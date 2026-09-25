@@ -1396,11 +1396,44 @@
         if (raw) {
           var parsed = JSON.parse(raw);
           if (parsed && Array.isArray(parsed.questions)) {
-            return parsed.questions;
+            var flat = [];
+            parsed.questions.forEach(function (mq) {
+              flat.push(mq);
+              if (Array.isArray(mq.children)) {
+                mq.children.forEach(function (sec) {
+                  if (Array.isArray(sec.children)) {
+                    sec.children.forEach(function (sq) {
+                      flat.push(sq);
+                    });
+                  }
+                });
+              }
+            });
+            return flat;
           }
         }
       } catch (e) { }
       return [];
+    }
+
+    function findQuestionInStore(store, id) {
+      if (!store || !Array.isArray(store.questions)) return null;
+      for (var i = 0; i < store.questions.length; i++) {
+        var mq = store.questions[i];
+        if (mq.id === id) return mq;
+        if (Array.isArray(mq.children)) {
+          for (var j = 0; j < mq.children.length; j++) {
+            var sec = mq.children[j];
+            if (Array.isArray(sec.children)) {
+              for (var k = 0; k < sec.children.length; k++) {
+                var sq = sec.children[k];
+                if (sq.id === id) return sq;
+              }
+            }
+          }
+        }
+      }
+      return null;
     }
 
     function getQuestion(questionId) {
@@ -1412,7 +1445,7 @@
         var raw = localStorage.getItem(MAIN_STORAGE_KEY);
         if (raw) {
           var store = JSON.parse(raw);
-          var q = store.questions.find(function (q) { return q.id === questionId; });
+          var q = findQuestionInStore(store, questionId);
           if (q) {
             q.answer = newAnswer;
             q.isEdited = true;
@@ -1430,7 +1463,7 @@
         var raw = localStorage.getItem(MAIN_STORAGE_KEY);
         if (raw) {
           var store = JSON.parse(raw);
-          var q = store.questions.find(function (q) { return q.id === questionId; });
+          var q = findQuestionInStore(store, questionId);
           if (q) {
             q.priority = newPriority;
             var prioMap = { must: 'Must Prepare', high: 'High', medium: 'Medium', standard: 'Standard' };
