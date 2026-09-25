@@ -531,6 +531,34 @@
       color: var(--text-muted);
     }
 
+    .sp-badge-select {
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 18px 2px 8px;
+      border-radius: 9999px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      border: 1px solid currentColor;
+      cursor: pointer;
+      outline: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='6' viewBox='0 0 8 6'%3E%3Cpath fill='%23666' d='M0 1l4 4 4-4z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 6px center;
+      transition: all 0.15s ease;
+    }
+    .sp-badge-select:hover {
+      filter: brightness(0.95);
+    }
+    .sp-badge-select option {
+      background: #faf6f0;
+      color: #2c2520;
+      text-transform: none;
+      font-size: 12px;
+    }
+
     .sp-badge--type {
       background: var(--violet-bg);
       color: var(--violet);
@@ -1397,6 +1425,26 @@
       return false;
     }
 
+    function updateMainStorePriority(questionId, newPriority) {
+      try {
+        var raw = localStorage.getItem(MAIN_STORAGE_KEY);
+        if (raw) {
+          var store = JSON.parse(raw);
+          var q = store.questions.find(function (q) { return q.id === questionId; });
+          if (q) {
+            q.priority = newPriority;
+            var prioMap = { must: 'Must Prepare', high: 'High', medium: 'Medium', standard: 'Standard' };
+            q.priorityLabel = prioMap[newPriority] || 'Standard';
+            q.isEdited = true;
+            store.lastSaved = Date.now();
+            localStorage.setItem(MAIN_STORAGE_KEY, JSON.stringify(store));
+            return true;
+          }
+        }
+      } catch (e) { }
+      return false;
+    }
+
     // ============================================================
     // GRAPH DATA OPERATIONS
     // ============================================================
@@ -1872,7 +1920,12 @@
           body.innerHTML =
             '<div class="sp-badges">' +
             '<span class="sp-badge sp-badge--section">' + escapeHtml(q.sectionLabel) + '</span>' +
-            '<span class="sp-badge sp-badge--priority-' + q.priority + '">' + escapeHtml(q.priorityLabel) + '</span>' +
+            '<select class="sp-badge-select sp-badge--priority-' + q.priority + '" id="spPrioritySelect" title="Change priority">' +
+            '<option value="must"' + (q.priority === 'must' ? ' selected' : '') + '>Must Prepare</option>' +
+            '<option value="high"' + (q.priority === 'high' ? ' selected' : '') + '>High</option>' +
+            '<option value="medium"' + (q.priority === 'medium' ? ' selected' : '') + '>Medium</option>' +
+            '<option value="standard"' + (q.priority === 'standard' ? ' selected' : '') + '>Standard</option>' +
+            '</select>' +
             '<span class="sp-badge sp-badge--type">' + escapeHtml(q.type) + '</span>' +
             '</div>' +
             '<div class="sp-question">' + escapeHtml(q.question) + '</div>' +
@@ -1883,6 +1936,23 @@
             '<a class="sp-link-btn" href="index.html" target="_blank">↗ Open in Q&A List</a>' +
             '<button class="sp-link-btn sp-link-btn--danger" id="spUnlinkBtn">⊘ Unlink Question</button>' +
             '</div>';
+
+          // Priority change
+          var prioSel = document.getElementById('spPrioritySelect');
+          if (prioSel) {
+            prioSel.addEventListener('change', function () {
+              if (panelNodeId !== null) {
+                var nd = findNode(panelNodeId);
+                if (nd && nd.questionId) {
+                  updateMainStorePriority(nd.questionId, this.value);
+                  delete _nodeWidthCache[nd.id];
+                  renderGraph();
+                  openSidePanel(panelNodeId);
+                  showToast('Priority updated ✓');
+                }
+              }
+            });
+          }
 
           // Answer auto-save
           var answerEl = document.getElementById('spAnswer');

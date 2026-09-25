@@ -491,6 +491,41 @@
       border: 1px solid #d8c8e8;
     }
 
+    .q-tag-select {
+      font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
+      font-size: 9.5px;
+      font-weight: 600;
+      padding: 1px 18px 1px 7px;
+      border-radius: 10px;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+      cursor: pointer;
+      outline: none;
+      transition: all 0.15s ease;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='6' viewBox='0 0 8 6'%3E%3Cpath fill='%23888' d='M0 1l4 4 4-4z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 5px center;
+    }
+
+    .q-tag-select:hover {
+      filter: brightness(0.93);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    }
+
+    .q-tag-select:focus {
+      box-shadow: 0 0 0 2px var(--accent-light);
+    }
+
+    .q-tag-select option {
+      background: var(--bg-card);
+      color: var(--text-main);
+      font-weight: 500;
+      font-size: 12px;
+    }
+
     .q-status-dot {
       flex-shrink: 0;
       width: 8px;
@@ -2678,6 +2713,7 @@
         'Permanently delete ' + count + ' selected question' + (count > 1 ? 's' : '') + '? This cannot be undone.';
       document.getElementById('batchDeleteModal').classList.add('open');
     }
+    document.getElementById('batchDeleteBtn').addEventListener('click', deleteSelectedQuestions);
     document.getElementById('batchDeleteCancel').addEventListener('click', function () {
       document.getElementById('batchDeleteModal').classList.remove('open');
     });
@@ -2701,6 +2737,7 @@
         'Move ' + count + ' selected question' + (count > 1 ? 's' : '') + ' to:';
       document.getElementById('batchSectionModal').classList.add('open');
     }
+    document.getElementById('batchSectionBtn').addEventListener('click', openBatchSectionModal);
     document.getElementById('batchSectionCancel').addEventListener('click', function () {
       document.getElementById('batchSectionModal').classList.remove('open');
     });
@@ -2729,6 +2766,7 @@
         'Set priority for ' + count + ' selected question' + (count > 1 ? 's' : '') + ' to:';
       document.getElementById('batchPriorityModal').classList.add('open');
     }
+    document.getElementById('batchPriorityBtn').addEventListener('click', openBatchPriorityModal);
     document.getElementById('batchPriorityCancel').addEventListener('click', function () {
       document.getElementById('batchPriorityModal').classList.remove('open');
     });
@@ -2748,6 +2786,19 @@
       showToast('Set ' + count + ' question' + (count > 1 ? 's' : '') + ' to ' + prioLabel + ' ✓');
       render();
     });
+
+    // Single Question Priority Change (Edit Mode)
+    function changeQuestionPriority(id, newPrio) {
+      var q = QUESTIONS.find(function (item) { return item.id === id; });
+      if (q && q.priority !== newPrio) {
+        q.priority = newPrio;
+        q.priorityLabel = priorityLabelMap[newPrio] || 'Standard';
+        q.isEdited = true;
+        saveStore();
+        showToast('Q' + id + ' priority set to ' + q.priorityLabel + ' ✓');
+        render();
+      }
+    }
 
     // Batch Mastery Toggle
     document.getElementById('batchMasterBtn').addEventListener('click', function () {
@@ -2869,6 +2920,22 @@
           bodyHtml = '<div class="q-answer" id="answer-' + q.id + '">' + q.answer + '</div>';
         }
 
+        var priorityHtml = '';
+        if (currentMode === 'edit') {
+          priorityHtml =
+            '<select class="q-tag-select ' + priorityTagClass + '" ' +
+            'onclick="event.stopPropagation()" ' +
+            'onchange="changeQuestionPriority(' + q.id + ', this.value)" ' +
+            'title="Change priority">' +
+            '<option value="must"' + (q.priority === 'must' ? ' selected' : '') + '>Must Prepare</option>' +
+            '<option value="high"' + (q.priority === 'high' ? ' selected' : '') + '>High</option>' +
+            '<option value="medium"' + (q.priority === 'medium' ? ' selected' : '') + '>Medium</option>' +
+            '<option value="standard"' + (q.priority === 'standard' ? ' selected' : '') + '>Standard</option>' +
+            '</select>';
+        } else {
+          priorityHtml = '<span class="q-tag ' + priorityTagClass + '">' + q.priorityLabel + '</span>';
+        }
+
         li.innerHTML =
           '<div class="q-header" onclick="toggleQuestion(' + q.id + ')">' +
           chkHtml +
@@ -2878,7 +2945,7 @@
           titleEditBtn +
           '<span class="q-tags">' +
           '<span class="q-tag q-tag--section">' + q.sectionLabel + '</span>' +
-          '<span class="q-tag ' + priorityTagClass + '">' + q.priorityLabel + '</span>' +
+          priorityHtml +
           '<span class="q-tag q-tag--type">' + q.type + '</span>' +
           '</span>' +
           masteryBadge +
