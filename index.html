@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Accenture Interview Prep — 6 Master Hubs</title>
   <meta name="description"
-    content="6 master interview hubs with 39 structured interview questions for Accenture ASE/AASE/AAE — Study, Read, and Edit modes with persistent storage.">
+    content="6 master interview hubs with nested branches and 39 structured interview questions for Accenture ASE/AASE/AAE — Study, Read, and Edit modes with persistent storage.">
   <style>
     /* ============================================================
     Accenture Interview Prep — Warm Parchment Theme
@@ -355,13 +355,6 @@
       justify-content: space-between;
     }
 
-    .filter-pills-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      align-items: center;
-    }
-
     .pills-group {
       display: flex;
       flex-wrap: wrap;
@@ -565,16 +558,17 @@
     }
 
     /* ============================================================
-       NESTED MASTER HUBS & 2-TIER ACCORDION
+       NESTED HIERARCHY: TIER 1 (HUBS) -> TIER 2 (BRANCHES) -> TIER 3 (SUB-QS)
        ============================================================ */
     .hubs-list {
       list-style: none;
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      gap: 22px;
       margin-top: 10px;
     }
 
+    /* Tier 1: Master Hub Card */
     .hub-card {
       background: var(--panel);
       border: 1px solid var(--border);
@@ -626,7 +620,7 @@
     .hub-badge {
       flex-shrink: 0;
       font-family: -apple-system, system-ui, sans-serif;
-      font-size: 10px;
+      font-size: 10.5px;
       font-weight: 700;
       letter-spacing: 0.06em;
       text-transform: uppercase;
@@ -652,7 +646,7 @@
 
     .hub-title {
       font-family: 'Georgia', serif;
-      font-size: 16.5px;
+      font-size: 17px;
       font-weight: 600;
       color: var(--text);
       line-height: 1.4;
@@ -701,7 +695,7 @@
       animation: fadeIn 0.18s ease;
     }
 
-    /* Core Answer Section inside Hub */
+    /* Core Answer Box */
     .hub-core-answer-box {
       background: #ffffff;
       border: 1px solid var(--border);
@@ -739,19 +733,21 @@
       font-weight: 500;
     }
 
-    /* Follow-up Section Header */
-    .hub-branch-section {
-      margin-top: 10px;
+    /* Tier 2: Branches (Follow-up Topics) */
+    .hub-branches-wrap {
+      margin-top: 16px;
     }
 
-    .hub-branch-header {
+    .hub-branches-main-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
       margin-bottom: 12px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--border-light);
     }
 
-    .hub-branch-title {
+    .hub-branches-main-title {
       font-family: -apple-system, system-ui, sans-serif;
       font-size: 12px;
       font-weight: 700;
@@ -763,31 +759,95 @@
       gap: 6px;
     }
 
-    .hub-branch-actions {
+    .branches-list {
       display: flex;
-      gap: 6px;
+      flex-direction: column;
+      gap: 12px;
     }
 
-    .btn-xs {
-      font-family: -apple-system, system-ui, sans-serif;
-      font-size: 11px;
-      font-weight: 500;
-      padding: 2px 8px;
-      border-radius: 6px;
+    .branch-card {
+      background: #faf7f2;
       border: 1px solid var(--border);
-      background: var(--panel);
-      color: var(--text-muted);
-      cursor: pointer;
+      border-left: 4px solid #a07d3a;
+      border-radius: 10px;
+      overflow: hidden;
       transition: all 0.15s ease;
     }
 
-    .btn-xs:hover {
-      background: var(--accent-light);
-      border-color: var(--accent-border);
-      color: var(--accent-hover);
+    .branch-card.open {
+      background: #ffffff;
+      border-color: #d8cebe;
+      box-shadow: 0 2px 6px rgba(61, 52, 41, 0.04);
     }
 
-    /* Sub-question Cards List (Level 2) */
+    .branch-header {
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      cursor: pointer;
+      user-select: none;
+      background: #f7f3ec;
+      transition: background 0.15s ease;
+    }
+
+    .branch-header:hover {
+      background: #eee8de;
+    }
+
+    .branch-card.open .branch-header {
+      background: #fdfaf6;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .branch-header-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .branch-chevron {
+      width: 14px;
+      height: 14px;
+      color: var(--text-light);
+      transition: transform 0.15s ease;
+    }
+
+    .branch-card.open .branch-chevron {
+      transform: rotate(90deg);
+      color: #a07d3a;
+    }
+
+    .branch-title {
+      font-family: -apple-system, system-ui, sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: 0.01em;
+    }
+
+    .branch-badge {
+      font-family: -apple-system, system-ui, sans-serif;
+      font-size: 10.5px;
+      font-weight: 600;
+      background: var(--pill-bg);
+      color: var(--text-muted);
+      padding: 2px 8px;
+      border-radius: 10px;
+    }
+
+    .branch-body {
+      display: none;
+      padding: 12px 14px 14px 14px;
+    }
+
+    .branch-card.open .branch-body {
+      display: block;
+      animation: fadeIn 0.15s ease;
+    }
+
+    /* Tier 3: Sub-question Cards inside Branch */
     .subq-list {
       list-style: none;
       display: flex;
@@ -798,7 +858,7 @@
     .subq-card {
       background: #ffffff;
       border: 1px solid var(--border);
-      border-radius: 9px;
+      border-radius: 8px;
       overflow: hidden;
       transition: border-color 0.15s ease, box-shadow 0.15s ease;
     }
@@ -890,18 +950,6 @@
       align-items: center;
       gap: 6px;
       flex-shrink: 0;
-    }
-
-    .subq-branch-tag {
-      font-family: -apple-system, system-ui, sans-serif;
-      font-size: 10px;
-      font-weight: 600;
-      padding: 2px 7px;
-      border-radius: 10px;
-      background: var(--pill-bg);
-      color: var(--text-muted);
-      border: 1px solid #e2dad0;
-      white-space: nowrap;
     }
 
     .subq-body {
@@ -1223,7 +1271,7 @@
     <div class="intro">
       <h1>6 Master Hubs.<br>39 Structured Interview Questions.</h1>
       <p>
-        Organized as a 2-tier interview framework with 6 core master questions and their natural follow-up branches.
+        Organized as a 3-tier nested hierarchy: 6 master questions → topic branches → follow-up questions.
         Rehearse in Study Mode, read in Read Mode, or customize everything in Edit Mode. Everything auto-persists and exports to JSON.
       </p>
     </div>
@@ -1251,7 +1299,7 @@
       <div class="progress-header">
         <span class="progress-label" id="progressLabel">Study Readiness: <strong>0</strong> / 39 mastered (0%)</span>
         <div class="progress-actions">
-          <button class="btn-sm" id="expandAllBtn" title="Expand all 6 master hubs">↕ Expand All Hubs</button>
+          <button class="btn-sm" id="expandAllBtn" title="Expand all master hubs and branches">↕ Expand All</button>
           <button class="btn-sm" id="collapseAllBtn" title="Collapse all">↕ Collapse All</button>
           <button class="btn-sm btn-sm--accent" id="backupJsonBtn" title="Backup all questions & progress to JSON">↓ Backup JSON</button>
           <button class="btn-sm" id="restoreJsonBtn" title="Restore from JSON backup">↑ Restore JSON</button>
@@ -1268,7 +1316,7 @@
     <div class="toolbar" id="toolbar">
       <div class="search-wrap">
         <span class="search-icon">🔍</span>
-        <input type="text" id="searchInput" class="search-input" placeholder="Search questions, answers, topics..." autocomplete="off" />
+        <input type="text" id="searchInput" class="search-input" placeholder="Search questions, answers, branches..." autocomplete="off" />
         <button id="clearSearchBtn" class="clear-search hidden" title="Clear">×</button>
       </div>
 
@@ -1322,7 +1370,7 @@
   <div class="modal-overlay delete-modal" id="resetModal">
     <div class="modal">
       <h3>Reset to Default Questions?</h3>
-      <p>This will restore all 6 Master Hubs and follow-up questions to their initial default state. Your custom edits and mastery marks will be reset.</p>
+      <p>This will restore all 6 Master Hubs, branches, and follow-up questions to their initial default state. Custom edits and mastery marks will be reset.</p>
       <div class="modal-actions">
         <button class="modal-btn modal-btn--cancel" id="resetCancel">Cancel</button>
         <button class="modal-btn modal-btn--danger" id="resetConfirm">Reset Everything</button>
@@ -2233,8 +2281,10 @@
     var MAIN_STORAGE_KEY = 'ACCENTURE_INTERVIEW_PREP_STORE';
 
     var currentMode = 'study'; // 'study' | 'read' | 'edit'
-    var openHubs = {};         // hubId -> boolean
-    var openSubQs = {};        // subQId -> boolean
+    // Default open Hub 1 so nesting is immediately visible on first load!
+    var openHubs = { 1: true };
+    var openBranches = { '1_0': true };
+    var openSubQs = {};
 
     var filterState = {
       search: '',
@@ -2369,7 +2419,6 @@
         hint.innerHTML = '✏️ <strong>Edit Mode:</strong> Click any answer or question title to edit inline. Priority and changes auto-persist.';
       }
 
-      // Update status filter pills text
       var statusPills = document.getElementById('statusPills');
       if (mode === 'study') {
         statusPills.innerHTML =
@@ -2426,48 +2475,10 @@
           return;
         }
 
-        // Collect all sub-questions for this hub
-        var subQuestions = [];
-        if (Array.isArray(mq.children)) {
-          mq.children.forEach(function (sec) {
-            if (Array.isArray(sec.children)) {
-              sec.children.forEach(function (sq) {
-                subQuestions.push({
-                  node: sq,
-                  branchTitle: sec.title
-                });
-              });
-            }
-          });
-        }
-
-        // Apply filters (search, priority, status)
         var masterMatchesSearch = !query ||
           mq.question.toLowerCase().indexOf(query) !== -1 ||
           mq.answer.toLowerCase().indexOf(query) !== -1 ||
           mq.type.toLowerCase().indexOf(query) !== -1;
-
-        var matchingSubQs = subQuestions.filter(function (item) {
-          var sq = item.node;
-          var matchSearch = !query ||
-            sq.question.toLowerCase().indexOf(query) !== -1 ||
-            sq.answer.toLowerCase().indexOf(query) !== -1 ||
-            sq.type.toLowerCase().indexOf(query) !== -1 ||
-            item.branchTitle.toLowerCase().indexOf(query) !== -1;
-
-          var matchPriority = st.priority === 'all' || sq.priority === st.priority;
-
-          var matchStatus = true;
-          if (currentMode === 'study') {
-            if (st.status === 'mastered') matchStatus = Boolean(sq.mastered);
-            if (st.status === 'unmastered') matchStatus = !sq.mastered;
-          } else {
-            if (st.status === 'edited') matchStatus = Boolean(sq.isEdited);
-            if (st.status === 'default') matchStatus = !sq.isEdited;
-          }
-
-          return matchSearch && matchPriority && matchStatus;
-        });
 
         var masterMatchesPriority = st.priority === 'all' || mq.priority === st.priority;
         var masterMatchesStatus = true;
@@ -2480,19 +2491,154 @@
         }
 
         var showMaster = masterMatchesSearch && masterMatchesPriority && masterMatchesStatus;
-        var hasVisibleSubQs = matchingSubQs.length > 0;
 
-        // If neither master nor any sub-question matches, omit this hub
-        if (!showMaster && !hasVisibleSubQs) {
+        // Process branches & sub-questions
+        var branchesHtml = '';
+        var totalSubQsInHub = 0;
+        var visibleSubQsInHub = 0;
+
+        if (Array.isArray(mq.children)) {
+          mq.children.forEach(function (sec, secIndex) {
+            var branchKey = mq.id + '_' + secIndex;
+            var subQsInBranch = sec.children || [];
+            totalSubQsInHub += subQsInBranch.length;
+
+            var matchingSubQs = subQsInBranch.filter(function (sq) {
+              var matchSearch = !query ||
+                sq.question.toLowerCase().indexOf(query) !== -1 ||
+                sq.answer.toLowerCase().indexOf(query) !== -1 ||
+                sq.type.toLowerCase().indexOf(query) !== -1 ||
+                sec.title.toLowerCase().indexOf(query) !== -1;
+
+              var matchPriority = st.priority === 'all' || sq.priority === st.priority;
+
+              var matchStatus = true;
+              if (currentMode === 'study') {
+                if (st.status === 'mastered') matchStatus = Boolean(sq.mastered);
+                if (st.status === 'unmastered') matchStatus = !sq.mastered;
+              } else {
+                if (st.status === 'edited') matchStatus = Boolean(sq.isEdited);
+                if (st.status === 'default') matchStatus = !sq.isEdited;
+              }
+
+              return matchSearch && matchPriority && matchStatus;
+            });
+
+            if (matchingSubQs.length === 0 && !masterMatchesSearch) {
+              return;
+            }
+
+            visibleSubQsInHub += matchingSubQs.length;
+
+            // Branch open state (default to true if openBranches hasn't been set, or if searching)
+            var isBranchOpen = openBranches[branchKey] !== false;
+            if (query && matchingSubQs.length > 0) {
+              isBranchOpen = true;
+            }
+
+            // Render subquestions inside this branch
+            var subQsHtml = '';
+            matchingSubQs.forEach(function (sq) {
+              var isSubOpen = Boolean(openSubQs[sq.id]);
+              if (query && (sq.question.toLowerCase().indexOf(query) !== -1 || sq.answer.toLowerCase().indexOf(query) !== -1)) {
+                isSubOpen = true;
+              }
+
+              var sqPriorityHtml = '';
+              if (currentMode === 'edit') {
+                sqPriorityHtml =
+                  '<select class="q-tag-select q-tag--' + sq.priority + '" ' +
+                  'onclick="event.stopPropagation()" ' +
+                  'onchange="changePriority(' + sq.id + ', this.value)" ' +
+                  'title="Change priority">' +
+                  '<option value="must"' + (sq.priority === 'must' ? ' selected' : '') + '>Must</option>' +
+                  '<option value="high"' + (sq.priority === 'high' ? ' selected' : '') + '>High</option>' +
+                  '<option value="medium"' + (sq.priority === 'medium' ? ' selected' : '') + '>Medium</option>' +
+                  '<option value="standard"' + (sq.priority === 'standard' ? ' selected' : '') + '>Standard</option>' +
+                  '</select>';
+              } else {
+                sqPriorityHtml = '<span class="q-tag q-tag--' + sq.priority + '">' + escapeHtml(sq.priorityLabel || priorityLabelMap[sq.priority] || 'Standard') + '</span>';
+              }
+
+              var sqTitleEditBtn = currentMode === 'edit'
+                ? '<button class="q-title-quick-edit" title="Edit sub-question" onclick="event.stopPropagation();startEditTitle(' + sq.id + ', false)">✎</button>'
+                : '';
+
+              var sqMasteryBadge =
+                '<span class="q-mastery-badge ' + (sq.mastered ? 'mastered' : 'practice') + '" ' +
+                'onclick="event.stopPropagation();toggleMastery(' + sq.id + ')" ' +
+                'title="Click to toggle mastery status">' +
+                (sq.mastered ? '✓ Mastered' : '○ Need Practice') +
+                '</span>';
+
+              var sqBodyHtml = '';
+              if (currentMode === 'edit') {
+                sqBodyHtml =
+                  '<div class="hub-core-header" style="margin-bottom:8px;">' +
+                  '<span class="edit-answer-status" id="saveStatus-' + sq.id + '">Auto-saved</span>' +
+                  '</div>' +
+                  '<div class="q-answer q-answer--editable" id="answer-' + sq.id + '" contenteditable="true" ' +
+                  'onblur="autoSaveAnswer(' + sq.id + ', this)" oninput="markAnswerDirty(' + sq.id + ')">' +
+                  sq.answer +
+                  '</div>';
+              } else if (currentMode === 'study') {
+                sqBodyHtml =
+                  '<div class="q-answer" id="answer-' + sq.id + '">' + sq.answer + '</div>' +
+                  '<div class="study-card-footer">' +
+                  '<span class="study-card-label">Follow-up confidence:</span>' +
+                  '<div class="study-card-btns">' +
+                  '<button class="study-action-btn mastered' + (sq.mastered ? ' active' : '') + '" onclick="setMastery(' + sq.id + ', true)">✓ Mastered</button>' +
+                  '<button class="study-action-btn review' + (!sq.mastered ? ' active' : '') + '" onclick="setMastery(' + sq.id + ', false)">🔁 Need Practice</button>' +
+                  '</div>' +
+                  '</div>';
+              } else {
+                sqBodyHtml = '<div class="q-answer" id="answer-' + sq.id + '">' + sq.answer + '</div>';
+              }
+
+              subQsHtml +=
+                '<li class="subq-card' + (isSubOpen ? ' open' : '') + '" data-subq-id="' + sq.id + '">' +
+                '<div class="subq-header" onclick="toggleSubQ(' + sq.id + ')">' +
+                '<div class="subq-header-left">' +
+                '<svg class="subq-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4l4 4-4 4"/></svg>' +
+                '<span class="subq-num">Q' + sq.id + '</span>' +
+                '<span class="subq-title" id="qTitle-' + sq.id + '">' + escapeHtml(sq.question) + '</span>' +
+                sqTitleEditBtn +
+                '</div>' +
+                '<div class="subq-header-right">' +
+                sqPriorityHtml +
+                '<span class="q-tag q-tag--type">' + escapeHtml(sq.type) + '</span>' +
+                sqMasteryBadge +
+                '</div>' +
+                '</div>' +
+                '<div class="subq-body">' + sqBodyHtml + '</div>' +
+                '</li>';
+            });
+
+            branchesHtml +=
+              '<div class="branch-card' + (isBranchOpen ? ' open' : '') + '" data-branch-key="' + branchKey + '">' +
+              '<div class="branch-header" data-bkey="' + branchKey + '" onclick="toggleBranch(this.dataset.bkey)">' +
+              '<div class="branch-header-left">' +
+              '<svg class="branch-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4l4 4-4 4"/></svg>' +
+              '<span class="branch-title">📁 ' + escapeHtml(sec.title) + '</span>' +
+              '</div>' +
+              '<span class="branch-badge">' + matchingSubQs.length + ' question' + (matchingSubQs.length !== 1 ? 's' : '') + '</span>' +
+              '</div>' +
+              '<div class="branch-body">' +
+              '<ul class="subq-list">' + subQsHtml + '</ul>' +
+              '</div>' +
+              '</div>';
+          });
+        }
+
+        if (!showMaster && visibleSubQsInHub === 0) {
           return;
         }
 
         renderedHubsCount++;
-        renderedQuestionsCount += (showMaster ? 1 : 0) + matchingSubQs.length;
+        renderedQuestionsCount += (showMaster ? 1 : 0) + visibleSubQsInHub;
 
-        // Auto-expand if searching and matching
         var isHubOpen = Boolean(openHubs[mq.id]);
-        if (query && (masterMatchesSearch || hasVisibleSubQs)) {
+        if (query && (masterMatchesSearch || visibleSubQsInHub > 0)) {
           isHubOpen = true;
         }
 
@@ -2500,7 +2646,6 @@
         hubCard.className = 'hub-card' + (isHubOpen ? ' open' : '');
         hubCard.setAttribute('data-hub-id', mq.id);
 
-        // Priority tag / select for master
         var masterPriorityHtml = '';
         if (currentMode === 'edit') {
           masterPriorityHtml =
@@ -2517,12 +2662,10 @@
           masterPriorityHtml = '<span class="q-tag q-tag--' + mq.priority + '">' + escapeHtml(mq.priorityLabel || priorityLabelMap[mq.priority] || 'Standard') + '</span>';
         }
 
-        // Title edit button for master
         var masterTitleEditBtn = currentMode === 'edit'
           ? '<button class="q-title-quick-edit" title="Edit hub title" onclick="event.stopPropagation();startEditTitle(' + mq.id + ', true)">✎</button>'
           : '';
 
-        // Mastery badge for master
         var masterMasteryBadge =
           '<span class="q-mastery-badge ' + (mq.mastered ? 'mastered' : 'practice') + '" ' +
           'onclick="event.stopPropagation();toggleMastery(' + mq.id + ')" ' +
@@ -2569,100 +2712,14 @@
             '</div>';
         }
 
-        // Sub-questions HTML
-        var visibleSubQs = query || st.priority !== 'all' || st.status !== 'all' ? matchingSubQs : subQuestions;
-        var subQsHtml = '';
-
-        visibleSubQs.forEach(function (item) {
-          var sq = item.node;
-          var isSubOpen = Boolean(openSubQs[sq.id]);
-          if (query && (sq.question.toLowerCase().indexOf(query) !== -1 || sq.answer.toLowerCase().indexOf(query) !== -1)) {
-            isSubOpen = true;
-          }
-
-          var sqPriorityHtml = '';
-          if (currentMode === 'edit') {
-            sqPriorityHtml =
-              '<select class="q-tag-select q-tag--' + sq.priority + '" ' +
-              'onclick="event.stopPropagation()" ' +
-              'onchange="changePriority(' + sq.id + ', this.value)" ' +
-              'title="Change priority">' +
-              '<option value="must"' + (sq.priority === 'must' ? ' selected' : '') + '>Must</option>' +
-              '<option value="high"' + (sq.priority === 'high' ? ' selected' : '') + '>High</option>' +
-              '<option value="medium"' + (sq.priority === 'medium' ? ' selected' : '') + '>Medium</option>' +
-              '<option value="standard"' + (sq.priority === 'standard' ? ' selected' : '') + '>Standard</option>' +
-              '</select>';
-          } else {
-            sqPriorityHtml = '<span class="q-tag q-tag--' + sq.priority + '">' + escapeHtml(sq.priorityLabel || priorityLabelMap[sq.priority] || 'Standard') + '</span>';
-          }
-
-          var sqTitleEditBtn = currentMode === 'edit'
-            ? '<button class="q-title-quick-edit" title="Edit sub-question" onclick="event.stopPropagation();startEditTitle(' + sq.id + ', false)">✎</button>'
-            : '';
-
-          var sqMasteryBadge =
-            '<span class="q-mastery-badge ' + (sq.mastered ? 'mastered' : 'practice') + '" ' +
-            'onclick="event.stopPropagation();toggleMastery(' + sq.id + ')" ' +
-            'title="Click to toggle mastery status">' +
-            (sq.mastered ? '✓ Mastered' : '○ Need Practice') +
-            '</span>';
-
-          var sqBodyHtml = '';
-          if (currentMode === 'edit') {
-            sqBodyHtml =
-              '<div class="hub-core-header" style="margin-bottom:8px;">' +
-              '<span class="edit-answer-status" id="saveStatus-' + sq.id + '">Auto-saved</span>' +
-              '</div>' +
-              '<div class="q-answer q-answer--editable" id="answer-' + sq.id + '" contenteditable="true" ' +
-              'onblur="autoSaveAnswer(' + sq.id + ', this)" oninput="markAnswerDirty(' + sq.id + ')">' +
-              sq.answer +
-              '</div>';
-          } else if (currentMode === 'study') {
-            sqBodyHtml =
-              '<div class="q-answer" id="answer-' + sq.id + '">' + sq.answer + '</div>' +
-              '<div class="study-card-footer">' +
-              '<span class="study-card-label">Follow-up confidence:</span>' +
-              '<div class="study-card-btns">' +
-              '<button class="study-action-btn mastered' + (sq.mastered ? ' active' : '') + '" onclick="setMastery(' + sq.id + ', true)">✓ Mastered</button>' +
-              '<button class="study-action-btn review' + (!sq.mastered ? ' active' : '') + '" onclick="setMastery(' + sq.id + ', false)">🔁 Need Practice</button>' +
-              '</div>' +
-              '</div>';
-          } else {
-            sqBodyHtml = '<div class="q-answer" id="answer-' + sq.id + '">' + sq.answer + '</div>';
-          }
-
-          subQsHtml +=
-            '<li class="subq-card' + (isSubOpen ? ' open' : '') + '" data-subq-id="' + sq.id + '">' +
-            '<div class="subq-header" onclick="toggleSubQ(' + sq.id + ')">' +
-            '<div class="subq-header-left">' +
-            '<svg class="subq-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4l4 4-4 4"/></svg>' +
-            '<span class="subq-num">Q' + sq.id + '</span>' +
-            '<span class="subq-title" id="qTitle-' + sq.id + '">' + escapeHtml(sq.question) + '</span>' +
-            sqTitleEditBtn +
+        var branchesSectionHtml = '';
+        if (totalSubQsInHub > 0) {
+          branchesSectionHtml =
+            '<div class="hub-branches-wrap">' +
+            '<div class="hub-branches-main-header">' +
+            '<span class="hub-branches-main-title">🌿 Nested Branches &amp; Follow-up Questions (' + visibleSubQsInHub + ' questions)</span>' +
             '</div>' +
-            '<div class="subq-header-right">' +
-            '<span class="subq-branch-tag">' + escapeHtml(item.branchTitle) + '</span>' +
-            sqPriorityHtml +
-            '<span class="q-tag q-tag--type">' + escapeHtml(sq.type) + '</span>' +
-            sqMasteryBadge +
-            '</div>' +
-            '</div>' +
-            '<div class="subq-body">' + sqBodyHtml + '</div>' +
-            '</li>';
-        });
-
-        var branchSectionHtml = '';
-        if (subQuestions.length > 0) {
-          branchSectionHtml =
-            '<div class="hub-branch-section">' +
-            '<div class="hub-branch-header">' +
-            '<span class="hub-branch-title">🌿 Follow-up Questions (' + visibleSubQs.length + (visibleSubQs.length !== subQuestions.length ? ' of ' + subQuestions.length : '') + ')</span>' +
-            '<div class="hub-branch-actions">' +
-            '<button class="btn-xs" onclick="expandHubSubQs(' + mq.id + ')">Expand all</button>' +
-            '<button class="btn-xs" onclick="collapseHubSubQs(' + mq.id + ')">Collapse all</button>' +
-            '</div>' +
-            '</div>' +
-            '<ul class="subq-list">' + subQsHtml + '</ul>' +
+            '<div class="branches-list">' + branchesHtml + '</div>' +
             '</div>';
         }
 
@@ -2675,7 +2732,7 @@
           masterTitleEditBtn +
           '</div>' +
           '<div class="hub-header-right">' +
-          '<span class="hub-subq-chip">' + subQuestions.length + ' follow-ups</span>' +
+          '<span class="hub-subq-chip">' + (mq.children ? mq.children.length : 0) + ' branches · ' + totalSubQsInHub + ' follow-ups</span>' +
           masterPriorityHtml +
           '<span class="q-tag q-tag--type">' + escapeHtml(mq.type) + '</span>' +
           masterMasteryBadge +
@@ -2683,13 +2740,12 @@
           '</div>' +
           '<div class="hub-body">' +
           coreAnswerBody +
-          branchSectionHtml +
+          branchesSectionHtml +
           '</div>';
 
         container.appendChild(hubCard);
       });
 
-      // Update meta info
       var metaEl = document.getElementById('resultsMeta');
       if (metaEl) {
         var isFiltered = query || st.hub !== 'all' || st.priority !== 'all' || st.status !== 'all' || st.sort !== 'default';
@@ -2697,7 +2753,7 @@
           metaEl.innerHTML = '<span class="meta-count">Showing ' + renderedHubsCount + ' of ' + totalHubs + ' hubs (' + renderedQuestionsCount + ' questions total)</span>' +
             '<button class="meta-reset-link" onclick="resetFilters()">Reset filters</button>';
         } else {
-          metaEl.innerHTML = '<span class="meta-count">All 6 master hubs · 39 questions total</span>';
+          metaEl.innerHTML = '<span class="meta-count">All 6 master hubs · 19 topic branches · 39 questions total</span>';
         }
       }
 
@@ -2723,39 +2779,16 @@
       if (el) el.classList.toggle('open', openHubs[hubId]);
     }
 
+    function toggleBranch(branchKey) {
+      openBranches[branchKey] = openBranches[branchKey] === false ? true : false;
+      var el = document.querySelector('.branch-card[data-branch-key="' + branchKey + '"]');
+      if (el) el.classList.toggle('open', openBranches[branchKey]);
+    }
+
     function toggleSubQ(subQId) {
       openSubQs[subQId] = !openSubQs[subQId];
       var el = document.querySelector('.subq-card[data-subq-id="' + subQId + '"]');
       if (el) el.classList.toggle('open', openSubQs[subQId]);
-    }
-
-    function expandHubSubQs(hubId) {
-      var mq = findQuestionNode(hubId);
-      if (mq && Array.isArray(mq.children)) {
-        mq.children.forEach(function (sec) {
-          if (Array.isArray(sec.children)) {
-            sec.children.forEach(function (sq) {
-              openSubQs[sq.id] = true;
-            });
-          }
-        });
-      }
-      openHubs[hubId] = true;
-      render();
-    }
-
-    function collapseHubSubQs(hubId) {
-      var mq = findQuestionNode(hubId);
-      if (mq && Array.isArray(mq.children)) {
-        mq.children.forEach(function (sec) {
-          if (Array.isArray(sec.children)) {
-            sec.children.forEach(function (sq) {
-              openSubQs[sq.id] = false;
-            });
-          }
-        });
-      }
-      render();
     }
 
     document.getElementById('expandAllBtn').addEventListener('click', function () {
@@ -2763,7 +2796,8 @@
         STORE_DATA.questions.forEach(function (mq) {
           openHubs[mq.id] = true;
           if (Array.isArray(mq.children)) {
-            mq.children.forEach(function (sec) {
+            mq.children.forEach(function (sec, sIdx) {
+              openBranches[mq.id + '_' + sIdx] = true;
               if (Array.isArray(sec.children)) {
                 sec.children.forEach(function (sq) {
                   openSubQs[sq.id] = true;
@@ -2778,6 +2812,7 @@
 
     document.getElementById('collapseAllBtn').addEventListener('click', function () {
       openHubs = {};
+      openBranches = {};
       openSubQs = {};
       render();
     });
