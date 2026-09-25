@@ -1,0 +1,2478 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Interview Map — Accenture Interview Prep</title>
+  <meta name="description"
+    content="Visual knowledge graph for interview preparation — map topics, connect questions, and trace conversation branches.">
+  <style>
+    /* ============================================================
+       Interview Map — Warm Parchment Theme (matching main app)
+       ============================================================ */
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #faf8f5;
+      --panel: #ffffff;
+      --border: #e8e2d9;
+      --border-light: #f0ebe4;
+      --text: #3d3429;
+      --text-muted: #7a6e5f;
+      --text-light: #9a8a75;
+      --accent: #c2956b;
+      --accent-hover: #8b5e3c;
+      --accent-light: #fbf5ee;
+      --accent-border: #ebd8c8;
+      --green: #6b8f5e;
+      --green-bg: #eef4ea;
+      --amber: #a07d3a;
+      --amber-bg: #faf3e6;
+      --rose: #a05a4a;
+      --rose-bg: #f8edea;
+      --blue: #4a6fa0;
+      --blue-bg: #eaf0f8;
+      --violet: #7a5ea0;
+      --violet-bg: #f0eaf8;
+      --pill-bg: #f0ebe2;
+      --pill-active-bg: #ffffff;
+    }
+
+    html {
+      -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+      font-family: 'Georgia', 'Times New Roman', serif;
+      background: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    ::selection {
+      background: #e8c9a0;
+      color: #2a2118;
+    }
+
+    /* ============================================================
+       HEADER
+       ============================================================ */
+    .graph-header {
+      flex-shrink: 0;
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      background: var(--panel);
+    }
+
+    .graph-nav {
+      font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #a08c72;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .graph-nav .leaf {
+      display: inline-block;
+      opacity: 0.25;
+      font-size: 14px;
+    }
+
+    .graph-nav a {
+      color: inherit;
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+
+    .graph-nav a:hover {
+      color: var(--accent-hover);
+    }
+
+    .graph-nav .nav-current {
+      color: var(--text);
+    }
+
+    .graph-title {
+      font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .graph-title .title-icon {
+      font-size: 18px;
+    }
+
+    /* ============================================================
+       TOOLBAR
+       ============================================================ */
+    .graph-toolbar {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 8px 18px;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border-light);
+      flex-wrap: wrap;
+    }
+
+    .graph-toolbar-left {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .graph-toolbar-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .gt-btn {
+      font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--panel);
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.12s;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .gt-btn:hover:not(:disabled) {
+      background: var(--pill-bg);
+      color: var(--text);
+      border-color: #d8cfc2;
+    }
+
+    .gt-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .gt-btn--accent {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    .gt-btn--accent:hover {
+      background: var(--accent-hover);
+      border-color: var(--accent-hover);
+      color: #fff;
+    }
+
+    .gt-btn--danger {
+      color: var(--rose);
+      border-color: #e8c9c2;
+    }
+
+    .gt-btn--danger:hover:not(:disabled) {
+      background: var(--rose-bg);
+      color: #8a3a2a;
+    }
+
+    .gt-btn--active {
+      background: var(--accent-light);
+      border-color: var(--accent);
+      color: var(--accent-hover);
+      box-shadow: 0 0 0 2px rgba(194, 149, 107, 0.15);
+    }
+
+    .gt-sep {
+      width: 1px;
+      height: 22px;
+      background: var(--border);
+      margin: 0 4px;
+    }
+
+    .gt-search-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .gt-search-icon {
+      position: absolute;
+      left: 8px;
+      font-size: 12px;
+      pointer-events: none;
+    }
+
+    .gt-search {
+      font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
+      font-size: 12.5px;
+      padding: 6px 10px 6px 28px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: var(--panel);
+      color: var(--text);
+      outline: none;
+      width: 180px;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    .gt-search:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px rgba(194, 149, 107, 0.12);
+    }
+
+    .gt-zoom-controls {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .gt-zoom-btn {
+      font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      width: 26px;
+      height: 26px;
+      border-radius: 5px;
+      border: 1px solid var(--border);
+      background: var(--panel);
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.12s;
+    }
+
+    .gt-zoom-btn:hover {
+      background: var(--pill-bg);
+      color: var(--text);
+    }
+
+    .gt-zoom-label {
+      font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-light);
+      min-width: 36px;
+      text-align: center;
+      user-select: none;
+    }
+
+    /* ============================================================
+       CANVAS
+       ============================================================ */
+    .graph-canvas-wrap {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+      background-color: var(--bg);
+      background-image: radial-gradient(circle, var(--border) 1px, transparent 1px);
+      background-size: 24px 24px;
+      cursor: grab;
+    }
+
+    .graph-canvas-wrap.panning {
+      cursor: grabbing;
+    }
+
+    .graph-canvas-wrap.connecting {
+      cursor: crosshair;
+    }
+
+    .graph-canvas-wrap svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    /* ---------- SVG Nodes ---------- */
+    .gn {
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .gn-bg {
+      fill: var(--panel);
+      stroke: var(--border);
+      stroke-width: 1;
+      transition: stroke 0.15s, stroke-width 0.15s;
+    }
+
+    .gn:hover .gn-bg {
+      stroke: var(--accent-border);
+    }
+
+    .gn--selected .gn-bg {
+      stroke: var(--accent);
+      stroke-width: 2;
+    }
+
+    .gn--connect-source .gn-bg {
+      stroke: var(--blue);
+      stroke-width: 2.5;
+      stroke-dasharray: 4 2;
+    }
+
+    .gn--search-match .gn-bg {
+      stroke: var(--amber);
+      stroke-width: 2;
+    }
+
+    .gn--search-dim {
+      opacity: 0.3;
+    }
+
+    .gn-accent {
+      pointer-events: none;
+    }
+
+    .gn-title {
+      font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
+      font-size: 12.5px;
+      font-weight: 600;
+      fill: var(--text);
+      pointer-events: none;
+    }
+
+    .gn-subtitle {
+      font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
+      font-size: 10px;
+      fill: var(--text-light);
+      pointer-events: none;
+    }
+
+    .gn-link-dot {
+      fill: var(--green);
+      pointer-events: none;
+    }
+
+    /* ---------- SVG Edges ---------- */
+    .ge-path {
+      fill: none;
+      stroke: #c4b9a8;
+      stroke-width: 1.5;
+      transition: stroke 0.15s, stroke-width 0.15s;
+    }
+
+    .ge--selected .ge-path {
+      stroke: var(--accent);
+      stroke-width: 2.5;
+    }
+
+    .ge-hit {
+      fill: none;
+      stroke: transparent;
+      stroke-width: 18;
+      cursor: pointer;
+    }
+
+    .temp-edge {
+      fill: none;
+      stroke: var(--accent);
+      stroke-width: 2;
+      stroke-dasharray: 6 4;
+      pointer-events: none;
+      opacity: 0.7;
+    }
+
+    /* ============================================================
+       STATUS BAR
+       ============================================================ */
+    .graph-status {
+      flex-shrink: 0;
+      padding: 5px 18px;
+      background: var(--panel);
+      border-top: 1px solid var(--border-light);
+      font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
+      font-size: 11px;
+      color: var(--text-light);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .status-hint {
+      color: var(--accent-hover);
+      font-weight: 600;
+    }
+
+    /* ============================================================
+       SIDE PANEL
+       ============================================================ */
+    .side-panel {
+      position: fixed;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      width: 400px;
+      max-width: 90vw;
+      background: var(--panel);
+      border-left: 1px solid var(--border);
+      box-shadow: -8px 0 30px rgba(42, 33, 24, 0.08);
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      transform: translateX(100%);
+      transition: transform 0.25s ease;
+    }
+
+    .side-panel.open {
+      transform: translateX(0);
+    }
+
+    .sp-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border-light);
+      flex-shrink: 0;
+    }
+
+    .sp-header-title {
+      font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-light);
+    }
+
+    .sp-close {
+      font-size: 18px;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 2px 6px;
+      border-radius: 4px;
+      transition: all 0.12s;
+    }
+
+    .sp-close:hover {
+      background: var(--pill-bg);
+      color: var(--text);
+    }
+
+    .sp-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+    }
+
+    .sp-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+
+    .sp-badge {
+      font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
+      font-size: 10.5px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .sp-badge--section {
+      background: var(--blue-bg);
+      color: var(--blue);
+    }
+
+    .sp-badge--priority-must {
+      background: var(--rose-bg);
+      color: var(--rose);
+    }
+
+    .sp-badge--priority-high {
+      background: var(--amber-bg);
+      color: var(--amber);
+    }
+
+    .sp-badge--priority-medium {
+      background: var(--blue-bg);
+      color: var(--blue);
+    }
+
+    .sp-badge--priority-standard {
+      background: var(--pill-bg);
+      color: var(--text-muted);
+    }
+
+    .sp-badge--type {
+      background: var(--violet-bg);
+      color: var(--violet);
+    }
+
+    .sp-question {
+      font-family: 'Georgia', serif;
+      font-size: 17px;
+      line-height: 1.45;
+      color: var(--text);
+      margin-bottom: 16px;
+      font-weight: 400;
+    }
+
+    .sp-divider {
+      height: 1px;
+      background: var(--border-light);
+      margin: 16px 0;
+    }
+
+    .sp-answer-label {
+      font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-light);
+      margin-bottom: 10px;
+    }
+
+    .sp-answer {
+      font-family: 'Georgia', serif;
+      font-size: 14.5px;
+      line-height: 1.75;
+      color: var(--text);
+      min-height: 80px;
+      outline: none;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid transparent;
+      transition: border-color 0.15s, background 0.15s;
+    }
+
+    .sp-answer:focus {
+      border-color: var(--accent-border);
+      background: var(--accent-light);
+    }
+
+    .sp-answer p {
+      margin-bottom: 10px;
+    }
+
+    .sp-answer p:last-child {
+      margin-bottom: 0;
+    }
+
+    .sp-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border-light);
+    }
+
+    .sp-link-btn {
+      font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
+      font-size: 11.5px;
+      font-weight: 600;
+      padding: 5px 12px;
+      border-radius: 5px;
+      border: 1px solid var(--border);
+      background: var(--panel);
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.12s;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .sp-link-btn:hover {
+      background: var(--pill-bg);
+      color: var(--text);
+    }
+
+    .sp-link-btn--danger {
+      color: var(--rose);
+      border-color: #e8c9c2;
+    }
+
+    .sp-link-btn--danger:hover {
+      background: var(--rose-bg);
+      color: #8a3a2a;
+    }
+
+    .sp-topic-label {
+      font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
+      font-size: 12px;
+      color: var(--text-light);
+      margin-bottom: 12px;
+    }
+
+    .sp-topic-title-input {
+      font-family: 'Georgia', serif;
+      font-size: 17px;
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--bg);
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.15s;
+    }
+
+    .sp-topic-title-input:focus {
+      border-color: var(--accent);
+    }
+
+    .sp-unlinked-msg {
+      font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
+      font-size: 12.5px;
+      color: var(--text-light);
+      line-height: 1.6;
+      margin-top: 16px;
+    }
+
+    /* ============================================================
+       EMPTY STATE
+       ============================================================ */
+    .graph-empty {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    .graph-empty.hidden {
+      display: none;
+    }
+
+    .graph-empty-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+      opacity: 0.5;
+    }
+
+    .graph-empty h2 {
+      font-family: 'Georgia', serif;
+      font-size: 22px;
+      font-weight: 400;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .graph-empty p {
+      font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
+      font-size: 13.5px;
+      color: var(--text-muted);
+      text-align: center;
+      max-width: 380px;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .graph-empty-btn {
+      font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 9px 22px;
+      border-radius: 8px;
+      border: none;
+      background: var(--accent);
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.15s;
+      pointer-events: auto;
+    }
+
+    .graph-empty-btn:hover {
+      background: var(--accent-hover);
+    }
+
+    /* ============================================================
+       MODALS
+       ============================================================ */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(42, 33, 24, 0.4);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-overlay.open {
+      display: flex;
+    }
+
+    .modal {
+      background: var(--panel);
+      border-radius: 12px;
+      padding: 28px;
+      max-width: 480px;
+      width: 90vw;
+      box-shadow: 0 20px 60px rgba(42, 33, 24, 0.2);
+    }
+
+    .modal h3 {
+      font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
+      font-size: 17px;
+      margin-bottom: 16px;
+      color: var(--text);
+      text-align: center;
+    }
+
+    .modal p {
+      font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
+      font-size: 13.5px;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+      line-height: 1.6;
+      text-align: center;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    .modal-btn {
+      font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 8px 20px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: all 0.12s;
+    }
+
+    .modal-btn--cancel {
+      background: var(--panel);
+      color: var(--text-muted);
+    }
+
+    .modal-btn--cancel:hover {
+      background: var(--pill-bg);
+    }
+
+    .modal-btn--danger {
+      background: var(--rose);
+      color: #fff;
+      border-color: var(--rose);
+    }
+
+    .modal-btn--danger:hover {
+      background: #8a3a2a;
+      border-color: #8a3a2a;
+    }
+
+    .modal-btn--accent {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    .modal-btn--accent:hover {
+      background: var(--accent-hover);
+      border-color: var(--accent-hover);
+    }
+
+    /* --- Add Node Modal --- */
+    .add-modal .modal {
+      max-width: 520px;
+      text-align: left;
+    }
+
+    .add-modal .modal h3 {
+      text-align: center;
+    }
+
+    .modal-search-wrap {
+      position: relative;
+      margin-bottom: 12px;
+    }
+
+    .modal-search-icon {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 13px;
+      pointer-events: none;
+    }
+
+    .modal-search {
+      font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
+      font-size: 13px;
+      width: 100%;
+      padding: 9px 12px 9px 32px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--bg);
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.15s;
+    }
+
+    .modal-search:focus {
+      border-color: var(--accent);
+    }
+
+    .sr-list {
+      max-height: 200px;
+      overflow-y: auto;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin-bottom: 16px;
+    }
+
+    .sr-item {
+      padding: 9px 14px;
+      border-bottom: 1px solid var(--border-light);
+      cursor: pointer;
+      transition: background 0.1s;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .sr-item:last-child {
+      border-bottom: none;
+    }
+
+    .sr-item:hover {
+      background: var(--accent-light);
+    }
+
+    .sr-item--linked {
+      opacity: 0.5;
+    }
+
+    .sr-item--linked:hover {
+      opacity: 0.7;
+    }
+
+    .sr-item-left {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .sr-q {
+      font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
+      font-size: 13px;
+      color: var(--text);
+      display: block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .sr-meta {
+      font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
+      font-size: 10.5px;
+      color: var(--text-light);
+      display: block;
+      margin-top: 2px;
+    }
+
+    .sr-badge {
+      font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
+      font-size: 9.5px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 10px;
+      background: var(--green-bg);
+      color: var(--green);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .sr-empty {
+      padding: 20px;
+      text-align: center;
+      font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
+      font-size: 12.5px;
+      color: var(--text-light);
+    }
+
+    .modal-or {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 16px 0;
+      font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
+      font-size: 11px;
+      color: var(--text-light);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-weight: 600;
+    }
+
+    .modal-or::before,
+    .modal-or::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .modal-form-group {
+      margin-bottom: 12px;
+    }
+
+    .modal-form-group label {
+      font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--text-muted);
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .modal-text-input {
+      font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
+      font-size: 13px;
+      width: 100%;
+      padding: 9px 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--bg);
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.15s;
+    }
+
+    .modal-text-input:focus {
+      border-color: var(--accent);
+    }
+
+    /* ============================================================
+       TOAST
+       ============================================================ */
+    .toast {
+      position: fixed;
+      bottom: 60px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      opacity: 0;
+      background: var(--text);
+      color: #f5f0e8;
+      font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
+      font-size: 13px;
+      padding: 8px 22px;
+      border-radius: 20px;
+      pointer-events: none;
+      transition: opacity 0.3s, transform 0.3s;
+      z-index: 2000;
+      white-space: nowrap;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* ============================================================
+       SCROLLBAR
+       ============================================================ */
+    ::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #d8cfc2;
+      border-radius: 3px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #b8a68e;
+    }
+
+    /* ============================================================
+       RESPONSIVE
+       ============================================================ */
+    @media (max-width: 600px) {
+      .graph-header {
+        padding: 10px 14px;
+      }
+
+      .graph-toolbar {
+        padding: 6px 12px;
+      }
+
+      .gt-search {
+        width: 120px;
+      }
+
+      .side-panel {
+        width: 100%;
+      }
+
+      .graph-title {
+        display: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Header -->
+  <div class="graph-header">
+    <div class="graph-nav">
+      <span class="leaf">🍂</span>
+      <a href="index.html">Accenture ASE</a>
+      <span>·</span>
+      <a href="index.html">Interview Prep</a>
+      <span>·</span>
+      <span class="nav-current">Interview Map</span>
+    </div>
+    <div class="graph-title">
+      <span class="title-icon">🗺</span>
+      Interview Knowledge Map
+    </div>
+  </div>
+
+  <!-- Toolbar -->
+  <div class="graph-toolbar">
+    <div class="graph-toolbar-left">
+      <button class="gt-btn gt-btn--accent" id="addNodeBtn" title="Add a node (or double-click canvas)">
+        ＋ Add Node
+      </button>
+      <button class="gt-btn" id="connectBtn" title="Connect two nodes (Shift+click)">
+        ⟶ Connect
+      </button>
+      <button class="gt-btn gt-btn--danger" id="deleteBtn" title="Delete selected (Del)" disabled>
+        ✕ Delete
+      </button>
+      <span class="gt-sep"></span>
+      <button class="gt-btn" id="fitAllBtn" title="Fit all nodes in view">
+        ⊞ Fit All
+      </button>
+    </div>
+    <div class="graph-toolbar-right">
+      <div class="gt-search-wrap">
+        <span class="gt-search-icon">🔍</span>
+        <input type="text" id="graphSearch" class="gt-search" placeholder="Search nodes..." autocomplete="off" />
+      </div>
+      <div class="gt-zoom-controls">
+        <button class="gt-zoom-btn" id="zoomOutBtn" title="Zoom out">−</button>
+        <span class="gt-zoom-label" id="zoomLabel">100%</span>
+        <button class="gt-zoom-btn" id="zoomInBtn" title="Zoom in">+</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Canvas -->
+  <div class="graph-canvas-wrap" id="canvasWrap">
+    <svg id="graphSvg" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrowhead" viewBox="0 0 10 8" refX="9" refY="4" markerWidth="8" markerHeight="6"
+          orient="auto-start-reverse">
+          <path d="M 0 0 L 10 4 L 0 8 z" fill="#b0a494" />
+        </marker>
+        <marker id="arrowheadAccent" viewBox="0 0 10 8" refX="9" refY="4" markerWidth="8" markerHeight="6"
+          orient="auto-start-reverse">
+          <path d="M 0 0 L 10 4 L 0 8 z" fill="#c2956b" />
+        </marker>
+        <filter id="nodeShadow" x="-20%" y="-20%" width="140%" height="160%">
+          <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="rgba(61,52,41,0.1)" />
+        </filter>
+      </defs>
+      <g id="graphViewport">
+        <g id="edgesGroup"></g>
+        <path id="tempEdge" class="temp-edge" d="" display="none" />
+        <g id="nodesGroup"></g>
+      </g>
+    </svg>
+
+    <!-- Empty State -->
+    <div class="graph-empty" id="emptyState">
+      <div class="graph-empty-icon">🗺</div>
+      <h2>Your Interview Map</h2>
+      <p>Build a visual knowledge graph of your interview topics and questions.
+        Add nodes, drag them around, and connect them to map out how your answers branch.</p>
+      <button class="graph-empty-btn" id="emptyAddBtn">＋ Add First Node</button>
+    </div>
+  </div>
+
+  <!-- Status Bar -->
+  <div class="graph-status" id="graphStatus">
+    <span id="statusText">Ready — double-click canvas to add a node</span>
+    <span id="statusInfo"></span>
+  </div>
+
+  <!-- Side Panel -->
+  <div class="side-panel" id="sidePanel">
+    <div class="sp-header">
+      <span class="sp-header-title" id="spHeaderTitle">Question Details</span>
+      <button class="sp-close" id="spClose" title="Close panel">✕</button>
+    </div>
+    <div class="sp-body" id="spBody"></div>
+  </div>
+
+  <!-- Add Node Modal -->
+  <div class="modal-overlay add-modal" id="addNodeModal">
+    <div class="modal">
+      <h3>Add to Interview Map</h3>
+      <div class="modal-search-wrap">
+        <span class="modal-search-icon">🔍</span>
+        <input type="text" id="modalSearchInput" class="modal-search" placeholder="Search existing questions..."
+          autocomplete="off" />
+      </div>
+      <div class="sr-list" id="searchResults"></div>
+      <div class="modal-or">or create a topic node</div>
+      <div class="modal-form-group">
+        <label for="topicTitleInput">Topic Title</label>
+        <input type="text" id="topicTitleInput" class="modal-text-input" placeholder="e.g. Projects, KPIT Experience, Strengths..." />
+      </div>
+      <div class="modal-actions">
+        <button class="modal-btn modal-btn--cancel" id="addNodeCancel">Cancel</button>
+        <button class="modal-btn modal-btn--accent" id="addTopicConfirm">Add Topic</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Node Modal -->
+  <div class="modal-overlay" id="editNodeModal">
+    <div class="modal">
+      <h3>Edit Node Title</h3>
+      <div class="modal-form-group">
+        <label for="editNodeTitleInput">Title</label>
+        <input type="text" id="editNodeTitleInput" class="modal-text-input" placeholder="Node title..." />
+      </div>
+      <div class="modal-actions">
+        <button class="modal-btn modal-btn--cancel" id="editNodeCancel">Cancel</button>
+        <button class="modal-btn modal-btn--accent" id="editNodeConfirm">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Confirm Modal -->
+  <div class="modal-overlay" id="deleteModal">
+    <div class="modal">
+      <h3 id="deleteTitle">Delete this node?</h3>
+      <p id="deleteDesc">This will remove the node and all its connections from the map. The original question (if
+        linked) will not be affected.</p>
+      <div class="modal-actions">
+        <button class="modal-btn modal-btn--cancel" id="deleteCancel">Cancel</button>
+        <button class="modal-btn modal-btn--danger" id="deleteConfirm">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // ============================================================
+    // CONSTANTS
+    // ============================================================
+    var SVG_NS = 'http://www.w3.org/2000/svg';
+    var GRAPH_STORAGE_KEY = 'accenture_prep_graph_v1';
+    var MAIN_STORAGE_KEY = 'accenture_prep_store_v3';
+    var NODE_H = 48;
+    var NODE_HALF_H = NODE_H / 2;
+    var NODE_MIN_W = 140;
+    var NODE_MAX_W = 280;
+    var NODE_PAD = 36;
+
+    // Text measuring
+    var _measureCanvas = document.createElement('canvas');
+    var _measureCtx = _measureCanvas.getContext('2d');
+    _measureCtx.font = '600 12.5px -apple-system, "Segoe UI", system-ui, sans-serif';
+
+    // ============================================================
+    // STATE
+    // ============================================================
+    var graphData = { nodes: [], edges: [], nextNodeId: 1, nextEdgeId: 1 };
+    var viewport = { x: 0, y: 0, zoom: 1 };
+    var graphState = {
+      mode: 'select',       // 'select' | 'connect'
+      selectedNode: null,
+      selectedEdge: null,
+      connectSource: null
+    };
+    var mouseState = {
+      action: null,          // 'pan' | 'drag' | null
+      startX: 0, startY: 0,
+      startVpX: 0, startVpY: 0,
+      dragNodeId: null,
+      dragStartNodeX: 0, dragStartNodeY: 0,
+      hasMoved: false
+    };
+    var addNodePosition = { x: 0, y: 0 };
+    var panelNodeId = null;
+    var editingNodeId = null;
+    var deletingType = null; // 'node' | 'edge'
+    var deletingId = null;
+    var searchQuery = '';
+    var _nodeWidthCache = {};
+
+    // ============================================================
+    // DOM REFERENCES
+    // ============================================================
+    var graphSvg = document.getElementById('graphSvg');
+    var viewportGroup = document.getElementById('graphViewport');
+    var nodesGroup = document.getElementById('nodesGroup');
+    var edgesGroup = document.getElementById('edgesGroup');
+    var tempEdgePath = document.getElementById('tempEdge');
+    var canvasWrap = document.getElementById('canvasWrap');
+    var emptyStateEl = document.getElementById('emptyState');
+
+    // ============================================================
+    // HELPERS
+    // ============================================================
+    function svgEl(tag) {
+      return document.createElementNS(SVG_NS, tag);
+    }
+
+    function escapeHtml(str) {
+      var div = document.createElement('div');
+      div.appendChild(document.createTextNode(str || ''));
+      return div.innerHTML;
+    }
+
+    function showToast(msg) {
+      var el = document.getElementById('toast');
+      el.textContent = msg;
+      el.classList.add('show');
+      setTimeout(function () { el.classList.remove('show'); }, 2200);
+    }
+
+    function measureTextWidth(str) {
+      return _measureCtx.measureText(str).width;
+    }
+
+    function getNodeWidth(node) {
+      if (_nodeWidthCache[node.id] && _nodeWidthCache[node.id].title === node.title) {
+        return _nodeWidthCache[node.id].width;
+      }
+      var textW = measureTextWidth(node.title);
+      var w = Math.max(NODE_MIN_W, Math.min(NODE_MAX_W, textW + NODE_PAD));
+      _nodeWidthCache[node.id] = { title: node.title, width: w };
+      return w;
+    }
+
+    function truncateText(text, maxWidth) {
+      if (measureTextWidth(text) <= maxWidth) return text;
+      var truncated = text;
+      while (truncated.length > 0 && measureTextWidth(truncated + '…') > maxWidth) {
+        truncated = truncated.slice(0, -1);
+      }
+      return truncated + '…';
+    }
+
+    function findNode(id) {
+      return graphData.nodes.find(function (n) { return n.id === id; });
+    }
+
+    function findEdge(id) {
+      return graphData.edges.find(function (e) { return e.id === id; });
+    }
+
+    // ============================================================
+    // PERSISTENCE
+    // ============================================================
+    function loadGraph() {
+      try {
+        var raw = localStorage.getItem(GRAPH_STORAGE_KEY);
+        if (raw) {
+          var parsed = JSON.parse(raw);
+          if (parsed && Array.isArray(parsed.nodes)) {
+            graphData = parsed;
+            if (!graphData.nextNodeId) graphData.nextNodeId = 1;
+            if (!graphData.nextEdgeId) graphData.nextEdgeId = 1;
+            // Ensure IDs are correct
+            graphData.nodes.forEach(function (n) {
+              if (n.id >= graphData.nextNodeId) graphData.nextNodeId = n.id + 1;
+            });
+            graphData.edges.forEach(function (e) {
+              if (e.id >= graphData.nextEdgeId) graphData.nextEdgeId = e.id + 1;
+            });
+          }
+        }
+      } catch (e) {
+        console.warn('Error loading graph:', e);
+      }
+      // Validate linked questions
+      validateLinkedQuestions();
+    }
+
+    function saveGraph() {
+      try {
+        localStorage.setItem(GRAPH_STORAGE_KEY, JSON.stringify(graphData));
+      } catch (e) {
+        console.error('Error saving graph:', e);
+        showToast('⚠ Storage error');
+      }
+    }
+
+    function validateLinkedQuestions() {
+      var questions = getMainStoreQuestions();
+      var qIds = {};
+      questions.forEach(function (q) { qIds[q.id] = true; });
+      graphData.nodes.forEach(function (n) {
+        if (n.questionId && !qIds[n.questionId]) {
+          n.questionId = null;
+        }
+      });
+    }
+
+    // ============================================================
+    // MAIN STORE INTEGRATION
+    // ============================================================
+    function getMainStoreQuestions() {
+      try {
+        var raw = localStorage.getItem(MAIN_STORAGE_KEY);
+        if (raw) {
+          var parsed = JSON.parse(raw);
+          if (parsed && Array.isArray(parsed.questions)) {
+            return parsed.questions;
+          }
+        }
+      } catch (e) { }
+      return [];
+    }
+
+    function getQuestion(questionId) {
+      return getMainStoreQuestions().find(function (q) { return q.id === questionId; });
+    }
+
+    function updateMainStoreAnswer(questionId, newAnswer) {
+      try {
+        var raw = localStorage.getItem(MAIN_STORAGE_KEY);
+        if (raw) {
+          var store = JSON.parse(raw);
+          var q = store.questions.find(function (q) { return q.id === questionId; });
+          if (q) {
+            q.answer = newAnswer;
+            q.isEdited = true;
+            store.lastSaved = Date.now();
+            localStorage.setItem(MAIN_STORAGE_KEY, JSON.stringify(store));
+            return true;
+          }
+        }
+      } catch (e) { }
+      return false;
+    }
+
+    // ============================================================
+    // GRAPH DATA OPERATIONS
+    // ============================================================
+    function addNode(title, questionId, x, y) {
+      var node = {
+        id: graphData.nextNodeId++,
+        title: title,
+        questionId: questionId || null,
+        x: Math.round(x),
+        y: Math.round(y)
+      };
+      graphData.nodes.push(node);
+      saveGraph();
+      renderGraph();
+      updateStatusInfo();
+      selectNode(node.id);
+      showToast('Node added ✓');
+      return node;
+    }
+
+    function deleteNodeById(nodeId) {
+      graphData.nodes = graphData.nodes.filter(function (n) { return n.id !== nodeId; });
+      graphData.edges = graphData.edges.filter(function (e) { return e.from !== nodeId && e.to !== nodeId; });
+      if (graphState.selectedNode === nodeId) graphState.selectedNode = null;
+      if (graphState.connectSource === nodeId) graphState.connectSource = null;
+      if (panelNodeId === nodeId) closeSidePanel();
+      delete _nodeWidthCache[nodeId];
+      saveGraph();
+      renderGraph();
+      updateDeleteBtn();
+      updateStatusInfo();
+      showToast('Node deleted');
+    }
+
+    function deleteEdgeById(edgeId) {
+      graphData.edges = graphData.edges.filter(function (e) { return e.id !== edgeId; });
+      if (graphState.selectedEdge === edgeId) graphState.selectedEdge = null;
+      saveGraph();
+      renderGraph();
+      updateDeleteBtn();
+      updateStatusInfo();
+      showToast('Connection removed');
+    }
+
+    function addEdge(fromId, toId) {
+      // Check duplicate
+      var exists = graphData.edges.some(function (e) {
+        return e.from === fromId && e.to === toId;
+      });
+      if (exists) {
+        showToast('Connection already exists');
+        return null;
+      }
+      if (fromId === toId) return null;
+
+      var edge = {
+        id: graphData.nextEdgeId++,
+        from: fromId,
+        to: toId
+      };
+      graphData.edges.push(edge);
+      saveGraph();
+      renderGraph();
+      updateStatusInfo();
+      showToast('Connected ✓');
+      return edge;
+    }
+
+    function updateNodeTitle(nodeId, newTitle) {
+      var node = findNode(nodeId);
+      if (node) {
+        node.title = newTitle;
+        delete _nodeWidthCache[nodeId];
+        saveGraph();
+        renderGraph();
+        if (panelNodeId === nodeId) openSidePanel(nodeId);
+      }
+    }
+
+    // ============================================================
+    // NODE COLORS
+    // ============================================================
+    function getNodeAccentColor(node) {
+      if (!node.questionId) return '#c2956b';
+      var q = getQuestion(node.questionId);
+      if (!q) return '#c2956b';
+      var colors = { must: '#a05a4a', high: '#a07d3a', medium: '#4a6fa0', standard: '#9a8a75' };
+      return colors[q.priority] || '#c2956b';
+    }
+
+    function getNodeSubtitle(node) {
+      if (!node.questionId) return 'Topic';
+      var q = getQuestion(node.questionId);
+      if (!q) return 'Unlinked';
+      return q.sectionLabel + ' · ' + q.priorityLabel;
+    }
+
+    // ============================================================
+    // EDGE PATH CALCULATION
+    // ============================================================
+    function getNodeBorderPoint(node, angle) {
+      var w = getNodeWidth(node) / 2 + 2;
+      var h = NODE_HALF_H + 2;
+      var cosA = Math.cos(angle);
+      var sinA = Math.sin(angle);
+      var absCos = Math.abs(cosA);
+      var absSin = Math.abs(sinA);
+
+      var scale;
+      if (absCos < 0.001) {
+        scale = h / absSin;
+      } else if (absSin < 0.001) {
+        scale = w / absCos;
+      } else if (absCos * h > absSin * w) {
+        scale = w / absCos;
+      } else {
+        scale = h / absSin;
+      }
+
+      return {
+        x: node.x + cosA * scale,
+        y: node.y + sinA * scale
+      };
+    }
+
+    function getEdgePath(fromNode, toNode) {
+      var dx = toNode.x - fromNode.x;
+      var dy = toNode.y - fromNode.y;
+      var dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < 1) return '';
+
+      var angleForward = Math.atan2(dy, dx);
+      var angleBack = Math.atan2(-dy, -dx);
+      var from = getNodeBorderPoint(fromNode, angleForward);
+      var to = getNodeBorderPoint(toNode, angleBack);
+
+      // Slight perpendicular curve
+      var ex = to.x - from.x;
+      var ey = to.y - from.y;
+      var elen = Math.sqrt(ex * ex + ey * ey);
+      if (elen < 1) return '';
+
+      var nx = -ey / elen;
+      var ny = ex / elen;
+      var offset = Math.min(12, elen * 0.06);
+      var mx = (from.x + to.x) / 2 + nx * offset;
+      var my = (from.y + to.y) / 2 + ny * offset;
+
+      return 'M' + from.x.toFixed(1) + ',' + from.y.toFixed(1) +
+        ' Q' + mx.toFixed(1) + ',' + my.toFixed(1) +
+        ' ' + to.x.toFixed(1) + ',' + to.y.toFixed(1);
+    }
+
+    // ============================================================
+    // RENDERING
+    // ============================================================
+    function renderGraph() {
+      renderEdges();
+      renderNodes();
+      updateEmptyState();
+    }
+
+    function renderNodes() {
+      nodesGroup.innerHTML = '';
+
+      graphData.nodes.forEach(function (node) {
+        var g = svgEl('g');
+        var cls = 'gn';
+        if (node.id === graphState.selectedNode) cls += ' gn--selected';
+        if (node.id === graphState.connectSource) cls += ' gn--connect-source';
+        if (searchQuery) {
+          var matches = node.title.toLowerCase().indexOf(searchQuery.toLowerCase()) !== -1;
+          if (matches) {
+            cls += ' gn--search-match';
+          } else {
+            cls += ' gn--search-dim';
+          }
+        }
+        g.setAttribute('class', cls);
+        g.setAttribute('data-nid', node.id);
+        g.setAttribute('transform', 'translate(' + node.x + ',' + node.y + ')');
+
+        var w = getNodeWidth(node);
+        var hw = w / 2;
+
+        // Shadow rect (slightly offset)
+        var shadow = svgEl('rect');
+        shadow.setAttribute('x', -hw + 1);
+        shadow.setAttribute('y', -NODE_HALF_H + 2);
+        shadow.setAttribute('width', w);
+        shadow.setAttribute('height', NODE_H);
+        shadow.setAttribute('rx', 10);
+        shadow.setAttribute('fill', 'rgba(61,52,41,0.06)');
+        shadow.setAttribute('stroke', 'none');
+
+        // Background rect
+        var bg = svgEl('rect');
+        bg.setAttribute('class', 'gn-bg');
+        bg.setAttribute('x', -hw);
+        bg.setAttribute('y', -NODE_HALF_H);
+        bg.setAttribute('width', w);
+        bg.setAttribute('height', NODE_H);
+        bg.setAttribute('rx', 10);
+
+        // Accent bar
+        var accent = svgEl('rect');
+        accent.setAttribute('class', 'gn-accent');
+        accent.setAttribute('x', -hw);
+        accent.setAttribute('y', -NODE_HALF_H + 8);
+        accent.setAttribute('width', 4);
+        accent.setAttribute('height', NODE_H - 16);
+        accent.setAttribute('rx', 2);
+        accent.setAttribute('fill', getNodeAccentColor(node));
+
+        // Title text
+        var maxTextW = w - NODE_PAD;
+        var titleText = svgEl('text');
+        titleText.setAttribute('class', 'gn-title');
+        titleText.setAttribute('text-anchor', 'middle');
+        titleText.setAttribute('dominant-baseline', 'central');
+        titleText.setAttribute('y', node.questionId ? -4 : 0);
+        titleText.textContent = truncateText(node.title, maxTextW);
+
+        // Subtitle
+        if (node.questionId || true) {
+          var subtitle = svgEl('text');
+          subtitle.setAttribute('class', 'gn-subtitle');
+          subtitle.setAttribute('text-anchor', 'middle');
+          subtitle.setAttribute('y', 12);
+          subtitle.textContent = getNodeSubtitle(node);
+          if (!node.questionId) subtitle.setAttribute('y', 0), titleText.setAttribute('y', -6);
+          else subtitle.setAttribute('y', 12), titleText.setAttribute('y', -5);
+        }
+
+        // Tooltip
+        var titleEl = svgEl('title');
+        titleEl.textContent = node.title;
+
+        // Link indicator
+        var linkDot = null;
+        if (node.questionId) {
+          linkDot = svgEl('circle');
+          linkDot.setAttribute('class', 'gn-link-dot');
+          linkDot.setAttribute('cx', hw - 10);
+          linkDot.setAttribute('cy', -NODE_HALF_H + 10);
+          linkDot.setAttribute('r', 3.5);
+        }
+
+        g.appendChild(shadow);
+        g.appendChild(bg);
+        g.appendChild(accent);
+        g.appendChild(titleText);
+        if (subtitle) g.appendChild(subtitle);
+        g.appendChild(titleEl);
+        if (linkDot) g.appendChild(linkDot);
+
+        nodesGroup.appendChild(g);
+      });
+    }
+
+    function renderEdges() {
+      edgesGroup.innerHTML = '';
+
+      graphData.edges.forEach(function (edge) {
+        var fromNode = findNode(edge.from);
+        var toNode = findNode(edge.to);
+        if (!fromNode || !toNode) return;
+
+        var pathD = getEdgePath(fromNode, toNode);
+        if (!pathD) return;
+
+        var g = svgEl('g');
+        g.setAttribute('class', 'ge' + (edge.id === graphState.selectedEdge ? ' ge--selected' : ''));
+        g.setAttribute('data-eid', edge.id);
+
+        // Visible path
+        var path = svgEl('path');
+        path.setAttribute('class', 'ge-path');
+        path.setAttribute('d', pathD);
+        path.setAttribute('marker-end', edge.id === graphState.selectedEdge ? 'url(#arrowheadAccent)' : 'url(#arrowhead)');
+
+        // Hit area (wider invisible path for click target)
+        var hitPath = svgEl('path');
+        hitPath.setAttribute('class', 'ge-hit');
+        hitPath.setAttribute('d', pathD);
+
+        g.appendChild(path);
+        g.appendChild(hitPath);
+        edgesGroup.appendChild(g);
+      });
+    }
+
+    function updateEmptyState() {
+      if (graphData.nodes.length === 0) {
+        emptyStateEl.classList.remove('hidden');
+      } else {
+        emptyStateEl.classList.add('hidden');
+      }
+    }
+
+    // ============================================================
+    // VIEWPORT (ZOOM / PAN)
+    // ============================================================
+    function applyViewport() {
+      viewportGroup.setAttribute('transform',
+        'translate(' + viewport.x + ',' + viewport.y + ') scale(' + viewport.zoom + ')');
+      // Update dot grid panning
+      canvasWrap.style.backgroundPosition = viewport.x + 'px ' + viewport.y + 'px';
+      // Zoom label
+      document.getElementById('zoomLabel').textContent = Math.round(viewport.zoom * 100) + '%';
+    }
+
+    function screenToSvg(clientX, clientY) {
+      var rect = graphSvg.getBoundingClientRect();
+      return {
+        x: (clientX - rect.left - viewport.x) / viewport.zoom,
+        y: (clientY - rect.top - viewport.y) / viewport.zoom
+      };
+    }
+
+    function handleZoom(delta, clientX, clientY) {
+      var factor = 1 + delta * 0.1;
+      var newZoom = Math.max(0.15, Math.min(4, viewport.zoom * factor));
+
+      var rect = graphSvg.getBoundingClientRect();
+      var mx = clientX - rect.left;
+      var my = clientY - rect.top;
+
+      viewport.x = mx - (mx - viewport.x) * (newZoom / viewport.zoom);
+      viewport.y = my - (my - viewport.y) * (newZoom / viewport.zoom);
+      viewport.zoom = newZoom;
+      applyViewport();
+    }
+
+    function fitAll() {
+      if (graphData.nodes.length === 0) {
+        viewport.x = 0;
+        viewport.y = 0;
+        viewport.zoom = 1;
+        applyViewport();
+        return;
+      }
+
+      var minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+      graphData.nodes.forEach(function (n) {
+        var hw = getNodeWidth(n) / 2;
+        minX = Math.min(minX, n.x - hw);
+        maxX = Math.max(maxX, n.x + hw);
+        minY = Math.min(minY, n.y - NODE_HALF_H);
+        maxY = Math.max(maxY, n.y + NODE_HALF_H);
+      });
+
+      var pad = 80;
+      var w = maxX - minX + pad * 2;
+      var h = maxY - minY + pad * 2;
+      var canvasW = graphSvg.clientWidth;
+      var canvasH = graphSvg.clientHeight;
+
+      var zoom = Math.min(canvasW / w, canvasH / h, 2);
+      zoom = Math.max(0.2, zoom);
+      var cx = (minX + maxX) / 2;
+      var cy = (minY + maxY) / 2;
+
+      viewport.zoom = zoom;
+      viewport.x = canvasW / 2 - cx * zoom;
+      viewport.y = canvasH / 2 - cy * zoom;
+      applyViewport();
+    }
+
+    function panToNode(nodeId) {
+      var node = findNode(nodeId);
+      if (!node) return;
+      var canvasW = graphSvg.clientWidth;
+      var canvasH = graphSvg.clientHeight;
+      viewport.x = canvasW / 2 - node.x * viewport.zoom;
+      viewport.y = canvasH / 2 - node.y * viewport.zoom;
+      applyViewport();
+    }
+
+    // ============================================================
+    // SELECTION
+    // ============================================================
+    function selectNode(nodeId) {
+      graphState.selectedNode = nodeId;
+      graphState.selectedEdge = null;
+      renderGraph();
+      updateDeleteBtn();
+      openSidePanel(nodeId);
+    }
+
+    function selectEdge(edgeId) {
+      graphState.selectedEdge = edgeId;
+      graphState.selectedNode = null;
+      renderGraph();
+      updateDeleteBtn();
+      closeSidePanel();
+    }
+
+    function deselectAll() {
+      graphState.selectedNode = null;
+      graphState.selectedEdge = null;
+      renderGraph();
+      updateDeleteBtn();
+    }
+
+    function updateDeleteBtn() {
+      var btn = document.getElementById('deleteBtn');
+      btn.disabled = !(graphState.selectedNode || graphState.selectedEdge);
+    }
+
+    // ============================================================
+    // CONNECT MODE
+    // ============================================================
+    function toggleConnectMode() {
+      if (graphState.mode === 'connect') {
+        exitConnectMode();
+      } else {
+        enterConnectMode();
+      }
+    }
+
+    function enterConnectMode() {
+      graphState.mode = 'connect';
+      graphState.connectSource = null;
+      document.getElementById('connectBtn').classList.add('gt-btn--active');
+      canvasWrap.classList.add('connecting');
+      updateStatusText('Connect mode: click a node to start');
+      renderGraph();
+    }
+
+    function exitConnectMode() {
+      graphState.mode = 'select';
+      graphState.connectSource = null;
+      document.getElementById('connectBtn').classList.remove('gt-btn--active');
+      canvasWrap.classList.remove('connecting');
+      tempEdgePath.setAttribute('display', 'none');
+      updateStatusText('Ready — double-click canvas to add a node');
+      renderGraph();
+    }
+
+    function handleConnectClick(nodeId) {
+      if (graphState.connectSource === null) {
+        graphState.connectSource = nodeId;
+        updateStatusText('Now click target node to connect');
+        renderGraph();
+      } else {
+        if (nodeId !== graphState.connectSource) {
+          addEdge(graphState.connectSource, nodeId);
+        }
+        graphState.connectSource = null;
+        tempEdgePath.setAttribute('display', 'none');
+        updateStatusText('Connect mode: click a node to start');
+        renderGraph();
+      }
+    }
+
+    // ============================================================
+    // SIDE PANEL
+    // ============================================================
+    function openSidePanel(nodeId) {
+      var node = findNode(nodeId);
+      if (!node) return;
+      panelNodeId = nodeId;
+
+      var panel = document.getElementById('sidePanel');
+      var body = document.getElementById('spBody');
+      var headerTitle = document.getElementById('spHeaderTitle');
+
+      if (node.questionId) {
+        var q = getQuestion(node.questionId);
+        if (q) {
+          headerTitle.textContent = 'Question Details';
+          body.innerHTML =
+            '<div class="sp-badges">' +
+            '<span class="sp-badge sp-badge--section">' + escapeHtml(q.sectionLabel) + '</span>' +
+            '<span class="sp-badge sp-badge--priority-' + q.priority + '">' + escapeHtml(q.priorityLabel) + '</span>' +
+            '<span class="sp-badge sp-badge--type">' + escapeHtml(q.type) + '</span>' +
+            '</div>' +
+            '<div class="sp-question">' + escapeHtml(q.question) + '</div>' +
+            '<div class="sp-divider"></div>' +
+            '<div class="sp-answer-label">Answer</div>' +
+            '<div class="sp-answer" id="spAnswer" contenteditable="true">' + (q.answer || '<p><em>No answer yet…</em></p>') + '</div>' +
+            '<div class="sp-actions">' +
+            '<a class="sp-link-btn" href="index.html" target="_blank">↗ Open in Q&A List</a>' +
+            '<button class="sp-link-btn sp-link-btn--danger" id="spUnlinkBtn">⊘ Unlink Question</button>' +
+            '</div>';
+
+          // Answer auto-save
+          var answerEl = document.getElementById('spAnswer');
+          answerEl.addEventListener('blur', function () {
+            if (panelNodeId !== null) {
+              var nd = findNode(panelNodeId);
+              if (nd && nd.questionId) {
+                updateMainStoreAnswer(nd.questionId, this.innerHTML);
+                showToast('Answer saved ✓');
+              }
+            }
+          });
+
+          // Unlink button
+          document.getElementById('spUnlinkBtn').addEventListener('click', function () {
+            var nd = findNode(panelNodeId);
+            if (nd) {
+              nd.questionId = null;
+              delete _nodeWidthCache[nd.id];
+              saveGraph();
+              renderGraph();
+              openSidePanel(panelNodeId);
+              showToast('Question unlinked');
+            }
+          });
+        } else {
+          // Linked question was deleted
+          renderTopicPanel(node);
+        }
+      } else {
+        renderTopicPanel(node);
+      }
+
+      panel.classList.add('open');
+    }
+
+    function renderTopicPanel(node) {
+      var headerTitle = document.getElementById('spHeaderTitle');
+      var body = document.getElementById('spBody');
+      headerTitle.textContent = 'Topic Node';
+      body.innerHTML =
+        '<div class="sp-topic-label">📌 Topic Node</div>' +
+        '<div class="modal-form-group">' +
+        '<label>Title</label>' +
+        '<input type="text" class="sp-topic-title-input" id="spTopicTitle" value="' + escapeHtml(node.title) + '" />' +
+        '</div>' +
+        '<div class="sp-unlinked-msg">This node is not linked to any interview question. ' +
+        'You can use it to group topics or create categories in your interview map.</div>' +
+        '<div class="sp-actions">' +
+        '<button class="sp-link-btn" id="spLinkBtn">🔗 Link to Question</button>' +
+        '</div>';
+
+      // Title auto-save
+      document.getElementById('spTopicTitle').addEventListener('blur', function () {
+        if (panelNodeId !== null && this.value.trim()) {
+          updateNodeTitle(panelNodeId, this.value.trim());
+          showToast('Title updated ✓');
+        }
+      });
+
+      document.getElementById('spTopicTitle').addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') {
+          this.blur();
+        }
+      });
+
+      // Link button
+      document.getElementById('spLinkBtn').addEventListener('click', function () {
+        closeSidePanel();
+        var pos = { x: node.x, y: node.y };
+        openLinkQuestionModal(node.id);
+      });
+    }
+
+    function closeSidePanel() {
+      panelNodeId = null;
+      document.getElementById('sidePanel').classList.remove('open');
+    }
+
+    function openLinkQuestionModal(nodeId) {
+      // Reuse add node modal but in "link" mode
+      editingNodeId = nodeId;
+      document.getElementById('modalSearchInput').value = '';
+      document.getElementById('topicTitleInput').value = '';
+      document.getElementById('topicTitleInput').parentElement.style.display = 'none';
+      document.querySelector('.modal-or').style.display = 'none';
+      document.getElementById('addTopicConfirm').style.display = 'none';
+      document.querySelector('.add-modal .modal h3').textContent = 'Link to Question';
+      renderSearchResults('');
+      document.getElementById('addNodeModal').classList.add('open');
+      document.getElementById('modalSearchInput').focus();
+    }
+
+    // ============================================================
+    // MODALS — ADD NODE
+    // ============================================================
+    function openAddNodeModal(x, y) {
+      editingNodeId = null;
+      addNodePosition.x = x || getDefaultPosition().x;
+      addNodePosition.y = y || getDefaultPosition().y;
+
+      // Reset modal state
+      document.getElementById('modalSearchInput').value = '';
+      document.getElementById('topicTitleInput').value = '';
+      document.getElementById('topicTitleInput').parentElement.style.display = '';
+      document.querySelector('.modal-or').style.display = '';
+      document.getElementById('addTopicConfirm').style.display = '';
+      document.querySelector('.add-modal .modal h3').textContent = 'Add to Interview Map';
+      renderSearchResults('');
+      document.getElementById('addNodeModal').classList.add('open');
+      document.getElementById('modalSearchInput').focus();
+    }
+
+    function closeAddNodeModal() {
+      document.getElementById('addNodeModal').classList.remove('open');
+      editingNodeId = null;
+    }
+
+    function getDefaultPosition() {
+      var canvasW = graphSvg.clientWidth;
+      var canvasH = graphSvg.clientHeight;
+      var x = (canvasW / 2 - viewport.x) / viewport.zoom + (Math.random() - 0.5) * 40;
+      var y = (canvasH / 2 - viewport.y) / viewport.zoom + (Math.random() - 0.5) * 40;
+      return { x: Math.round(x), y: Math.round(y) };
+    }
+
+    function renderSearchResults(query) {
+      var questions = getMainStoreQuestions();
+      var results = questions;
+
+      if (query) {
+        var q = query.toLowerCase();
+        results = questions.filter(function (item) {
+          return item.question.toLowerCase().indexOf(q) !== -1 ||
+            item.sectionLabel.toLowerCase().indexOf(q) !== -1 ||
+            item.type.toLowerCase().indexOf(q) !== -1;
+        });
+      }
+
+      // Track which questions are already on the graph
+      var linkedIds = {};
+      graphData.nodes.forEach(function (n) {
+        if (n.questionId) linkedIds[n.questionId] = true;
+      });
+
+      var container = document.getElementById('searchResults');
+      container.innerHTML = '';
+
+      results.slice(0, 20).forEach(function (item) {
+        var div = document.createElement('div');
+        div.className = 'sr-item' + (linkedIds[item.id] ? ' sr-item--linked' : '');
+
+        var left = document.createElement('div');
+        left.className = 'sr-item-left';
+        left.innerHTML = '<span class="sr-q">' + escapeHtml(item.question) + '</span>' +
+          '<span class="sr-meta">' + escapeHtml(item.sectionLabel) + ' · ' + escapeHtml(item.priorityLabel) + '</span>';
+
+        div.appendChild(left);
+
+        if (linkedIds[item.id]) {
+          var badge = document.createElement('span');
+          badge.className = 'sr-badge';
+          badge.textContent = 'On Map';
+          div.appendChild(badge);
+        }
+
+        div.addEventListener('click', function () {
+          if (editingNodeId !== null) {
+            // Linking mode — link existing node to question
+            var node = findNode(editingNodeId);
+            if (node) {
+              node.questionId = item.id;
+              node.title = item.question;
+              delete _nodeWidthCache[node.id];
+              saveGraph();
+              renderGraph();
+              openSidePanel(node.id);
+              showToast('Question linked ✓');
+            }
+            closeAddNodeModal();
+            return;
+          }
+
+          if (linkedIds[item.id]) {
+            // Already on map — pan to it
+            var existingNode = graphData.nodes.find(function (n) { return n.questionId === item.id; });
+            if (existingNode) {
+              selectNode(existingNode.id);
+              panToNode(existingNode.id);
+            }
+            closeAddNodeModal();
+            return;
+          }
+
+          // Add linked node
+          addNode(item.question, item.id, addNodePosition.x, addNodePosition.y);
+          closeAddNodeModal();
+        });
+
+        container.appendChild(div);
+      });
+
+      if (results.length === 0 && query) {
+        container.innerHTML = '<div class="sr-empty">No matching questions found</div>';
+      } else if (results.length === 0) {
+        container.innerHTML = '<div class="sr-empty">No questions in the Q&A store yet</div>';
+      }
+    }
+
+    // ============================================================
+    // MODALS — EDIT NODE
+    // ============================================================
+    function openEditNodeModal(nodeId) {
+      editingNodeId = nodeId;
+      var node = findNode(nodeId);
+      if (!node) return;
+      document.getElementById('editNodeTitleInput').value = node.title;
+      document.getElementById('editNodeModal').classList.add('open');
+      document.getElementById('editNodeTitleInput').focus();
+      document.getElementById('editNodeTitleInput').select();
+    }
+
+    function closeEditNodeModal() {
+      document.getElementById('editNodeModal').classList.remove('open');
+      editingNodeId = null;
+    }
+
+    // ============================================================
+    // MODALS — DELETE
+    // ============================================================
+    function openDeleteModal(type, id) {
+      deletingType = type;
+      deletingId = id;
+
+      if (type === 'node') {
+        var node = findNode(id);
+        document.getElementById('deleteTitle').textContent = 'Delete this node?';
+        document.getElementById('deleteDesc').textContent =
+          'This will remove "' + (node ? node.title : '') + '" and all its connections from the map. The original question (if linked) will not be affected.';
+      } else {
+        document.getElementById('deleteTitle').textContent = 'Remove this connection?';
+        document.getElementById('deleteDesc').textContent = 'This will remove the connection between the two nodes.';
+      }
+
+      document.getElementById('deleteModal').classList.add('open');
+    }
+
+    function closeDeleteModal() {
+      document.getElementById('deleteModal').classList.remove('open');
+      deletingType = null;
+      deletingId = null;
+    }
+
+    // ============================================================
+    // SEARCH
+    // ============================================================
+    function handleGraphSearch(query) {
+      searchQuery = query.trim();
+      renderGraph();
+    }
+
+    // ============================================================
+    // STATUS
+    // ============================================================
+    function updateStatusText(text) {
+      document.getElementById('statusText').innerHTML = text;
+    }
+
+    function updateStatusInfo() {
+      var info = graphData.nodes.length + ' node' + (graphData.nodes.length !== 1 ? 's' : '') +
+        ', ' + graphData.edges.length + ' connection' + (graphData.edges.length !== 1 ? 's' : '');
+      document.getElementById('statusInfo').textContent = info;
+    }
+
+    // ============================================================
+    // EVENT HANDLERS — MOUSE
+    // ============================================================
+    graphSvg.addEventListener('mousedown', function (e) {
+      if (e.button !== 0) return; // left click only
+
+      var nodeEl = e.target.closest('.gn');
+      var edgeEl = e.target.closest('.ge');
+
+      mouseState.startX = e.clientX;
+      mouseState.startY = e.clientY;
+      mouseState.hasMoved = false;
+
+      if (nodeEl) {
+        var nodeId = parseInt(nodeEl.getAttribute('data-nid'));
+
+        if (graphState.mode === 'connect') {
+          handleConnectClick(nodeId);
+          return;
+        }
+
+        var node = findNode(nodeId);
+        if (!node) return;
+
+        mouseState.action = 'drag';
+        mouseState.dragNodeId = nodeId;
+        mouseState.dragStartNodeX = node.x;
+        mouseState.dragStartNodeY = node.y;
+        e.preventDefault();
+      } else if (edgeEl) {
+        // Edge click handled on mouseup
+        mouseState.action = null;
+      } else {
+        // Background — start pan
+        if (graphState.mode === 'connect' && graphState.connectSource !== null) {
+          // In connect mode, clicking background cancels source selection
+          graphState.connectSource = null;
+          tempEdgePath.setAttribute('display', 'none');
+          updateStatusText('Connect mode: click a node to start');
+          renderGraph();
+          return;
+        }
+        mouseState.action = 'pan';
+        mouseState.startVpX = viewport.x;
+        mouseState.startVpY = viewport.y;
+        canvasWrap.classList.add('panning');
+        e.preventDefault();
+      }
+    });
+
+    document.addEventListener('mousemove', function (e) {
+      // Temp edge in connect mode
+      if (graphState.mode === 'connect' && graphState.connectSource !== null) {
+        var sourceNode = findNode(graphState.connectSource);
+        if (sourceNode) {
+          var mPos = screenToSvg(e.clientX, e.clientY);
+          var angle = Math.atan2(mPos.y - sourceNode.y, mPos.x - sourceNode.x);
+          var from = getNodeBorderPoint(sourceNode, angle);
+          tempEdgePath.setAttribute('d',
+            'M' + from.x.toFixed(1) + ',' + from.y.toFixed(1) +
+            ' L' + mPos.x.toFixed(1) + ',' + mPos.y.toFixed(1));
+          tempEdgePath.setAttribute('display', '');
+        }
+      }
+
+      if (!mouseState.action) return;
+
+      var dx = e.clientX - mouseState.startX;
+      var dy = e.clientY - mouseState.startY;
+
+      if (Math.abs(dx) > 3 || Math.abs(dy) > 3) {
+        mouseState.hasMoved = true;
+      }
+
+      if (mouseState.action === 'pan') {
+        viewport.x = mouseState.startVpX + dx;
+        viewport.y = mouseState.startVpY + dy;
+        applyViewport();
+      } else if (mouseState.action === 'drag') {
+        var node = findNode(mouseState.dragNodeId);
+        if (node) {
+          node.x = Math.round(mouseState.dragStartNodeX + dx / viewport.zoom);
+          node.y = Math.round(mouseState.dragStartNodeY + dy / viewport.zoom);
+          renderGraph();
+        }
+      }
+    });
+
+    document.addEventListener('mouseup', function (e) {
+      if (mouseState.action === 'drag') {
+        if (mouseState.hasMoved) {
+          saveGraph();
+        } else {
+          // Click on node (no drag)
+          selectNode(mouseState.dragNodeId);
+        }
+      }
+
+      if (mouseState.action === 'pan') {
+        canvasWrap.classList.remove('panning');
+        if (!mouseState.hasMoved) {
+          // Click on background
+          deselectAll();
+          closeSidePanel();
+        }
+      }
+
+      mouseState.action = null;
+      mouseState.dragNodeId = null;
+    });
+
+    // Edge click
+    graphSvg.addEventListener('click', function (e) {
+      var edgeHit = e.target.closest('.ge-hit') || e.target.closest('.ge-path');
+      if (edgeHit) {
+        var edgeGroup = edgeHit.closest('.ge');
+        if (edgeGroup) {
+          var edgeId = parseInt(edgeGroup.getAttribute('data-eid'));
+          selectEdge(edgeId);
+          e.stopPropagation();
+        }
+      }
+    });
+
+    // Double-click
+    graphSvg.addEventListener('dblclick', function (e) {
+      var nodeEl = e.target.closest('.gn');
+      if (nodeEl) {
+        var nodeId = parseInt(nodeEl.getAttribute('data-nid'));
+        openEditNodeModal(nodeId);
+        return;
+      }
+      // Double-click on background — add node
+      var pos = screenToSvg(e.clientX, e.clientY);
+      openAddNodeModal(pos.x, pos.y);
+    });
+
+    // Zoom (wheel)
+    canvasWrap.addEventListener('wheel', function (e) {
+      e.preventDefault();
+      var delta = e.deltaY < 0 ? 1 : -1;
+      handleZoom(delta, e.clientX, e.clientY);
+    }, { passive: false });
+
+    // ============================================================
+    // EVENT HANDLERS — KEYBOARD
+    // ============================================================
+    document.addEventListener('keydown', function (e) {
+      // Don't intercept when typing in inputs
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.contentEditable === 'true') return;
+
+      if (e.key === 'Delete' || e.key === 'Backspace') {
+        e.preventDefault();
+        if (graphState.selectedNode) {
+          openDeleteModal('node', graphState.selectedNode);
+        } else if (graphState.selectedEdge) {
+          openDeleteModal('edge', graphState.selectedEdge);
+        }
+      }
+
+      if (e.key === 'Escape') {
+        if (graphState.mode === 'connect') {
+          exitConnectMode();
+        } else {
+          deselectAll();
+          closeSidePanel();
+        }
+        // Close any open modal
+        closeAddNodeModal();
+        closeEditNodeModal();
+        closeDeleteModal();
+      }
+    });
+
+    // ============================================================
+    // EVENT HANDLERS — TOOLBAR BUTTONS
+    // ============================================================
+    document.getElementById('addNodeBtn').addEventListener('click', function () {
+      openAddNodeModal();
+    });
+
+    document.getElementById('emptyAddBtn').addEventListener('click', function () {
+      openAddNodeModal();
+    });
+
+    document.getElementById('connectBtn').addEventListener('click', function () {
+      toggleConnectMode();
+    });
+
+    document.getElementById('deleteBtn').addEventListener('click', function () {
+      if (graphState.selectedNode) {
+        openDeleteModal('node', graphState.selectedNode);
+      } else if (graphState.selectedEdge) {
+        openDeleteModal('edge', graphState.selectedEdge);
+      }
+    });
+
+    document.getElementById('fitAllBtn').addEventListener('click', function () {
+      fitAll();
+    });
+
+    document.getElementById('zoomInBtn').addEventListener('click', function () {
+      var rect = graphSvg.getBoundingClientRect();
+      handleZoom(1, rect.left + rect.width / 2, rect.top + rect.height / 2);
+    });
+
+    document.getElementById('zoomOutBtn').addEventListener('click', function () {
+      var rect = graphSvg.getBoundingClientRect();
+      handleZoom(-1, rect.left + rect.width / 2, rect.top + rect.height / 2);
+    });
+
+    // Search
+    document.getElementById('graphSearch').addEventListener('input', function () {
+      handleGraphSearch(this.value);
+    });
+
+    // Side panel close
+    document.getElementById('spClose').addEventListener('click', function () {
+      closeSidePanel();
+      deselectAll();
+    });
+
+    // ============================================================
+    // EVENT HANDLERS — MODALS
+    // ============================================================
+
+    // Add Node Modal
+    document.getElementById('modalSearchInput').addEventListener('input', function () {
+      renderSearchResults(this.value);
+    });
+
+    document.getElementById('addTopicConfirm').addEventListener('click', function () {
+      var title = document.getElementById('topicTitleInput').value.trim();
+      if (!title) {
+        showToast('Please enter a title');
+        return;
+      }
+      addNode(title, null, addNodePosition.x, addNodePosition.y);
+      closeAddNodeModal();
+    });
+
+    document.getElementById('topicTitleInput').addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') {
+        document.getElementById('addTopicConfirm').click();
+      }
+    });
+
+    document.getElementById('addNodeCancel').addEventListener('click', closeAddNodeModal);
+
+    // Edit Node Modal
+    document.getElementById('editNodeConfirm').addEventListener('click', function () {
+      var title = document.getElementById('editNodeTitleInput').value.trim();
+      if (!title) {
+        showToast('Please enter a title');
+        return;
+      }
+      if (editingNodeId !== null) {
+        updateNodeTitle(editingNodeId, title);
+        showToast('Title updated ✓');
+      }
+      closeEditNodeModal();
+    });
+
+    document.getElementById('editNodeTitleInput').addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') {
+        document.getElementById('editNodeConfirm').click();
+      }
+    });
+
+    document.getElementById('editNodeCancel').addEventListener('click', closeEditNodeModal);
+
+    // Delete Modal
+    document.getElementById('deleteConfirm').addEventListener('click', function () {
+      if (deletingType === 'node' && deletingId !== null) {
+        deleteNodeById(deletingId);
+      } else if (deletingType === 'edge' && deletingId !== null) {
+        deleteEdgeById(deletingId);
+      }
+      closeDeleteModal();
+    });
+
+    document.getElementById('deleteCancel').addEventListener('click', closeDeleteModal);
+
+    // Close modals on overlay click
+    document.querySelectorAll('.modal-overlay').forEach(function (overlay) {
+      overlay.addEventListener('click', function (e) {
+        if (e.target === overlay) {
+          overlay.classList.remove('open');
+          editingNodeId = null;
+          deletingType = null;
+          deletingId = null;
+        }
+      });
+    });
+
+    // ============================================================
+    // INITIALIZATION
+    // ============================================================
+    loadGraph();
+    renderGraph();
+    updateStatusInfo();
+    updateDeleteBtn();
+    applyViewport();
+
+    // Center viewport if there are nodes
+    if (graphData.nodes.length > 0) {
+      fitAll();
+    } else {
+      // Center viewport
+      var initRect = graphSvg.getBoundingClientRect();
+      viewport.x = initRect.width / 2;
+      viewport.y = initRect.height / 2;
+      applyViewport();
+    }
+
+  </script>
+</body>
+
+</html>
