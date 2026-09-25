@@ -1194,6 +1194,127 @@
       background: #8b483a;
     }
 
+    
+    /* Add Question Buttons & Form Styles */
+    .hub-add-q-btn {
+      font-family: -apple-system, system-ui, sans-serif;
+      font-size: 11.5px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--accent-border);
+      background: var(--accent-light);
+      color: var(--accent-hover);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .hub-add-q-btn:hover {
+      background: var(--accent-hover);
+      color: #fff;
+      border-color: var(--accent-hover);
+    }
+
+    .subq-add-item {
+      list-style: none;
+      padding: 8px 0 2px 0;
+    }
+    .branch-add-q-btn {
+      font-family: -apple-system, system-ui, sans-serif;
+      font-size: 11.5px;
+      font-weight: 500;
+      padding: 7px 12px;
+      border-radius: 6px;
+      border: 1px dashed var(--border);
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      width: 100%;
+      text-align: center;
+      transition: all 0.15s ease;
+    }
+    .branch-add-q-btn:hover {
+      background: var(--accent-light);
+      border-color: var(--accent);
+      color: var(--accent-hover);
+    }
+
+    .q-quick-delete {
+      background: none;
+      border: none;
+      color: var(--rose);
+      cursor: pointer;
+      font-size: 12px;
+      padding: 2px 5px;
+      border-radius: 4px;
+      opacity: 0.5;
+      transition: all 0.15s;
+      margin-left: 2px;
+    }
+    .q-quick-delete:hover {
+      opacity: 1;
+      background: var(--rose-bg);
+    }
+    body.body-mode--study .q-quick-delete,
+    body.body-mode--read .q-quick-delete {
+      display: none !important;
+    }
+
+    .form-group {
+      margin-bottom: 14px;
+      text-align: left;
+    }
+    .form-label {
+      display: block;
+      font-family: -apple-system, system-ui, sans-serif;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 5px;
+    }
+    .form-select,
+    .form-input,
+    .form-textarea {
+      width: 100%;
+      box-sizing: border-box;
+      font-family: -apple-system, system-ui, sans-serif;
+      font-size: 13px;
+      padding: 8px 10px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: var(--panel);
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .form-textarea {
+      font-family: 'Georgia', serif;
+      resize: vertical;
+      line-height: 1.5;
+    }
+    .form-select:focus,
+    .form-input:focus,
+    .form-textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px rgba(194, 149, 107, 0.15);
+    }
+    .form-row {
+      display: flex;
+      gap: 12px;
+    }
+    .form-col {
+      flex: 1;
+    }
+    .newly-added {
+      animation: pulseHighlight 2s ease;
+    }
+    @keyframes pulseHighlight {
+      0% { background: #fff8e8; box-shadow: 0 0 0 3px rgba(194, 149, 107, 0.4); }
+      100% { background: #ffffff; box-shadow: none; }
+    }
+
     /* Toast */
     .toast {
       position: fixed;
@@ -1299,6 +1420,7 @@
       <div class="progress-header">
         <span class="progress-label" id="progressLabel">Study Readiness: <strong>0</strong> / 39 mastered (0%)</span>
         <div class="progress-actions">
+          <button class="btn-sm btn-sm--accent" id="addQuestionMainBtn" onclick="openAddQuestionModal()" title="Add a question to any hub">＋ Add Question</button>
           <button class="btn-sm" id="expandAllBtn" title="Expand all master hubs and branches">↕ Expand All</button>
           <button class="btn-sm" id="collapseAllBtn" title="Collapse all">↕ Collapse All</button>
           <button class="btn-sm btn-sm--accent" id="backupJsonBtn" title="Backup all questions & progress to JSON">↓ Backup JSON</button>
@@ -1374,6 +1496,87 @@
       <div class="modal-actions">
         <button class="modal-btn modal-btn--cancel" id="resetCancel">Cancel</button>
         <button class="modal-btn modal-btn--danger" id="resetConfirm">Reset Everything</button>
+      </div>
+    </div>
+  </div>
+
+  
+  <!-- Add Question Modal -->
+  <div class="modal-overlay" id="addQuestionModal">
+    <div class="modal" style="max-width: 520px;">
+      <h3 id="addQModalTitle">Add Question to Hub</h3>
+      <p style="margin-bottom: 14px;">Expand your interview knowledge by adding follow-up questions to any hub and branch.</p>
+      
+      <div class="form-group">
+        <label class="form-label" for="addQHubSelect">Target Master Hub</label>
+        <select class="form-select" id="addQHubSelect" onchange="populateBranchSelect(this.value)">
+          <option value="1">Hub 1: Tell me something about yourself (Intro)</option>
+          <option value="56">Hub 2: Experience at KPIT (General)</option>
+          <option value="5">Hub 3: Sugam Krishi (Project)</option>
+          <option value="12">Hub 4: Passwordzzz (Project)</option>
+          <option value="18">Hub 5: Tech Stack & Fundamentals (Technical)</option>
+          <option value="41">Hub 6: Why Accenture & HR (Behavioral)</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="addQBranchSelect">Topic Branch / Section</label>
+        <select class="form-select" id="addQBranchSelect" onchange="handleBranchSelectChange(this.value)"></select>
+      </div>
+
+      <div class="form-group" id="newBranchGroup" style="display:none;">
+        <label class="form-label" for="addQNewBranchInput">New Branch Name</label>
+        <input type="text" class="form-input" id="addQNewBranchInput" placeholder="e.g. System Design, Edge Cases, Code Quality...">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="addQTextInput">Question Prompt *</label>
+        <textarea class="form-textarea" id="addQTextInput" rows="2" placeholder="e.g. How do you handle merge conflicts in Git?"></textarea>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group form-col">
+          <label class="form-label" for="addQPrioritySelect">Priority</label>
+          <select class="form-select" id="addQPrioritySelect">
+            <option value="must">Must Prepare</option>
+            <option value="high" selected>High</option>
+            <option value="medium">Medium</option>
+            <option value="standard">Standard</option>
+          </select>
+        </div>
+        <div class="form-group form-col">
+          <label class="form-label" for="addQTypeSelect">Category / Type</label>
+          <select class="form-select" id="addQTypeSelect">
+            <option value="Technical">Technical</option>
+            <option value="Introductory">Introductory</option>
+            <option value="Project">Project</option>
+            <option value="Behavioral">Behavioral</option>
+            <option value="General">General</option>
+            <option value="HR">HR</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="addQAnswerInput">Core Answer (optional)</label>
+        <textarea class="form-textarea" id="addQAnswerInput" rows="4" placeholder="Draft your structured talking points or answer here..."></textarea>
+      </div>
+
+      <div class="modal-actions">
+        <button class="modal-btn modal-btn--cancel" onclick="closeAddQuestionModal()">Cancel</button>
+        <button class="modal-btn modal-btn--accent" onclick="handleSaveNewQuestion()">Add Question</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Question Confirm Modal -->
+  <div class="modal-overlay delete-modal" id="deleteQModal">
+    <div class="modal">
+      <h3 id="deleteQTitle">Delete this question?</h3>
+      <p id="deleteQDesc">This will remove the question and its answer from your preparation store.</p>
+      <div class="modal-actions">
+        <button class="modal-btn modal-btn--cancel" onclick="closeDeleteQModal()">Cancel</button>
+        <button class="modal-btn modal-btn--danger" onclick="executeDeleteQuestion()">Delete</button>
       </div>
     </div>
   </div>
@@ -2303,6 +2506,282 @@
 
     var STORE_DATA = null;
 
+    
+    // ============================================================
+    // DYNAMIC QUESTION CREATION & DELETION
+    // ============================================================
+    function getNextQuestionId(store) {
+      var maxId = 0;
+      if (!store || !Array.isArray(store.questions)) return 100;
+      store.questions.forEach(function (mq) {
+        if (mq.id && mq.id > maxId) maxId = mq.id;
+        if (Array.isArray(mq.children)) {
+          mq.children.forEach(function (sec) {
+            if (Array.isArray(sec.children)) {
+              sec.children.forEach(function (sq) {
+                if (sq.id && sq.id > maxId) maxId = sq.id;
+              });
+            }
+          });
+        }
+      });
+      return maxId + 1;
+    }
+
+    function updateHubPills() {
+      if (!STORE_DATA || !Array.isArray(STORE_DATA.questions)) return;
+      var all = getAllQuestionsFlat();
+      var total = all.length;
+      var countsByHub = {};
+      STORE_DATA.questions.forEach(function (mq) {
+        var count = 1;
+        if (Array.isArray(mq.children)) {
+          mq.children.forEach(function (sec) {
+            if (Array.isArray(sec.children)) {
+              count += sec.children.length;
+            }
+          });
+        }
+        countsByHub[mq.id] = count;
+      });
+
+      var hubLabels = {
+        1: '1. About You',
+        56: '2. KPIT',
+        5: '3. Sugam Krishi',
+        12: '4. Passwordzzz',
+        18: '5. Tech Stack',
+        41: '6. Why Accenture'
+      };
+
+      document.querySelectorAll('#hubPills .pill').forEach(function (pill) {
+        var hubId = pill.dataset.hub;
+        if (hubId === 'all') {
+          pill.textContent = 'All Hubs (' + total + ')';
+        } else if (countsByHub[hubId] !== undefined) {
+          pill.textContent = (hubLabels[hubId] || 'Hub ' + hubId) + ' (' + countsByHub[hubId] + ')';
+        }
+      });
+    }
+
+    var pendingDeleteQId = null;
+
+    function confirmDeleteQuestion(id) {
+      pendingDeleteQId = id;
+      var node = findQuestionNode(id);
+      if (node) {
+        var qText = node.question || '';
+        document.getElementById('deleteQTitle').textContent = 'Delete "Q' + id + ': ' + (qText.slice(0, 35) + (qText.length > 35 ? '…' : '')) + '"?';
+      }
+      document.getElementById('deleteQModal').classList.add('open');
+    }
+
+    function closeDeleteQModal() {
+      document.getElementById('deleteQModal').classList.remove('open');
+      pendingDeleteQId = null;
+    }
+
+    function executeDeleteQuestion() {
+      if (pendingDeleteQId === null || !STORE_DATA) return;
+      var idToDelete = pendingDeleteQId;
+      var deleted = false;
+
+      STORE_DATA.questions.forEach(function (mq) {
+        if (Array.isArray(mq.children)) {
+          mq.children.forEach(function (sec) {
+            if (Array.isArray(sec.children)) {
+              var idx = sec.children.findIndex(function (sq) { return sq.id === idToDelete; });
+              if (idx !== -1) {
+                sec.children.splice(idx, 1);
+                deleted = true;
+              }
+            }
+          });
+        }
+      });
+
+      if (deleted) {
+        STORE_DATA.totalQuestionNodes = getAllQuestionsFlat().length;
+        saveStore();
+        updateProgress();
+        updateHubPills();
+        render();
+        showToast('Question deleted');
+      }
+      closeDeleteQModal();
+    }
+
+    function handleBranchSelectChange(val) {
+      var newBranchGroup = document.getElementById('newBranchGroup');
+      if (val === '__new__') {
+        newBranchGroup.style.display = 'block';
+        document.getElementById('addQNewBranchInput').focus();
+      } else {
+        newBranchGroup.style.display = 'none';
+      }
+    }
+
+    function populateBranchSelect(hubId, selectedBranchIdx) {
+      var branchSelect = document.getElementById('addQBranchSelect');
+      var newBranchGroup = document.getElementById('newBranchGroup');
+      if (!branchSelect) return;
+      branchSelect.innerHTML = '';
+
+      var mq = STORE_DATA.questions.find(function (q) { return String(q.id) === String(hubId); });
+      if (!mq || !Array.isArray(mq.children) || mq.children.length === 0) {
+        var optNew = document.createElement('option');
+        optNew.value = '__new__';
+        optNew.textContent = '＋ Create new branch...';
+        branchSelect.appendChild(optNew);
+        newBranchGroup.style.display = 'block';
+        return;
+      }
+
+      mq.children.forEach(function (sec, idx) {
+        var opt = document.createElement('option');
+        opt.value = idx;
+        opt.textContent = sec.title + ' (' + (sec.children ? sec.children.length : 0) + ' Qs)';
+        if (selectedBranchIdx !== undefined && idx === selectedBranchIdx) {
+          opt.selected = true;
+        }
+        branchSelect.appendChild(opt);
+      });
+
+      var optNew = document.createElement('option');
+      optNew.value = '__new__';
+      optNew.textContent = '＋ Create new branch...';
+      branchSelect.appendChild(optNew);
+
+      if (branchSelect.value === '__new__') {
+        newBranchGroup.style.display = 'block';
+      } else {
+        newBranchGroup.style.display = 'none';
+      }
+    }
+
+    function openAddQuestionModal(optHubId, optBranchIndex) {
+      var hubSelect = document.getElementById('addQHubSelect');
+      if (optHubId) {
+        hubSelect.value = String(optHubId);
+      }
+      populateBranchSelect(hubSelect.value, optBranchIndex);
+      document.getElementById('addQTextInput').value = '';
+      document.getElementById('addQAnswerInput').value = '';
+      document.getElementById('addQNewBranchInput').value = '';
+      document.getElementById('addQuestionModal').classList.add('open');
+      setTimeout(function () {
+        document.getElementById('addQTextInput').focus();
+      }, 100);
+    }
+
+    function closeAddQuestionModal() {
+      document.getElementById('addQuestionModal').classList.remove('open');
+    }
+
+    function handleSaveNewQuestion() {
+      var questionText = document.getElementById('addQTextInput').value.trim();
+      if (!questionText) {
+        showToast('Please enter question text');
+        document.getElementById('addQTextInput').focus();
+        return;
+      }
+
+      var hubId = parseInt(document.getElementById('addQHubSelect').value, 10);
+      var branchVal = document.getElementById('addQBranchSelect').value;
+      var priority = document.getElementById('addQPrioritySelect').value;
+      var type = document.getElementById('addQTypeSelect').value;
+      var answerRaw = document.getElementById('addQAnswerInput').value.trim();
+
+      var answerHtml = answerRaw
+        ? '<p>' + escapeHtml(answerRaw).replace(/\n/g, '<br>') + '</p>'
+        : '<p><em>No answer drafted yet…</em></p>';
+
+      var mq = STORE_DATA.questions.find(function (q) { return q.id === hubId; });
+      if (!mq) return;
+
+      if (!Array.isArray(mq.children)) {
+        mq.children = [];
+      }
+
+      var targetBranch = null;
+      if (branchVal === '__new__') {
+        var branchTitle = document.getElementById('addQNewBranchInput').value.trim() || 'Additional Follow-ups';
+        targetBranch = {
+          nodeType: 'section',
+          title: branchTitle,
+          toggle: { section: true, defaultOpen: true },
+          children: []
+        };
+        mq.children.push(targetBranch);
+      } else {
+        var branchIdx = parseInt(branchVal, 10);
+        targetBranch = mq.children[branchIdx];
+        if (!targetBranch) {
+          targetBranch = {
+            nodeType: 'section',
+            title: 'Additional Follow-ups',
+            toggle: { section: true, defaultOpen: true },
+            children: []
+          };
+          mq.children.push(targetBranch);
+        }
+      }
+
+      var newId = getNextQuestionId(STORE_DATA);
+      var newQuestion = {
+        nodeType: 'question',
+        id: newId,
+        sourceQuestionId: newId,
+        question: questionText,
+        answer: answerHtml,
+        priority: priority,
+        priorityLabel: priorityLabelMap[priority] || 'Standard',
+        type: type,
+        isEdited: true,
+        mastered: false,
+        toggle: {
+          question: true,
+          answer: true,
+          defaultOpen: false
+        },
+        children: []
+      };
+
+      if (!Array.isArray(targetBranch.children)) {
+        targetBranch.children = [];
+      }
+      targetBranch.children.push(newQuestion);
+
+      STORE_DATA.totalQuestionNodes = getAllQuestionsFlat().length;
+      saveStore();
+
+      // Open hub and branch so user immediately sees their new question
+      openHubs[hubId] = true;
+      var finalBranchIdx = mq.children.indexOf(targetBranch);
+      openBranches[hubId + '_' + finalBranchIdx] = true;
+      openSubQs[newId] = true;
+
+      updateProgress();
+      updateHubPills();
+      render();
+      closeAddQuestionModal();
+
+      var hubIndex = STORE_DATA.questions.indexOf(mq) + 1;
+      showToast('Question added to Hub ' + hubIndex + ' ✓');
+
+      setTimeout(function () {
+        var titleEl = document.getElementById('qTitle-' + newId);
+        if (titleEl) {
+          var card = titleEl.closest('.subq-card');
+          if (card) {
+            card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            card.classList.add('newly-added');
+            setTimeout(function () { card.classList.remove('newly-added'); }, 2000);
+          }
+        }
+      }, 150);
+    }
+
     // Load store
     function loadStore() {
       try {
@@ -2563,6 +3042,9 @@
               var sqTitleEditBtn = currentMode === 'edit'
                 ? '<button class="q-title-quick-edit" title="Edit sub-question" onclick="event.stopPropagation();startEditTitle(' + sq.id + ', false)">✎</button>'
                 : '';
+              var sqDeleteBtn = currentMode === 'edit'
+                ? '<button class="q-quick-delete" title="Delete question" onclick="event.stopPropagation();confirmDeleteQuestion(' + sq.id + ')">✕</button>'
+                : '';
 
               var sqMasteryBadge =
                 '<span class="q-mastery-badge ' + (sq.mastered ? 'mastered' : 'practice') + '" ' +
@@ -2603,6 +3085,7 @@
                 '<span class="subq-num">Q' + sq.id + '</span>' +
                 '<span class="subq-title" id="qTitle-' + sq.id + '">' + escapeHtml(sq.question) + '</span>' +
                 sqTitleEditBtn +
+                sqDeleteBtn +
                 '</div>' +
                 '<div class="subq-header-right">' +
                 sqPriorityHtml +
@@ -2614,6 +3097,9 @@
                 '</li>';
             });
 
+            var branchAddBtn = currentMode === 'edit'
+                ? '<li class="subq-add-item"><button class="branch-add-q-btn" onclick="openAddQuestionModal(' + mq.id + ', ' + secIndex + ')">＋ Add follow-up to ' + escapeHtml(sec.title) + '</button></li>'
+                : '';
             branchesHtml +=
               '<div class="branch-card' + (isBranchOpen ? ' open' : '') + '" data-branch-key="' + branchKey + '">' +
               '<div class="branch-header" data-bkey="' + branchKey + '" onclick="toggleBranch(this.dataset.bkey)">' +
@@ -2624,7 +3110,7 @@
               '<span class="branch-badge">' + matchingSubQs.length + ' question' + (matchingSubQs.length !== 1 ? 's' : '') + '</span>' +
               '</div>' +
               '<div class="branch-body">' +
-              '<ul class="subq-list">' + subQsHtml + '</ul>' +
+              '<ul class="subq-list">' + subQsHtml + branchAddBtn + '</ul>' +
               '</div>' +
               '</div>';
           });
@@ -2718,6 +3204,7 @@
             '<div class="hub-branches-wrap">' +
             '<div class="hub-branches-main-header">' +
             '<span class="hub-branches-main-title">🌿 Nested Branches &amp; Follow-up Questions (' + visibleSubQsInHub + ' questions)</span>' +
+            '<button class="hub-add-q-btn" onclick="openAddQuestionModal(' + mq.id + ')">＋ Add Question</button>' +
             '</div>' +
             '<div class="branches-list">' + branchesHtml + '</div>' +
             '</div>';
