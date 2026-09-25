@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Interview Map — Accenture Interview Prep</title>
   <meta name="description"
-    content="Visual knowledge graph for interview preparation — map topics, connect questions, and trace conversation branches.">
+    content="Visual knowledge graph for interview preparation — 6 Master Hubs, Topic Branches, and follow-up subquestions.">
   <style>
     /* ============================================================
        Interview Map — Warm Parchment Theme (matching main app)
@@ -73,7 +73,7 @@
        ============================================================ */
     .graph-header {
       flex-shrink: 0;
-      padding: 14px 24px;
+      padding: 12px 24px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -146,6 +146,7 @@
       display: flex;
       align-items: center;
       gap: 6px;
+      flex-wrap: wrap;
     }
 
     .graph-toolbar-right {
@@ -158,7 +159,7 @@
       font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
       font-size: 12px;
       font-weight: 600;
-      padding: 6px 14px;
+      padding: 6px 13px;
       border-radius: 6px;
       border: 1px solid var(--border);
       background: var(--panel);
@@ -213,7 +214,7 @@
 
     .gt-sep {
       width: 1px;
-      height: 22px;
+      height: 20px;
       background: var(--border);
       margin: 0 4px;
     }
@@ -288,6 +289,61 @@
     }
 
     /* ============================================================
+       HUB NAVIGATION BAR
+       ============================================================ */
+    .hub-nav-bar {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 18px;
+      background: #fdfbf7;
+      border-bottom: 1px solid var(--border);
+      overflow-x: auto;
+      white-space: nowrap;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .hub-nav-label {
+      font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
+      font-size: 10.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-light);
+      margin-right: 4px;
+      flex-shrink: 0;
+    }
+
+    .hub-pill {
+      font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
+      font-size: 11.5px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: var(--panel);
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .hub-pill:hover {
+      background: var(--accent-light);
+      color: var(--text);
+      border-color: var(--accent-border);
+    }
+
+    .hub-pill.active {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+      box-shadow: 0 1px 3px rgba(139, 94, 60, 0.2);
+    }
+
+    /* ============================================================
        CANVAS
        ============================================================ */
     .graph-canvas-wrap {
@@ -318,13 +374,14 @@
     .gn {
       cursor: pointer;
       user-select: none;
+      transition: opacity 0.2s ease, filter 0.2s ease;
     }
 
     .gn-bg {
       fill: var(--panel);
       stroke: var(--border);
       stroke-width: 1;
-      transition: stroke 0.15s, stroke-width 0.15s;
+      transition: stroke 0.15s, stroke-width 0.15s, fill 0.15s;
     }
 
     .gn:hover .gn-bg {
@@ -332,76 +389,146 @@
     }
 
     .gn--selected .gn-bg {
-      stroke: var(--accent);
-      stroke-width: 2;
+      stroke: var(--accent) !important;
+      stroke-width: 2.5 !important;
     }
 
     .gn--connect-source .gn-bg {
-      stroke: var(--blue);
-      stroke-width: 2.5;
+      stroke: var(--blue) !important;
+      stroke-width: 2.5 !important;
       stroke-dasharray: 4 2;
     }
 
     .gn--search-match .gn-bg {
-      stroke: var(--amber);
-      stroke-width: 2;
+      stroke: var(--amber) !important;
+      stroke-width: 2 !important;
     }
 
-    .gn--search-dim {
-      opacity: 0.3;
+    .gn--search-dim,
+    .gn--hub-dim {
+      opacity: 0.25;
+      filter: grayscale(0.5);
     }
 
-    .gn-accent {
-      pointer-events: none;
+    /* Master Hub Node Style */
+    .gn--master .gn-bg {
+      fill: #fffdf9;
+      stroke: #8b5e3c;
+      stroke-width: 1.75;
+    }
+
+    .gn--master:hover .gn-bg {
+      stroke: #664124;
+      stroke-width: 2.25;
+    }
+
+    .gn-master-badge {
+      font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
+      font-size: 9.5px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      fill: #8b5e3c;
+    }
+
+    /* Topic Branch Node Style */
+    .gn--branch .gn-bg {
+      fill: #f5efe6;
+      stroke: #d8cdbe;
+      stroke-width: 1.25;
+    }
+
+    .gn--branch:hover .gn-bg {
+      stroke: #bdae9c;
+      fill: #fcf7f0;
+    }
+
+    .gn--branch .gn-title {
+      font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
+      font-size: 11.5px;
+      font-weight: 600;
+      fill: #5c4e3e;
+    }
+
+    /* Question Node Style */
+    .gn--question .gn-bg {
+      fill: #ffffff;
+      stroke: var(--border);
     }
 
     .gn-title {
       font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
-      font-size: 12.5px;
+      font-size: 12px;
       font-weight: 600;
       fill: var(--text);
-      pointer-events: none;
+    }
+
+    .gn--master .gn-title {
+      font-family: 'Georgia', serif;
+      font-size: 13px;
+      font-weight: bold;
+      fill: #2c241c;
     }
 
     .gn-subtitle {
       font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
       font-size: 10px;
       fill: var(--text-light);
-      pointer-events: none;
     }
 
     .gn-link-dot {
-      fill: var(--green);
-      pointer-events: none;
+      fill: var(--accent);
     }
 
     /* ---------- SVG Edges ---------- */
     .ge-path {
       fill: none;
-      stroke: #c4b9a8;
+      stroke: #c8beae;
       stroke-width: 1.5;
       transition: stroke 0.15s, stroke-width 0.15s;
-    }
-
-    .ge--selected .ge-path {
-      stroke: var(--accent);
-      stroke-width: 2.5;
     }
 
     .ge-hit {
       fill: none;
       stroke: transparent;
-      stroke-width: 18;
+      stroke-width: 16;
       cursor: pointer;
+    }
+
+    .ge:hover .ge-path {
+      stroke: var(--accent);
+      stroke-width: 2.2;
+    }
+
+    .ge--selected .ge-path {
+      stroke: var(--accent-hover);
+      stroke-width: 2.5;
+    }
+
+    /* Progression Edge */
+    .ge--progression .ge-path {
+      stroke: #c2956b;
+      stroke-width: 2;
+      stroke-dasharray: 6 4;
+      opacity: 0.85;
+    }
+
+    .ge--progression:hover .ge-path {
+      stroke: #8b5e3c;
+      stroke-width: 2.8;
+      opacity: 1;
+    }
+
+    .ge--dim {
+      opacity: 0.2;
     }
 
     .temp-edge {
       fill: none;
-      stroke: var(--accent);
+      stroke: var(--blue);
       stroke-width: 2;
-      stroke-dasharray: 6 4;
+      stroke-dasharray: 5 3;
       pointer-events: none;
-      opacity: 0.7;
     }
 
     /* ============================================================
@@ -409,9 +536,9 @@
        ============================================================ */
     .graph-status {
       flex-shrink: 0;
-      padding: 5px 18px;
+      padding: 6px 18px;
       background: var(--panel);
-      border-top: 1px solid var(--border-light);
+      border-top: 1px solid var(--border);
       font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
       font-size: 11px;
       color: var(--text-light);
@@ -420,29 +547,23 @@
       justify-content: space-between;
     }
 
-    .status-hint {
-      color: var(--accent-hover);
-      font-weight: 600;
-    }
-
     /* ============================================================
        SIDE PANEL
        ============================================================ */
     .side-panel {
-      position: fixed;
-      right: 0;
+      position: absolute;
       top: 0;
+      right: 0;
       bottom: 0;
-      width: 400px;
-      max-width: 90vw;
+      width: 440px;
       background: var(--panel);
       border-left: 1px solid var(--border);
-      box-shadow: -8px 0 30px rgba(42, 33, 24, 0.08);
+      box-shadow: -4px 0 20px rgba(61, 52, 41, 0.08);
       z-index: 100;
       display: flex;
       flex-direction: column;
       transform: translateX(100%);
-      transition: transform 0.25s ease;
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .side-panel.open {
@@ -450,36 +571,33 @@
     }
 
     .sp-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 16px 20px;
-      border-bottom: 1px solid var(--border-light);
-      flex-shrink: 0;
     }
 
     .sp-header-title {
       font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
-      font-size: 11px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: var(--text-light);
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--text);
     }
 
     .sp-close {
-      font-size: 18px;
+      font-size: 16px;
       background: none;
       border: none;
       color: var(--text-muted);
       cursor: pointer;
-      padding: 2px 6px;
+      padding: 4px;
       border-radius: 4px;
-      transition: all 0.12s;
+      line-height: 1;
+      transition: color 0.12s;
     }
 
     .sp-close:hover {
-      background: var(--pill-bg);
       color: var(--text);
     }
 
@@ -491,19 +609,26 @@
 
     .sp-badges {
       display: flex;
-      flex-wrap: wrap;
       gap: 6px;
-      margin-bottom: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+      align-items: center;
     }
 
     .sp-badge {
       font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
-      font-size: 10.5px;
-      font-weight: 600;
-      padding: 3px 10px;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 9px;
       border-radius: 20px;
       text-transform: uppercase;
-      letter-spacing: 0.03em;
+      letter-spacing: 0.04em;
+    }
+
+    .sp-badge--hub {
+      background: #fbf5ee;
+      color: #8b5e3c;
+      border: 1px solid #ebd8c8;
     }
 
     .sp-badge--section {
@@ -534,7 +659,7 @@
     .sp-badge-select {
       font-size: 10px;
       font-weight: 600;
-      padding: 2px 18px 2px 8px;
+      padding: 3px 18px 3px 8px;
       border-radius: 9999px;
       text-transform: uppercase;
       letter-spacing: 0.03em;
@@ -542,16 +667,17 @@
       cursor: pointer;
       outline: none;
       -webkit-appearance: none;
-      -moz-appearance: none;
       appearance: none;
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='6' viewBox='0 0 8 6'%3E%3Cpath fill='%23666' d='M0 1l4 4 4-4z'/%3E%3C/svg%3E");
       background-repeat: no-repeat;
       background-position: right 6px center;
       transition: all 0.15s ease;
     }
+
     .sp-badge-select:hover {
       filter: brightness(0.95);
     }
+
     .sp-badge-select option {
       background: #faf6f0;
       color: #2c2520;
@@ -566,11 +692,11 @@
 
     .sp-question {
       font-family: 'Georgia', serif;
-      font-size: 17px;
-      line-height: 1.45;
+      font-size: 16.5px;
+      line-height: 1.5;
       color: var(--text);
       margin-bottom: 16px;
-      font-weight: 400;
+      font-weight: 600;
     }
 
     .sp-divider {
@@ -582,7 +708,7 @@
     .sp-answer-label {
       font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
       font-size: 11px;
-      font-weight: 600;
+      font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.06em;
       color: var(--text-light);
@@ -611,8 +737,14 @@
       margin-bottom: 10px;
     }
 
-    .sp-answer p:last-child {
-      margin-bottom: 0;
+    .sp-answer ul,
+    .sp-answer ol {
+      margin-left: 20px;
+      margin-bottom: 10px;
+    }
+
+    .sp-answer li {
+      margin-bottom: 6px;
     }
 
     .sp-actions {
@@ -665,7 +797,7 @@
 
     .sp-topic-title-input {
       font-family: 'Georgia', serif;
-      font-size: 17px;
+      font-size: 16px;
       width: 100%;
       padding: 8px 12px;
       border: 1px solid var(--border);
@@ -680,12 +812,32 @@
       border-color: var(--accent);
     }
 
-    .sp-unlinked-msg {
+    .sp-branch-q-list {
+      margin-top: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .sp-branch-q-item {
+      padding: 8px 12px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--bg);
       font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
       font-size: 12.5px;
-      color: var(--text-light);
-      line-height: 1.6;
-      margin-top: 16px;
+      color: var(--text);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      transition: background 0.12s, border-color 0.12s;
+    }
+
+    .sp-branch-q-item:hover {
+      background: var(--accent-light);
+      border-color: var(--accent-border);
     }
 
     /* ============================================================
@@ -752,50 +904,61 @@
        MODALS
        ============================================================ */
     .modal-overlay {
-      display: none;
       position: fixed;
       inset: 0;
-      background: rgba(42, 33, 24, 0.4);
+      background: rgba(45, 38, 28, 0.45);
+      backdrop-filter: blur(2px);
       z-index: 1000;
+      display: flex;
       align-items: center;
       justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
     }
 
     .modal-overlay.open {
-      display: flex;
+      opacity: 1;
+      pointer-events: auto;
     }
 
     .modal {
       background: var(--panel);
+      border: 1px solid var(--border);
       border-radius: 12px;
-      padding: 28px;
+      padding: 24px;
       max-width: 480px;
-      width: 90vw;
-      box-shadow: 0 20px 60px rgba(42, 33, 24, 0.2);
+      width: 90%;
+      box-shadow: 0 12px 36px rgba(61, 52, 41, 0.15);
+      text-align: center;
+      transform: scale(0.95);
+      transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .modal-overlay.open .modal {
+      transform: scale(1);
     }
 
     .modal h3 {
-      font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
-      font-size: 17px;
-      margin-bottom: 16px;
+      font-family: 'Georgia', serif;
+      font-size: 18px;
+      font-weight: 400;
       color: var(--text);
-      text-align: center;
+      margin-bottom: 12px;
     }
 
     .modal p {
       font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
-      font-size: 13.5px;
+      font-size: 13px;
       color: var(--text-muted);
-      margin-bottom: 16px;
-      line-height: 1.6;
-      text-align: center;
+      line-height: 1.5;
+      margin-bottom: 20px;
     }
 
     .modal-actions {
       display: flex;
-      gap: 10px;
-      justify-content: center;
-      margin-top: 20px;
+      gap: 8px;
+      justify-content: flex-end;
     }
 
     .modal-btn {
@@ -912,10 +1075,6 @@
       opacity: 0.5;
     }
 
-    .sr-item--linked:hover {
-      opacity: 0.7;
-    }
-
     .sr-item-left {
       flex: 1;
       min-width: 0;
@@ -1015,7 +1174,7 @@
        ============================================================ */
     .toast {
       position: fixed;
-      bottom: 60px;
+      bottom: 50px;
       left: 50%;
       transform: translateX(-50%) translateY(20px);
       opacity: 0;
@@ -1029,31 +1188,12 @@
       transition: opacity 0.3s, transform 0.3s;
       z-index: 2000;
       white-space: nowrap;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
     }
 
     .toast.show {
       opacity: 1;
       transform: translateX(-50%) translateY(0);
-    }
-
-    /* ============================================================
-       SCROLLBAR
-       ============================================================ */
-    ::-webkit-scrollbar {
-      width: 5px;
-    }
-
-    ::-webkit-scrollbar-track {
-      background: transparent;
-    }
-
-    ::-webkit-scrollbar-thumb {
-      background: #d8cfc2;
-      border-radius: 3px;
-    }
-
-    ::-webkit-scrollbar-thumb:hover {
-      background: #b8a68e;
     }
 
     /* ============================================================
@@ -1117,6 +1257,9 @@
       <button class="gt-btn" id="fitAllBtn" title="Fit all nodes in view">
         ⊞ Fit All
       </button>
+      <button class="gt-btn" id="resetMapBtn" title="Reset map to 6 Master Hubs structure">
+        🔄 Reset Master Map
+      </button>
     </div>
     <div class="graph-toolbar-right">
       <div class="gt-search-wrap">
@@ -1131,6 +1274,18 @@
     </div>
   </div>
 
+  <!-- Hub Navigation Bar -->
+  <div class="hub-nav-bar" id="hubNavBar">
+    <span class="hub-nav-label">Hubs:</span>
+    <button class="hub-pill active" data-hub="all">All Hubs (39 Qs)</button>
+    <button class="hub-pill" data-hub="1">1. About You</button>
+    <button class="hub-pill" data-hub="2">2. KPIT Experience</button>
+    <button class="hub-pill" data-hub="3">3. Sugam Krishi</button>
+    <button class="hub-pill" data-hub="4">4. Passwordzzz</button>
+    <button class="hub-pill" data-hub="5">5. Tech Stack & Fundamentals</button>
+    <button class="hub-pill" data-hub="6">6. Why Accenture & HR</button>
+  </div>
+
   <!-- Canvas -->
   <div class="graph-canvas-wrap" id="canvasWrap">
     <svg id="graphSvg" xmlns="http://www.w3.org/2000/svg">
@@ -1143,9 +1298,6 @@
           orient="auto-start-reverse">
           <path d="M 0 0 L 10 4 L 0 8 z" fill="#c2956b" />
         </marker>
-        <filter id="nodeShadow" x="-20%" y="-20%" width="140%" height="160%">
-          <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="rgba(61,52,41,0.1)" />
-        </filter>
       </defs>
       <g id="graphViewport">
         <g id="edgesGroup"></g>
@@ -1166,7 +1318,7 @@
 
   <!-- Status Bar -->
   <div class="graph-status" id="graphStatus">
-    <span id="statusText">Ready — double-click canvas to add a node</span>
+    <span id="statusText">Ready — double-click canvas to add node or click a Hub to focus</span>
     <span id="statusInfo"></span>
   </div>
 
@@ -1229,16 +1381,926 @@
     </div>
   </div>
 
+  <!-- Reset Confirm Modal -->
+  <div class="modal-overlay" id="resetModal">
+    <div class="modal">
+      <h3 id="resetTitle">Reset to Master Hubs Structure?</h3>
+      <p id="resetDesc">This will rebuild the interview map with all 6 master hubs, 19 topic branches, and 33 follow-up questions neatly organized to match the main screen.</p>
+      <div class="modal-actions">
+        <button class="modal-btn modal-btn--cancel" id="resetCancel">Cancel</button>
+        <button class="modal-btn modal-btn--accent" id="resetConfirm">Reset Map</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Toast -->
   <div class="toast" id="toast"></div>
 
   <script>
     // ============================================================
-    // CONSTANTS
+    // NESTED MASTER DATA (REFERENCE TEMPLATE)
+    // ============================================================
+    var DEFAULT_MASTER_DATA = {
+  "version": 5,
+  "mode": "edit",
+  "structure": "nested-accordion",
+  "description": "Six master interview hubs with collapsible sections and nested question/answer toggles. Answers are copied verbatim from the uploaded JSON source; earlier drafts are not substituted.",
+  "totalMasterQuestions": 6,
+  "totalQuestionNodes": 39,
+  "prepPath": [
+    1,
+    56,
+    5,
+    12,
+    18,
+    41
+  ],
+  "ui": {
+    "masterToggle": "accordion",
+    "sectionToggle": "accordion",
+    "questionToggle": "accordion",
+    "answerToggle": true,
+    "defaultOpenMaster": false,
+    "defaultOpenSection": false,
+    "defaultOpenAnswer": false
+  },
+  "questions": [
+    {
+      "nodeType": "master",
+      "id": 1,
+      "sourceQuestionId": 1,
+      "question": "Tell me something about yourself.",
+      "answer": "<ul><li><p>Sure, I’m Sayan Kabir, currently pursuing M.Tech in CSE at KIIT. I completed my B.Tech from the same university.</p></li><li><p>My interest in programming started back in school. In college, I built a stronger foundation in computer science through subjects like data structures, algorithms, OOP. Alongside my coursework, I started exploring technologies like Flutter and Unity through separate courses and personal projects.</p></li><li><p>One of the projects I built was Passwordzzz, an offline password manager where I explored things like local storage, encryption and biometric authentication. I also worked on Sugam Krishi, which is an all-in-one platform for farmers that we built as a team of four as part of a hackathon. We eventually won the institute-level round of the hackathon and represented our university at the regional level.</p></li><li><p>I got my first industry experience at KPIT Technologies. I joined as an intern and later worked as a Trainee Software Engineer, where I got exposure to working on real-world software, particularly with Python, SQL, git, as well as internal tools. Unfortunately, I had to leave the organization due to a family emergency, but I left on good terms and I'm grateful for the experience I got there.</p></li><li><p>Currently, I’m pursuing my M.Tech while continuing to strengthen my fundamentals and skills. I genuinely enjoy learning by building things, and I’m now looking for an opportunity to work on real-world problems and grow as a software engineer.</p></li></ul>",
+      "priority": "must",
+      "priorityLabel": "Must Prepare",
+      "type": "Introductory",
+      "isEdited": true,
+      "toggle": {
+        "master": true,
+        "answer": true,
+        "defaultOpen": false
+      },
+      "children": [
+        {
+          "nodeType": "section",
+          "title": "Natural follow-ups",
+          "toggle": {
+            "section": true,
+            "defaultOpen": false
+          },
+          "children": [
+            {
+              "nodeType": "question",
+              "id": 2,
+              "sourceQuestionId": 2,
+              "question": "Walk me through your resume.",
+              "answer": "<p>Sure. I'm doing my M.Tech in CS&E at KIIT, Bhubaneswar right now. Before that I did my B.Tech in IT at the same university and graduated with an 8.90 CGPA.</p><p>On the experience side, I joined KPIT Technologies in January 2024 as an intern and became a Trainee Software Engineer in July. Over 11 months I worked on internal tooling: automation scripts in Python and pandas, a Flask web application with SQLAlchemy for database management, and data analysis with SQL, pandas, and NumPy. I used Git and GitHub every day for version control and code reviews.</p><p>My main project is Sugam Krishi, a Flutter AgTech app with a Firebase backend, a TensorFlow CNN for crop disease detection, and an LLM-powered chatbot. The second is Passwordzzz, an open-source offline password manager built with Flutter, SQLite, and AES-256 encryption, with biometric unlock.</p><p>For skills, I'm strongest in C++, Python, and Dart, and I have solid fundamentals in DSA, OOP, DBMS, and operating systems. I use Flutter for mobile, Flask and Node.js for backend work, and MySQL, SQLite, and Firebase for databases.</p><p>I also hold the IBM DevOps and Software Engineering Professional Certificate, and I won the institute-level Solving For India Hackathon.</p>",
+              "priority": "must",
+              "priorityLabel": "Must Prepare",
+              "type": "Introductory",
+              "isEdited": false,
+              "toggle": {
+                "question": true,
+                "answer": true,
+                "defaultOpen": false
+              },
+              "children": []
+            },
+            {
+              "nodeType": "question",
+              "id": 3,
+              "sourceQuestionId": 3,
+              "question": "Why did you choose CS/IT as your field?",
+              "answer": "<p>My interest in programming and tech started back in school. I enjoyed the idea that I could write some code and create something tangible with it. I had taken up Computer Science in my +2 instead of Biology and had learnt basics of Java and C. I'd also tried to build games by learning C# and the Unity game engine. So CS/IT was a natural choice.</p><p>During the degree I kept drifting toward building whole applications, from Flutter mobile apps to Flask backends, and the more I built, the more sure I was that this is where I wanted to be. I chose the M.Tech in CSE to go deeper on core computer science, meaning algorithms, systems, and engineering principles, so I can build better software.</p>",
+              "priority": "must",
+              "priorityLabel": "Must Prepare",
+              "type": "Introductory",
+              "isEdited": true,
+              "toggle": {
+                "question": true,
+                "answer": true,
+                "defaultOpen": false
+              },
+              "children": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "nodeType": "master",
+      "id": 56,
+      "sourceQuestionId": 56,
+      "question": "Tell about your experience at KPIT. What was your role and what exactly you worked on ?",
+      "answer": "<p>So I joined KPIT back in January 2024 as an intern where I was trained on Python(more specifically numpy, pandas), also on a few internal tools as well as some theory about automotive powertrains and autosar. In July, I was converted to a full time employee where I joined a team of engineers working for MBRDI (Mercedes Benz Research &amp; Development India). I performed whatever subtasks my team lead would assign me to, like optimizing SQL queries using Indexes, Triggers, visualizing essential data using pandas and matplotlib and occasionally creating presentations.<br>Unfortunately I had to leave the company due to a family emergency, but I left on good terms and I'm grateful for the opportunity and experience I got there.</p>",
+      "priority": "must",
+      "priorityLabel": "Must Prepare",
+      "type": "General",
+      "isEdited": true,
+      "toggle": {
+        "master": true,
+        "answer": true,
+        "defaultOpen": false
+      },
+      "children": [
+        {
+          "nodeType": "section",
+          "title": "What you actually worked on",
+          "toggle": {
+            "section": true,
+            "defaultOpen": false
+          },
+          "children": [
+            {
+              "nodeType": "question",
+              "id": 20,
+              "sourceQuestionId": 20,
+              "question": "What kind of internal tools did you build at KPIT?",
+              "answer": "<p>The tools fell into two groups.</p><p>The first was automation scripts in Python and pandas. The team had recurring data-handling tasks: pulling data from spreadsheets, cleaning and transforming it, and generating reports. I wrote scripts that automated these end to end, so work that had been done by hand in Excel could run from a single script.</p><p>The second was a web dashboard built with Flask, SQLAlchemy as the ORM, and Jinja2 templates. Team members could query project data through the browser instead of writing SQL by hand, with search, filtering, and basic data visualization.</p><p>These tools cut down manual effort and became part of the team's daily workflow. It was satisfying to see colleagues use something I built to make their work easier.</p><p><span class=\"placeholder\">[ADD: Any specific metrics — time saved, number of users, etc.]</span></p>",
+              "priority": "medium",
+              "priorityLabel": "Medium",
+              "type": "Experience",
+              "isEdited": false,
+              "toggle": {
+                "question": true,
+                "answer": true,
+                "defaultOpen": false
+              },
+              "children": []
+            },
+            {
+              "nodeType": "question",
+              "id": 21,
+              "sourceQuestionId": 21,
+              "question": "How did you use Flask and SQLAlchemy in your work at KPIT?",
+              "answer": "<p>Flask is a lightweight Python web framework. I used it for the internal tool because it's minimal and doesn't force a project structure, which suits a tool that doesn't need Django's complexity, and it's easy to set up routes, handle form submissions, and render HTML with Jinja2.</p><p>SQLAlchemy is Python's most popular ORM. I used it to define database models as Python classes, with each class mapping to a table, to run CRUD operations on Python objects instead of raw SQL strings, and to manage database sessions and transactions safely.</p><p>A typical request went like this. A user opens the dashboard and Flask serves the page. They submit a search form, a Flask route handler receives the request, SQLAlchemy queries the database, and the results go into a Jinja2 template that returns rendered HTML to the browser.</p><p>Together they gave me a backend stack that was quick to develop and easy to maintain for an internal tool of moderate complexity.</p>",
+              "priority": "medium",
+              "priorityLabel": "Medium",
+              "type": "Technical",
+              "isEdited": false,
+              "toggle": {
+                "question": true,
+                "answer": true,
+                "defaultOpen": false
+              },
+              "children": []
+            }
+          ]
+        },
+        {
+          "nodeType": "section",
+          "title": "Professional workflow & learning",
+          "toggle": {
+            "section": true,
+            "defaultOpen": false
+          },
+          "children": [
+            {
+              "nodeType": "question",
+              "id": 22,
+              "sourceQuestionId": 22,
+              "question": "How did you collaborate with your team using Git/GitHub at KPIT?",
+              "answer": "<p>At KPIT we followed a branching workflow. For each new feature or bug fix I'd create a branch off main or develop, with names like <code>feature/dashboard-search</code> or <code>fix/data-cleanup-null-handling</code>. When the work was ready I'd push the branch and open a pull request, a senior engineer would review it and leave comments, and I'd address them before merging. I also reviewed teammates' code, which taught me to read code written by others, a skill as important as writing your own. I kept commits small and focused, with clear messages.</p><p>It was my first exposure to professional Git workflows. I learned why a clean history and meaningful branch names matter, and that code review is a way to share knowledge as well as a gate before merging.</p>",
+              "priority": "medium",
+              "priorityLabel": "Medium",
+              "type": "Behavioral",
+              "isEdited": false,
+              "toggle": {
+                "question": true,
+                "answer": true,
+                "defaultOpen": false
+              },
+              "children": []
+            },
+            {
+              "nodeType": "question",
+              "id": 23,
+              "sourceQuestionId": 23,
+              "question": "What did you learn from your internship that you couldn't learn in college?",
+              "answer": "<p>Three things.</p><p>First, working with existing codebases. In college you usually start from scratch. At KPIT I had to read and understand existing code, work out where to make a change, and make sure I didn't break anything else. Reading code turned out to be harder than writing it.</p><p>Second, communication. I had to explain what I was building, why I made certain design choices, and give clear status updates. Writing good PR descriptions and documentation became part of my daily routine.</p><p>Third, real-world constraints. In college projects I could pick any technology and any approach. At KPIT I had to work within the team's tech stack, follow coding standards, and write code someone else would maintain, while thinking about backward compatibility and deployment.</p><p>Overall the internship taught me the difference between knowing how to code and building software as part of a team.</p>",
+              "priority": "medium",
+              "priorityLabel": "Medium",
+              "type": "Behavioral",
+              "isEdited": false,
+              "toggle": {
+                "question": true,
+                "answer": true,
+                "defaultOpen": false
+              },
+              "children": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "nodeType": "master",
+      "id": 5,
+      "sourceQuestionId": 5,
+      "question": "Explain your project Sugam Krishi along with your role in it.",
+      "answer": "<p>Sugam Krishi is an all-in-one Agri-tech platform for farmers that I worked on as part of a team of four during the Smart India Hackathon. The idea was to bring several useful resources together in one platform — including detailed weather and climate forecasts, a farmer community, a marketplace with real-time market pricing, government schemes, modern farming techniques, and utilities like crop disease detection and a chatbot.</p><p>I was the team lead, so apart from contributing technically, I was responsible for coordinating the team, guiding everyone based on their strengths, and bringing the different components together. A teammate and I designed the NoSQL database, while another teammate worked on the backend APIs. I designed the overall app flow and UI/UX, integrated the APIs into the application's business logic, and trained the deep-learning-based crop disease detection model, which I then integrated into the app using TFLite.</p><p>Overall, my role was a combination of technical development, product design, and coordinating the team to turn the individual components into a working product.</p>",
+      "priority": "must",
+      "priorityLabel": "Must Prepare",
+      "type": "Project",
+      "isEdited": true,
+      "toggle": {
+        "master": true,
+        "answer": true,
+        "defaultOpen": false
+      },
+      "children": [
+        {
+          "nodeType": "section",
+          "title": "Project & architecture",
+          "toggle": {
+            "section": true,
+            "defaultOpen": false
+          },
+          "children": [
+            {
+              "nodeType": "question",
+              "id": 6,
+              "sourceQuestionId": 6,
+              "question": "What was the architecture of Sugam Krishi?",
+              "answer": "<p>Sugam Krishi has three layers plus the ML pipeline.</p><p>The presentation layer is Flutter, with Provider for state management. Screens are organized by feature: home, marketplace, community, disease detection, and chatbot. Each screen talks to a ViewModel or controller that holds the business logic.</p><p>Below that sits a layer of services: an authentication service wrapping Firebase Auth, a database service wrapping Firestore, an ML service wrapping TensorFlow Lite for on-device inference, and a chatbot service that makes the API calls to the LLM.</p><p>The data layer is Firebase. Firestore is the NoSQL database, with collections for users, crops, market prices, community posts, and disease reports. I used its real-time listeners for live updates, so when a new market price is posted, every connected client sees it right away. Firebase Auth handles signup, login, and sessions.</p><p>For the ML pipeline, I trained the CNN in Python with TensorFlow on a labeled crop disease dataset, converted it to TensorFlow Lite, and bundled it with the Flutter app. Inference runs on the device, so it works without internet.</p><p>I chose this setup because Firebase gave me a serverless backend with real-time sync, which suits a mobile-first app for farmers who may have patchy connectivity, and Flutter gave me one codebase for Android and iOS.</p>",
+              "priority": "high",
+              "priorityLabel": "High",
+              "type": "Project",
+              "isEdited": false,
+              "toggle": {
+                "question": true,
+                "answer": true,
+                "defaultOpen": false
+              },
+              "children": []
+            }
+          ]
+        },
+        {
+          "nodeType": "section",
+          "title": "Crop disease model",
+          "toggle": {
+            "section": true,
+            "defaultOpen": false
+          },
+          "children": [
+            {
+              "nodeType": "question",
+              "id": 7,
+              "sourceQuestionId": 7,
+              "question": "How did you design and train the CNN model for crop disease detection?",
+              "answer": "<ul><li>Problem : identifying crop diseases from photos that farmers take on their phones.</li><li>Dataset : combined multiple labeled datasets of crop leaf images covering several disease categories. </li><li>Preprocessing: I then resized the images to a uniform size, normalized the pixel values, and augmented them with rotation, flipping, and brightness changes so the model would generalize better.</li><li>The model : </li><li>Validation :</li><li>Deployment : tflite for on device inference</li></ul><div><br></div>",
+              "priority": "high",
+              "priorityLabel": "High",
+              "type": "Technical",
+              "isEdited": true,
+              "toggle": {
+                "question": true,
+                "answer": true,
+                "defaultOpen": false
+              },
+              "children": []
+            }
+          ]
+        },
+        {
+          "nodeType": "section",
+          "title": "Chatbot & challenges",
+          "toggle": {
+            "section": true,
+            "defaultOpen": false
+          },
+          "children": [
+            {
+              "nodeType": "question",
+              "id": 9,
+              "sourceQuestionId": 9,
+              "question": "How did you integrate the LLM-powered chatbot?",
+              "answer": "<p>The chatbot handles natural-language questions from farmers, such as \"What's the best fertilizer for wheat?\" or \"My tomato leaves are turning yellow, what should I do?\"</p><p>The Flutter app has a chat screen where the user types or speaks a question. The app sends it to an LLM API with an HTTP POST, using Dart's <code>http</code> package, and the response is streamed back and shown in a WhatsApp-style chat bubble UI. I keep the chat history for the session so the model has context for follow-up questions.</p><p>I wrote the system prompt to keep answers about agriculture, short, and in simple language farmers can follow.</p><p>I used an LLM instead of a rule-based system because farmers phrase questions in many different ways, and a rule-based bot would need thousands of predefined patterns.</p><p><span class=\"placeholder\">[ADD: Which LLM API you used — OpenAI, Gemini, etc.]</span></p>",
+              "priority": "high",
+              "priorityLabel": "High",
+              "type": "Technical",
+              "isEdited": false,
+              "toggle": {
+                "question": true,
+                "answer": true,
+                "defaultOpen": false
+              },
+              "children": []
+            },
+            {
+              "nodeType": "question",
+              "id": 10,
+              "sourceQuestionId": 10,
+              "question": "What challenges did you face in Sugam Krishi and how did you solve them?",
+              "answer": "<p>There were four main challenges.</p><p>The first was model size. The initial TensorFlow model was too large to bundle with the app, so I converted it to TensorFlow Lite and applied quantization, which shrank it while keeping accuracy acceptable.</p><p>The second was real-time sync performance. With several Firestore listeners active at once (market prices, the community feed, notifications), the app made too many reads and the UI got janky. I used real-time listeners only on the screens that needed them, switched the rest to one-time fetches, and added pagination to the community feed.</p><p>The third was poor connectivity in rural areas. Firestore's offline persistence keeps the app usable without internet, and the TF Lite model runs locally, so disease detection works fully offline.</p><p>The fourth was chatbot answers that were too technical for farmers. I reworked the system prompt so the model uses simple, practical language and gives advice people can act on instead of theory.</p>",
+              "priority": "high",
+              "priorityLabel": "High",
+              "type": "Behavioral",
+              "isEdited": false,
+              "toggle": {
+                "question": true,
+                "answer": true,
+                "defaultOpen": false
+              },
+              "children": []
+            }
+          ]
+        },
+        {
+          "nodeType": "section",
+          "title": "Design decisions & reflection",
+          "toggle": {
+            "section": true,
+            "defaultOpen": false
+          },
+          "children": [
+            {
+              "nodeType": "question",
+              "id": 11,
+              "sourceQuestionId": 11,
+              "question": "If you had to rebuild Sugam Krishi today, what would you change?",
+              "answer": "<p>With more experience, I'd change several things. I'd move state management from Provider to Riverpod or Bloc, which scale and test better as an app grows. Firebase was great for prototyping, but for production I'd consider a proper backend in Node.js or Python with FastAPI behind the Firebase Auth layer, which gives more control over business logic, easier testing, and cleaner integration with external APIs.</p><p>On the ML side, I'd try transfer learning with a pre-trained model like MobileNet or EfficientNet instead of building the CNN from scratch, which should give better accuracy with less training time. I'd also write unit, widget, and integration tests from day one, since the original project had minimal coverage, and set up GitHub Actions for automated testing and deployment.</p>",
+              "priority": "high",
+              "priorityLabel": "High",
+              "type": "Project",
+              "isEdited": false,
+              "toggle": {
+                "question": true,
+                "answer": true,
+                "defaultOpen": false
+              },
+              "children": []
+            },
+            {
+              "nodeType": "question",
+              "id": 17,
+              "sourceQuestionId": 17,
+              "question": "What was your most challenging project and why?",
+              "answer": "<p>Sugam Krishi was my most challenging project because it touched so many areas at once. I had to work as a mobile developer in Flutter, a backend engineer designing the Firebase architecture, a data scientist designing and training the CNN, and an API integrator for the LLM chatbot. Each area had its own learning curve and its own ways of failing.</p><p>The hardest technical part was getting the TensorFlow model onto mobile. Training it in Python was one thing. Converting it to TF Lite, handling the input and output tensor formats in Dart, and making inference fast enough for a good experience meant debugging across two different ecosystems, Python ML and Dart mobile.</p><p>The second challenge was system design. I had to make Firebase, the ML model, and the chatbot API work together while keeping the app responsive, which meant deciding when to use real-time listeners versus one-time fetches, what to cache locally, and how to handle errors gracefully.</p><p>The project taught me more about thinking through a whole system than anything else I've done.</p>",
+              "priority": "high",
+              "priorityLabel": "High",
+              "type": "Behavioral",
+              "isEdited": false,
+              "toggle": {
+                "question": true,
+                "answer": true,
+                "defaultOpen": false
+              },
+              "children": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "nodeType": "master",
+      "id": 12,
+      "sourceQuestionId": 12,
+      "question": "Explain your project Passwordzzz.",
+      "answer": "<p>Passwordzzz is an open-source, fully offline password manager I built around a local-first idea: no data ever leaves the device. Most password managers need internet or keep encrypted data on cloud servers, and I wanted one where credentials never touch a network.</p><p>It's built with Flutter for the cross-platform UI, Dart for the logic, SQLite for local storage, and AES-256 for encryption. Credentials are encrypted before they go into SQLite, with the key derived from the user's master password through a key derivation function. Users can unlock the app with a fingerprint through the device's biometric APIs, via Flutter plugins. I also wrote a password-strength scoring algorithm that looks at length, character variety (uppercase, lowercase, digits, symbols), common patterns, and dictionary words, then shows a visual score with suggestions. The app has no network permissions, no cloud sync, and no analytics.</p><p>The project is open source on GitHub.</p>",
+      "priority": "must",
+      "priorityLabel": "Must Prepare",
+      "type": "Project",
+      "isEdited": true,
+      "toggle": {
+        "master": true,
+        "answer": true,
+        "defaultOpen": false
+      },
+      "children": [
+        {
+          "nodeType": "section",
+          "title": "Why offline / SQLite",
+          "toggle": {
+            "section": true,
+            "defaultOpen": false
+          },
+          "children": [
+            {
+              "nodeType": "question",
+              "id": 16,
+              "sourceQuestionId": 16,
+              "question": "Why did you choose SQLite over other databases for Passwordzzz?",
+              "answer": "<p>SQLite fit Passwordzzz for a few reasons. It's an embedded database that runs inside the app process with no separate server, and since the core idea is that no data leaves the device, a local-only database was essential. It needs no internet connection, because the database is a single file on the device.</p><p>Password entries also have a structured schema (site, username, encrypted password, category, notes, created and modified dates), and SQL makes it easy to search, filter, and sort them. The engine is only about 600KB, which keeps the APK small, and the <code>sqflite</code> package gives Flutter a mature, well-maintained API with transactions, migrations, and raw SQL.</p><p>I ruled out SharedPreferences because it only stores key-value pairs. Hive is fast, but it's a NoSQL box store and I needed relational queries for search, sorting by date, and category filtering.</p>",
+              "priority": "high",
+              "priorityLabel": "High",
+              "type": "Technical",
+              "isEdited": false,
+              "toggle": {
+                "question": true,
+                "answer": true,
+                "defaultOpen": false
+              },
+              "children": []
+            }
+          ]
+        },
+        {
+          "nodeType": "section",
+          "title": "Encryption & biometrics",
+          "toggle": {
+            "section": true,
+            "defaultOpen": false
+          },
+          "children": [
+            {
+              "nodeType": "question",
+              "id": 13,
+              "sourceQuestionId": 13,
+              "question": "Why did you choose AES-256 for encryption in Passwordzzz?",
+              "answer": "<p>AES-256 is the industry standard for symmetric encryption, and I chose it for four reasons.</p><p>It's very strong. With current computing power it's considered virtually unbreakable, and governments and banks rely on it, which matters for a password manager. It's also fast, since most modern devices accelerate AES in hardware, so encrypting and decrypting feels instant. Because all encryption and decryption happens on the same device and nothing is transmitted, symmetric encryption is the right fit, and asymmetric encryption like RSA would be more complex and slower with no benefit here. Finally, the Dart and Flutter ecosystem has mature, well-audited AES libraries, so I didn't have to write custom crypto code, which is where vulnerabilities tend to creep in.</p><p>The master password is never stored directly. A key derivation function combines it with a salt to produce the AES-256 key, so someone who gets hold of the database file still can't decrypt it without the master password.</p>",
+              "priority": "high",
+              "priorityLabel": "High",
+              "type": "Technical",
+              "isEdited": false,
+              "toggle": {
+                "question": true,
+                "answer": true,
+                "defaultOpen": false
+              },
+              "children": []
+            },
+            {
+              "nodeType": "question",
+              "id": 14,
+              "sourceQuestionId": 14,
+              "question": "How does the biometric authentication work in Passwordzzz?",
+              "answer": "<p>Biometric unlock in Passwordzzz uses the device's fingerprint sensor (or Face ID on supported devices) as a convenience layer on top of the master password. It doesn't replace the password.</p><p>I used the <code>local_auth</code> Flutter plugin, which gives one API for biometrics on Android and iOS. At first setup the user creates a master password, and if the device supports biometrics they can turn on fingerprint unlock. When it's on, the master password (or its derived key) is stored in the device's secure enclave, meaning Keychain on iOS and Keystore on Android. On later launches the user authenticates with a fingerprint, the app retrieves the stored key, and it decrypts the database.</p><p>If biometric authentication fails, whether from the wrong finger or a hardware issue, the app falls back to the master password screen, so the user can always enter it manually.</p>",
+              "priority": "high",
+              "priorityLabel": "High",
+              "type": "Technical",
+              "isEdited": false,
+              "toggle": {
+                "question": true,
+                "answer": true,
+                "defaultOpen": false
+              },
+              "children": []
+            }
+          ]
+        },
+        {
+          "nodeType": "section",
+          "title": "Password security",
+          "toggle": {
+            "section": true,
+            "defaultOpen": false
+          },
+          "children": [
+            {
+              "nodeType": "question",
+              "id": 15,
+              "sourceQuestionId": 15,
+              "question": "Explain the password-strength scoring algorithm you designed.",
+              "answer": "<p>The scorer rates a password from 0 to 100 on four factors.</p><ul><li>Length, 30% of the score. Longer passwords are much harder to crack, so the score rises logarithmically: 8 characters is the baseline and 16 or more gets full marks.</li><li>Character diversity, 25%. It checks for lowercase, uppercase, digits, and special characters, and using all four gets full marks.</li><li>Pattern detection, 25%. It penalizes sequences (abc, 123), repeated characters (aaa), keyboard patterns (qwerty), and common substitutions like @ for a and 3 for e.</li><li>Dictionary check, 20%. Passwords containing common passwords or dictionary words are penalized.</li></ul><p>The total maps to a visual indicator: Weak (red), Fair (orange), Good (yellow-green), or Strong (green), with specific suggestions such as \"Add special characters\" or \"Avoid sequential numbers\". The approach is inspired by tools like zxcvbn, adapted to be lightweight for mobile.</p>",
+              "priority": "high",
+              "priorityLabel": "High",
+              "type": "Technical",
+              "isEdited": false,
+              "toggle": {
+                "question": true,
+                "answer": true,
+                "defaultOpen": false
+              },
+              "children": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "nodeType": "master",
+      "id": 18,
+      "sourceQuestionId": 18,
+      "question": "How do you decide which technology stack to use for a project?",
+      "answer": "<p>I start from what the problem requires. Real-time sync points to Firebase, offline-first to SQLite, cross-platform mobile to Flutter, and a REST API backend to Flask or Node.js.</p><p>Scale matters too. For prototypes and MVPs I lean toward managed services like Firebase or Supabase so I can ship fast. For production systems with complex business logic I'd choose a traditional backend, such as Node.js with Express or Python with FastAPI.</p><p>Team familiarity is another factor. At KPIT we used Python and Flask because the team knew Python. On personal projects I can experiment, but in a professional setting, using what the team already knows reduces friction. I also check that libraries and community support are mature (Flutter's SQLite and Firebase plugins are well maintained, for example) and whether performance requirements matter, such as C++ for algorithm-heavy work or TF Lite for on-device ML instead of API calls.</p><p>For Sugam Krishi I chose Flutter for cross-platform, Firebase for real-time and serverless, and TensorFlow for ML. For Passwordzzz I chose Flutter for mobile, SQLite for local-only storage, and AES-256 for security. In both cases the choices followed the main requirement of the project.</p>",
+      "priority": "must",
+      "priorityLabel": "Must Prepare",
+      "type": "Technical",
+      "isEdited": false,
+      "toggle": {
+        "master": true,
+        "answer": true,
+        "defaultOpen": false
+      },
+      "children": [
+        {
+          "nodeType": "section",
+          "title": "Languages & DSA",
+          "toggle": {
+            "section": true,
+            "defaultOpen": false
+          },
+          "children": [
+            {
+              "nodeType": "question",
+              "id": 27,
+              "sourceQuestionId": 27,
+              "question": "Why C++? / Why Python? — Talk about your strongest language.",
+              "answer": "<p>I'm comfortable in both, for different reasons.</p><p>I use C++ mainly for data structures, algorithms, and competitive-style problem solving. It's my go-to for coding assessments because it's fast, the STL gives me sort, map, set, priority_queue and more, and it gives precise control over memory. I understand pointers, references, manual memory management, and template-based generics.</p><p>Python is what I use for everything else: scripting, automation, data analysis, ML, and backend work with Flask. It was my main language at KPIT, and I'm proficient with pandas, NumPy, and the core libraries. Its readability and ecosystem suit both rapid prototyping and production tools. For mobile work with Flutter I write Dart, which has Java-like syntax, strong typing, async/await, and a clean OOP model.</p><p>If I had to pick one for interviews and problem-solving, I'd choose <span class=\"placeholder\">[YOUR CHOICE: C++ or Python]</span> because <span class=\"placeholder\">[YOUR REASON]</span>.</p>",
+              "priority": "medium",
+              "priorityLabel": "Medium",
+              "type": "Technical",
+              "isEdited": false,
+              "toggle": {
+                "question": true,
+                "answer": true,
+                "defaultOpen": false
+              },
+              "children": []
+            },
+            {
+              "nodeType": "question",
+              "id": 31,
+              "sourceQuestionId": 31,
+              "question": "Explain your understanding of Data Structures & Algorithms.",
+              "answer": "<p>Data structures organize data, and algorithms are step-by-step procedures for solving problems with it. Together they're the basis of efficient software.</p><p>I'm proficient with arrays and strings (contiguous memory, O(1) access, O(n) search), linked lists (dynamic size, O(1) insertion and deletion at a known position, O(n) access), stacks and queues (LIFO and FIFO, useful for parsing, BFS and DFS, and monotonic stack problems), and hash maps and sets (O(1) average lookup, the most useful structure in interviews for things like two-sum, frequency counting, and deduplication). I'm also comfortable with trees, both binary and BST, which give O(log n) operations when balanced, and with graphs, including BFS, DFS, and shortest path algorithms.</p><p>On the algorithm side I use sorting (quicksort, mergesort), binary search, two pointers, sliding window, recursion and backtracking, basic dynamic programming, and greedy methods.</p><p>I practice on LeetCode and focus on patterns instead of memorizing solutions. I try to understand why a given structure or approach is optimal for a problem.</p>",
+              "priority": "medium",
+              "priorityLabel": "Medium",
+              "type": "Technical",
+              "isEdited": false,
+              "toggle": {
+                "question": true,
+                "answer": true,
+                "defaultOpen": false
+              },
+              "children": []
+            }
+          ]
+        },
+        {
+          "nodeType": "section",
+          "title": "OOP",
+          "toggle": {
+            "section": true,
+            "defaultOpen": false
+          },
+          "children": [
+            {
+              "nodeType": "question",
+              "id": 29,
+              "sourceQuestionId": 29,
+              "question": "What are the four pillars of OOP? Explain each.",
+              "answer": "<p>The four pillars are encapsulation, abstraction, inheritance, and polymorphism.</p><p>Encapsulation bundles data and methods into one unit and restricts direct access to internal state, usually through private variables and public getters and setters. In Passwordzzz, outside code can't reach the raw encryption key directly.</p><p>Abstraction hides implementation details and exposes only what's needed: the \"what\" instead of the \"how\". In Sugam Krishi, the <code>DiseaseDetectionService</code> exposes a simple <code>predict(image)</code> method, and the caller doesn't need to know about tensor conversion, model loading, or preprocessing.</p><p>Inheritance lets a new class reuse the properties and behavior of an existing one. If I have a <code>BaseUser</code> class, I can create <code>Farmer</code> and <code>Admin</code> classes that inherit from it and add their own methods.</p><p>Polymorphism means the same method name behaves differently depending on the object. In Flutter every widget has a <code>build()</code> method, but <code>Text</code> and <code>Container</code> implement it very differently, which makes the code flexible and extensible.</p>",
+              "priority": "medium",
+              "priorityLabel": "Medium",
+              "type": "Technical",
+              "isEdited": false,
+              "toggle": {
+                "question": true,
+                "answer": true,
+                "defaultOpen": false
+              },
+              "children": []
+            },
+            {
+              "nodeType": "question",
+              "id": 30,
+              "sourceQuestionId": 30,
+              "question": "Difference between abstraction and encapsulation.",
+              "answer": "<p>Abstraction is about hiding complexity. It shows only the relevant features of an object and hides the implementation, so it answers \"what does it do?\". Encapsulation is about hiding data. It bundles data and methods together and restricts direct access to internal state, so it answers \"how is the data protected?\".</p><p>A car makes the difference concrete. Abstraction is that you know the steering wheel turns the car, the accelerator speeds it up, and the brake stops it, without needing to understand the combustion cycle. Encapsulation is that the engine sits under a sealed hood, so you can't work the fuel injectors by hand and have to use the pedals and dashboard.</p><p>In code, abstraction is typically done with abstract classes and interfaces, and encapsulation with access modifiers (private, protected, public). Abstraction is more of a design-level idea and encapsulation more of an implementation-level one. They work together but solve different problems.</p>",
+              "priority": "medium",
+              "priorityLabel": "Medium",
+              "type": "Technical",
+              "isEdited": false,
+              "toggle": {
+                "question": true,
+                "answer": true,
+                "defaultOpen": false
+              },
+              "children": []
+            }
+          ]
+        },
+        {
+          "nodeType": "section",
+          "title": "APIs & databases",
+          "toggle": {
+            "section": true,
+            "defaultOpen": false
+          },
+          "children": [
+            {
+              "nodeType": "question",
+              "id": 32,
+              "sourceQuestionId": 32,
+              "question": "Explain REST APIs — how do they work?",
+              "answer": "<p>REST (Representational State Transfer) is an architectural style for web APIs, where clients like a browser or mobile app talk to a server over standard HTTP methods.</p><p>Everything is a resource identified by a URL, such as <code>/api/users/123</code> for user 123. The HTTP methods map to CRUD: <code>GET</code> reads, <code>POST</code> creates, <code>PUT</code> updates, <code>DELETE</code> deletes. Requests are stateless, so each one carries everything needed to process it and the server keeps no client state between requests. Data usually travels as JSON.</p><p>I've used REST in two places. In Sugam Krishi, the Flutter app sends an HTTP POST with the user's query to the LLM and gets the response as JSON. At KPIT, the Flask tool exposed REST endpoints that the frontend consumed.</p><p>A typical flow: the mobile app calls <code>GET /api/market-prices?crop=wheat</code>, the server queries the database and returns JSON like <code>{\"crop\": \"wheat\", \"price\": 2500, \"unit\": \"quintal\"}</code>, and the app displays it.</p>",
+              "priority": "medium",
+              "priorityLabel": "Medium",
+              "type": "Technical",
+              "isEdited": false,
+              "toggle": {
+                "question": true,
+                "answer": true,
+                "defaultOpen": false
+              },
+              "children": []
+            },
+            {
+              "nodeType": "question",
+              "id": 34,
+              "sourceQuestionId": 34,
+              "question": "Difference between SQL and NoSQL databases.",
+              "answer": "<p>SQL (relational) databases such as MySQL, PostgreSQL, and SQLite store data in tables with fixed schemas, define relationships through foreign keys and joins, and give strong consistency through ACID transactions. They suit structured data, complex queries, and transactions, and the schema has to be defined up front.</p><p>NoSQL databases include MongoDB and Firebase Firestore (document stores), Redis (key-value), and Cassandra (column-family). Their schemas are flexible, so documents can have different fields, and they scale horizontally by adding servers. They're usually eventually consistent, though Firestore supports strong consistency. They suit semi-structured data, real-time apps, and high-volume reads and writes.</p><p>I've used both. On the SQL side, I used MySQL for internal tools at KPIT and SQLite for local storage in Passwordzzz, and I'm comfortable with joins, subqueries, GROUP BY, and indexing. On the NoSQL side, I used Firestore in Sugam Krishi, where its real-time listeners and offline support fit a mobile app well.</p><p>If the data is highly relational and needs complex queries, I'd pick SQL. If it's document-shaped and needs flexibility and real-time sync, I'd pick NoSQL.</p>",
+              "priority": "medium",
+              "priorityLabel": "Medium",
+              "type": "Technical",
+              "isEdited": false,
+              "toggle": {
+                "question": true,
+                "answer": true,
+                "defaultOpen": false
+              },
+              "children": []
+            }
+          ]
+        },
+        {
+          "nodeType": "section",
+          "title": "Development tools",
+          "toggle": {
+            "section": true,
+            "defaultOpen": false
+          },
+          "children": [
+            {
+              "nodeType": "question",
+              "id": 33,
+              "sourceQuestionId": 33,
+              "question": "What is Docker and why is it used?",
+              "answer": "<p>Docker is a platform for building, shipping, and running applications in containers, which are lightweight, isolated environments that package an application with its dependencies. It solves the \"it works on my machine\" problem: developers have different OS versions, library versions, and configurations, and Docker makes the application run the same way in development, testing, and production.</p><p>A Dockerfile is a script that defines how to build the container image: the base OS, the dependencies to install, the code to copy in, and the startup command. An image is the read-only template built from it, a snapshot of the application and its environment. A container is a running instance of an image, isolated from the host but much lighter than a VM.</p><p>A VM includes a full guest OS and takes gigabytes. A container shares the host kernel and holds only the app and its dependencies, so it takes megabytes and starts in seconds instead of minutes.</p><p>I learned Docker through the IBM DevOps certificate and list it as a skill. I understand Dockerfiles, image building, the container lifecycle, and the basics of Docker Compose for multi-container setups.</p>",
+              "priority": "medium",
+              "priorityLabel": "Medium",
+              "type": "Technical",
+              "isEdited": false,
+              "toggle": {
+                "question": true,
+                "answer": true,
+                "defaultOpen": false
+              },
+              "children": []
+            },
+            {
+              "nodeType": "question",
+              "id": 40,
+              "sourceQuestionId": 40,
+              "question": "Explain the Flutter framework and state management (Provider/Bloc).",
+              "answer": "<p>Flutter is Google's open-source UI framework for building natively compiled, cross-platform apps from a single Dart codebase, targeting Android, iOS, web, and desktop. Unlike React Native, which bridges to native components, Flutter renders everything through its own engine (Skia). Every UI element is a widget, either stateless (immutable, for static UI) or stateful (mutable, for interactive UI). Widgets compose into a tree, and Flutter re-renders only the parts that changed.</p><p>State management is about handling data that changes over time and affects the UI. Provider is a dependency injection and state management solution the Flutter team recommends. A model class extends <code>ChangeNotifier</code> and calls <code>notifyListeners()</code> when data changes, and widgets wrapped in <code>Consumer</code> or using <code>Provider.of()</code> rebuild automatically. It has minimal boilerplate and works well for small and medium apps.</p><p>Bloc (Business Logic Component) is more structured. It separates UI from business logic using events and states: the UI sends events, the Bloc processes them and emits new states, and the UI rebuilds. It takes more boilerplate but is more testable, predictable, and scalable for larger apps.</p><p>I've used Provider in Sugam Krishi, where the state needs were simpler, and I understand how Bloc works for more complex scenarios. <span class=\"placeholder\">[ADD: if you have actually used Bloc in a project, say where. The original draft said you'd used both, but only Provider is tied to a project in this doc.]</span></p>",
+              "priority": "medium",
+              "priorityLabel": "Medium",
+              "type": "Technical",
+              "isEdited": false,
+              "toggle": {
+                "question": true,
+                "answer": true,
+                "defaultOpen": false
+              },
+              "children": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "nodeType": "master",
+      "id": 41,
+      "sourceQuestionId": 41,
+      "question": "Why Accenture?",
+      "answer": "<p>Three things draw me to Accenture.</p><p>The first is scale and variety. Accenture works with clients in banking, healthcare, retail, technology, and other industries, so I'd be exposed to different problem domains and technology stacks, which is the fastest way to grow. I'd rather not be tied to a single product.</p><p>The second is that Accenture is a technology consulting firm, so the work goes beyond writing code. I'm interested in understanding the business problem behind the code and turning business needs into technical solutions, and Accenture's model is built around that.</p><p>The third is learning and growth. Accenture invests in training and certifications and has a clear path from analyst to architect or manager, and its size leaves room to switch domains or explore new roles.</p><p>I also know Accenture has a strong presence in India's technology sector, and working on solutions that reach millions of users appeals to me.</p>",
+      "priority": "must",
+      "priorityLabel": "Must Prepare",
+      "type": "Behavioral",
+      "isEdited": false,
+      "toggle": {
+        "master": true,
+        "answer": true,
+        "defaultOpen": false
+      },
+      "children": [
+        {
+          "nodeType": "section",
+          "title": "Why Accenture & motivation",
+          "toggle": {
+            "section": true,
+            "defaultOpen": false
+          },
+          "children": [
+            {
+              "nodeType": "question",
+              "id": 52,
+              "sourceQuestionId": 52,
+              "question": "What motivates you?",
+              "answer": "<p>Two things motivate me.</p><p>The first is building things people use. The most satisfying moment in software is when someone uses what you built and it makes their work easier or solves their problem. At KPIT, seeing colleagues use my automation tools every day was rewarding, and with Sugam Krishi I like the idea that a farmer could diagnose a crop disease from a phone. That's the kind of impact I want to have.</p><p>The second is learning. Technology moves fast and I enjoy picking up a new framework, design pattern, or domain. That's why I did the IBM DevOps certificate alongside my job, and why I'm doing an M.Tech after getting industry experience.</p><p>I'm also motivated by working with smart, driven people. My best work has come when I'm around people who push me to be better, and I expect to find that at Accenture.</p>",
+              "priority": "standard",
+              "priorityLabel": "Standard",
+              "type": "Behavioral",
+              "isEdited": false,
+              "toggle": {
+                "question": true,
+                "answer": true,
+                "defaultOpen": false
+              },
+              "children": []
+            }
+          ]
+        },
+        {
+          "nodeType": "section",
+          "title": "Goals & future",
+          "toggle": {
+            "section": true,
+            "defaultOpen": false
+          },
+          "children": [
+            {
+              "nodeType": "question",
+              "id": 4,
+              "sourceQuestionId": 4,
+              "question": "What are your short-term and long-term career goals?",
+              "answer": "<p><span style=\"font-weight: 700;\">Short-term (1–2 years) :</span> become a reliable software engineer at Accenture. That means learning the technology stack my team uses, contributing to client projects, seeing how large enterprise software gets built, deployed, and maintained. I'm also keen to learn the consulting side, which is turning business requirements into technical solutions.</p><p><span style=\"font-weight: 700;\">Long-term (5+ years) :</span> I'd like to move into a technical lead or solution architect role, where I design systems and mentor junior engineers as well as write code. Accenture works across industries and technologies, which is the breadth I want to build. Eventually I'd like to own a solution from architecture through deployment.</p>",
+              "priority": "must",
+              "priorityLabel": "Must Prepare",
+              "type": "Introductory",
+              "isEdited": true,
+              "toggle": {
+                "question": true,
+                "answer": true,
+                "defaultOpen": false
+              },
+              "children": []
+            },
+            {
+              "nodeType": "question",
+              "id": 48,
+              "sourceQuestionId": 48,
+              "question": "Where do you see yourself in 5 years?",
+              "answer": "<p>In five years I see myself as a technology consultant and technical lead at Accenture.</p><p>In the first two years I want to be a reliable, high-performing software engineer: master my team's technology stack, deliver quality work on client projects, and earn my colleagues' and managers' trust. I'd also pursue relevant certifications that Accenture supports.</p><p>In years three and four I'd like to own larger modules or small projects end to end, from understanding client requirements through design, build, and deployment, and start mentoring newer team members.</p><p>By year five I'd like to be in a technical lead or solution design role, involved in architecture decisions, client interactions, and team leadership. Accenture's breadth across industries and technologies is what makes that path possible. I don't want to do the same thing for five years, and I want varied, challenging work.</p>",
+              "priority": "standard",
+              "priorityLabel": "Standard",
+              "type": "Behavioral",
+              "isEdited": false,
+              "toggle": {
+                "question": true,
+                "answer": true,
+                "defaultOpen": false
+              },
+              "children": []
+            }
+          ]
+        },
+        {
+          "nodeType": "section",
+          "title": "Why you / self-awareness",
+          "toggle": {
+            "section": true,
+            "defaultOpen": false
+          },
+          "children": [
+            {
+              "nodeType": "question",
+              "id": 42,
+              "sourceQuestionId": 42,
+              "question": "Why should we hire you?",
+              "answer": "<p>Three things make me a strong fit.</p><p>First, I ship things. I've built and deployed real applications on top of practicing LeetCode. Sugam Krishi is a full-stack system with a mobile frontend, cloud backend, ML model, and chatbot, and Passwordzzz is on GitHub and working. At KPIT, the tools I built are still used by the team. I know how to get from an idea to working software.</p><p>Second, I learn fast. At KPIT I went from intern to Trainee Software Engineer in six months, and I picked up Flask, SQLAlchemy, and production Python practices on the job. In my projects I taught myself TensorFlow, Firebase, and Flutter without formal coursework.</p><p>Third, I have strong fundamentals. My B.Tech CGPA is 8.90 and my M.Tech CGPA is 8.33, and I have the IBM DevOps certificate and a hackathon win. I know DSA, OOP, DBMS, and OS, the core concepts everything else builds on.</p><p>I'm at a stage where I'm eager to learn, and I'm ready to contribute from day one.</p>",
+              "priority": "standard",
+              "priorityLabel": "Standard",
+              "type": "Behavioral",
+              "isEdited": false,
+              "toggle": {
+                "question": true,
+                "answer": true,
+                "defaultOpen": false
+              },
+              "children": []
+            },
+            {
+              "nodeType": "question",
+              "id": 43,
+              "sourceQuestionId": 43,
+              "question": "What are your strengths and weaknesses?",
+              "answer": "<p>My strengths are these. I think about the whole system: how a function fits in, how it'll be tested, and how it'll be maintained, and each of my projects has a complete architecture behind it. I learn quickly, whether it's a framework like Flutter or Flask or a domain like ML or DevOps, and my 11 months at KPIT showed that. And I'm persistent. When I hit a bug or a design problem, I debug systematically, read the documentation, and keep going until I find a solution.</p><p>For weaknesses, I sometimes spend too long designing the ideal architecture before I build anything. I've learned to get a working version first and refine it iteratively.</p><p><span class=\"placeholder\">[ADD: A genuine, non-critical weakness that shows self-awareness — e.g., \"I sometimes struggle with estimating how long tasks will take\" or \"I need to improve my public speaking confidence\"]</span></p>",
+              "priority": "standard",
+              "priorityLabel": "Standard",
+              "type": "Behavioral",
+              "isEdited": false,
+              "toggle": {
+                "question": true,
+                "answer": true,
+                "defaultOpen": false
+              },
+              "children": []
+            }
+          ]
+        },
+        {
+          "nodeType": "section",
+          "title": "Team, pressure & leadership",
+          "toggle": {
+            "section": true,
+            "defaultOpen": false
+          },
+          "children": [
+            {
+              "nodeType": "question",
+              "id": 44,
+              "sourceQuestionId": 44,
+              "question": "Tell me about a time you worked in a team.",
+              "answer": "<p>At KPIT I was part of a small engineering team building internal tooling, and one project was a data dashboard that several teams across the organization would use. I owned the backend, meaning the Flask API and database integration. Other team members handled the data pipeline and gathered requirements from stakeholders.</p><p>We collaborated through Git and GitHub with feature branches, pull requests, and code reviews, and I took part in the daily standups where we discussed blockers and progress. When a colleague was stuck on a database schema problem, I paired with them on the table design. I also documented my API endpoints so the frontend team could integrate without constantly asking me questions.</p><p>We delivered the dashboard on time and it became a daily tool for several teams. The main lesson was that clear communication, documented interfaces, and helping teammates matter as much as technical skill.</p><p><span class=\"placeholder\">[ALTERNATIVE: You can also use the Hackathon team experience here]</span></p>",
+              "priority": "standard",
+              "priorityLabel": "Standard",
+              "type": "Behavioral",
+              "isEdited": false,
+              "toggle": {
+                "question": true,
+                "answer": true,
+                "defaultOpen": false
+              },
+              "children": []
+            },
+            {
+              "nodeType": "question",
+              "id": 46,
+              "sourceQuestionId": 46,
+              "question": "Tell me about a time you led a team or initiative.",
+              "answer": "<p>During the Solving For India Hackathon at KIIT, I <span class=\"placeholder\">[FILL IN: led / co-led]</span> a team of <span class=\"placeholder\">[FILL IN: number]</span> members. The task was to identify a real-world problem in India and build a working technology solution within the hackathon timeframe.</p><p><span class=\"placeholder\">[FILL IN: What you actually did as a leader. The earlier draft listed setting direction in the brainstorm, splitting work by strengths, making quick calls on what to cut, and leading the final presentation to the judges. Keep only what is true, and note that your \"My contribution\" answer to the hackathon question should match.]</span></p><p>We won the institute-level competition. <span class=\"placeholder\">[FILL IN: What you took from leading the team.]</span></p>",
+              "priority": "standard",
+              "priorityLabel": "Standard",
+              "type": "Behavioral",
+              "isEdited": false,
+              "toggle": {
+                "question": true,
+                "answer": true,
+                "defaultOpen": false
+              },
+              "children": []
+            },
+            {
+              "nodeType": "question",
+              "id": 47,
+              "sourceQuestionId": 47,
+              "question": "How do you handle pressure or tight deadlines?",
+              "answer": "<p>I handle pressure by prioritizing in a structured way instead of panicking. First I work out what is essential and what is nice to have, because under pressure you can't do everything and you need to know the minimum viable delivery. Then I break the work into small, time-boxed tasks. Instead of \"build the entire feature,\" I aim for \"finish the database schema and one API endpoint in the next two hours.\" I turn off notifications, close unrelated tabs, and focus on one task at a time. And if I realize a deadline isn't achievable, I say so early, before the deadline and not after, and propose a realistic timeline.</p><p><span class=\"placeholder\">[FILL IN: A real example of a tight deadline you handled, and what you cut or prioritized. The earlier draft used the hackathon, with disease detection, a marketplace, and a dropped notification feature, but that doesn't match the hackathon details left blank in the \"Solving For India\" answer.]</span></p>",
+              "priority": "standard",
+              "priorityLabel": "Standard",
+              "type": "Behavioral",
+              "isEdited": false,
+              "toggle": {
+                "question": true,
+                "answer": true,
+                "defaultOpen": false
+              },
+              "children": []
+            }
+          ]
+        },
+        {
+          "nodeType": "section",
+          "title": "Practical HR",
+          "toggle": {
+            "section": true,
+            "defaultOpen": false
+          },
+          "children": [
+            {
+              "nodeType": "question",
+              "id": 51,
+              "sourceQuestionId": 51,
+              "question": "Do you have any questions for us?",
+              "answer": "<p>Yes, I have a few.</p><ol><li>Could you tell me about the team I'd be joining, what projects they're working on now, and what technology stack they use?</li><li>What does the typical growth path look like for someone joining as an ASE or AASE, and how long do people usually spend at each level?</li><li>Does Accenture support employees in pursuing additional certifications or attending technical conferences?</li><li>How are engineers matched with client projects, and is there any input from the engineer on the kind of work they'd like to do?</li></ol><p>A few tips for this one. Have two or three questions ready, because \"no questions\" reads as disinterest. Ask about the work and growth, and leave compensation and leave policy for HR. And if the interviewer already answered one of your questions during the interview, say so and ask a follow-up instead.</p>",
+              "priority": "standard",
+              "priorityLabel": "Standard",
+              "type": "Behavioral",
+              "isEdited": false,
+              "toggle": {
+                "question": true,
+                "answer": true,
+                "defaultOpen": false
+              },
+              "children": []
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "source": {
+    "file": "accenture-prep-backup-2026-09-25.json",
+    "totalSourceQuestions": 55,
+    "answerPolicy": "Uploaded JSON is the source of truth. Preserve selected answers exactly."
+  }
+};
+
+    // ============================================================
+    // CONSTANTS & KEYS
     // ============================================================
     var SVG_NS = 'http://www.w3.org/2000/svg';
-    var GRAPH_STORAGE_KEY = 'accenture_prep_graph_v1';
-    var MAIN_STORAGE_KEY = 'accenture_prep_store_v3';
+    var GRAPH_STORAGE_KEY = 'accenture_prep_graph_v2';
+    var GRAPH_VERSION = 2;
+    var STORAGE_KEY_NESTED = 'accenture_interview_nested_store_v5';
+    var MAIN_STORAGE_KEY = 'ACCENTURE_INTERVIEW_PREP_STORE';
+
     var NODE_H = 48;
     var NODE_HALF_H = NODE_H / 2;
     var NODE_MIN_W = 140;
@@ -1253,14 +2315,17 @@
     // ============================================================
     // STATE
     // ============================================================
-    var graphData = { nodes: [], edges: [], nextNodeId: 1, nextEdgeId: 1 };
+    var graphData = { nodes: [], edges: [], nextNodeId: 1, nextEdgeId: 1, version: GRAPH_VERSION };
     var viewport = { x: 0, y: 0, zoom: 1 };
+    var activeHubFilter = 'all';
+
     var graphState = {
       mode: 'select',       // 'select' | 'connect'
       selectedNode: null,
       selectedEdge: null,
       connectSource: null
     };
+
     var mouseState = {
       action: null,          // 'pan' | 'drag' | null
       startX: 0, startY: 0,
@@ -1269,6 +2334,7 @@
       dragStartNodeX: 0, dragStartNodeY: 0,
       hasMoved: false
     };
+
     var addNodePosition = { x: 0, y: 0 };
     var panelNodeId = null;
     var editingNodeId = null;
@@ -1312,12 +2378,25 @@
       return _measureCtx.measureText(str).width;
     }
 
+    function getNodeHeight(node) {
+      if (node.nodeType === 'master') return 56;
+      if (node.nodeType === 'branch') return 36;
+      return NODE_H;
+    }
+
     function getNodeWidth(node) {
       if (_nodeWidthCache[node.id] && _nodeWidthCache[node.id].title === node.title) {
         return _nodeWidthCache[node.id].width;
       }
       var textW = measureTextWidth(node.title);
-      var w = Math.max(NODE_MIN_W, Math.min(NODE_MAX_W, textW + NODE_PAD));
+      var w;
+      if (node.nodeType === 'master') {
+        w = Math.max(220, Math.min(320, textW + 48));
+      } else if (node.nodeType === 'branch') {
+        w = Math.max(130, Math.min(240, textW + 36));
+      } else {
+        w = Math.max(NODE_MIN_W, Math.min(NODE_MAX_W, textW + NODE_PAD));
+      }
       _nodeWidthCache[node.id] = { title: node.title, width: w };
       return w;
     }
@@ -1340,79 +2419,76 @@
     }
 
     // ============================================================
-    // PERSISTENCE
-    // ============================================================
-    function loadGraph() {
-      try {
-        var raw = localStorage.getItem(GRAPH_STORAGE_KEY);
-        if (raw) {
-          var parsed = JSON.parse(raw);
-          if (parsed && Array.isArray(parsed.nodes)) {
-            graphData = parsed;
-            if (!graphData.nextNodeId) graphData.nextNodeId = 1;
-            if (!graphData.nextEdgeId) graphData.nextEdgeId = 1;
-            // Ensure IDs are correct
-            graphData.nodes.forEach(function (n) {
-              if (n.id >= graphData.nextNodeId) graphData.nextNodeId = n.id + 1;
-            });
-            graphData.edges.forEach(function (e) {
-              if (e.id >= graphData.nextEdgeId) graphData.nextEdgeId = e.id + 1;
-            });
-          }
-        }
-      } catch (e) {
-        console.warn('Error loading graph:', e);
-      }
-      // Validate linked questions
-      validateLinkedQuestions();
-    }
-
-    function saveGraph() {
-      try {
-        localStorage.setItem(GRAPH_STORAGE_KEY, JSON.stringify(graphData));
-      } catch (e) {
-        console.error('Error saving graph:', e);
-        showToast('⚠ Storage error');
-      }
-    }
-
-    function validateLinkedQuestions() {
-      var questions = getMainStoreQuestions();
-      var qIds = {};
-      questions.forEach(function (q) { qIds[q.id] = true; });
-      graphData.nodes.forEach(function (n) {
-        if (n.questionId && !qIds[n.questionId]) {
-          n.questionId = null;
-        }
-      });
-    }
-
-    // ============================================================
     // MAIN STORE INTEGRATION
     // ============================================================
-    function getMainStoreQuestions() {
+    function getMasterStoreData() {
       try {
-        var raw = localStorage.getItem(MAIN_STORAGE_KEY);
+        var raw = localStorage.getItem(STORAGE_KEY_NESTED) ||
+                  localStorage.getItem(MAIN_STORAGE_KEY);
         if (raw) {
           var parsed = JSON.parse(raw);
-          if (parsed && Array.isArray(parsed.questions)) {
-            var flat = [];
-            parsed.questions.forEach(function (mq) {
-              flat.push(mq);
-              if (Array.isArray(mq.children)) {
-                mq.children.forEach(function (sec) {
-                  if (Array.isArray(sec.children)) {
-                    sec.children.forEach(function (sq) {
-                      flat.push(sq);
-                    });
-                  }
-                });
-              }
-            });
-            return flat;
+          if (parsed && Array.isArray(parsed.questions) && parsed.questions.length === 6) {
+            return parsed;
           }
         }
-      } catch (e) { }
+      } catch (e) {
+        console.warn('Error reading master store data:', e);
+      }
+      return JSON.parse(JSON.stringify(DEFAULT_MASTER_DATA));
+    }
+
+    function getMainStoreQuestions() {
+      try {
+        var store = getMasterStoreData();
+        if (store && Array.isArray(store.questions)) {
+          var flat = [];
+          store.questions.forEach(function (mq, mqIdx) {
+            var hubNum = mqIdx + 1;
+            flat.push({
+              id: mq.id,
+              sourceQuestionId: mq.sourceQuestionId || mq.id,
+              nodeType: 'master',
+              isMaster: true,
+              hubId: mq.id,
+              hubIndex: hubNum,
+              question: mq.question,
+              answer: mq.answer,
+              priority: mq.priority || 'must',
+              priorityLabel: mq.priorityLabel || 'Must Prepare',
+              type: mq.type || 'Introductory',
+              sectionLabel: 'Hub ' + hubNum + ' · Master',
+              hubTitle: mq.question
+            });
+            if (Array.isArray(mq.children)) {
+              mq.children.forEach(function (sec) {
+                var branchTitle = sec.title || 'Follow-ups';
+                if (Array.isArray(sec.children)) {
+                  sec.children.forEach(function (sq) {
+                    flat.push({
+                      id: sq.id,
+                      sourceQuestionId: sq.sourceQuestionId || sq.id,
+                      nodeType: 'question',
+                      isMaster: false,
+                      hubId: mq.id,
+                      hubIndex: hubNum,
+                      question: sq.question,
+                      answer: sq.answer,
+                      priority: sq.priority || 'standard',
+                      priorityLabel: sq.priorityLabel || 'Standard',
+                      type: sq.type || mq.type || 'General',
+                      sectionLabel: branchTitle,
+                      hubTitle: mq.question
+                    });
+                  });
+                }
+              });
+            }
+          });
+          return flat;
+        }
+      } catch (e) {
+        console.warn('Error reading store questions:', e);
+      }
       return [];
     }
 
@@ -1442,40 +2518,238 @@
 
     function updateMainStoreAnswer(questionId, newAnswer) {
       try {
-        var raw = localStorage.getItem(MAIN_STORAGE_KEY);
-        if (raw) {
-          var store = JSON.parse(raw);
-          var q = findQuestionInStore(store, questionId);
-          if (q) {
-            q.answer = newAnswer;
-            q.isEdited = true;
-            store.lastSaved = Date.now();
-            localStorage.setItem(MAIN_STORAGE_KEY, JSON.stringify(store));
-            return true;
-          }
+        var store = getMasterStoreData();
+        var q = findQuestionInStore(store, questionId);
+        if (q) {
+          q.answer = newAnswer;
+          q.isEdited = true;
+          store.lastSaved = Date.now();
+          var serialized = JSON.stringify(store);
+          localStorage.setItem(STORAGE_KEY_NESTED, serialized);
+          localStorage.setItem(MAIN_STORAGE_KEY, serialized);
+          return true;
         }
-      } catch (e) { }
+      } catch (e) {
+        console.error('Error updating main store answer:', e);
+      }
       return false;
     }
 
     function updateMainStorePriority(questionId, newPriority) {
       try {
-        var raw = localStorage.getItem(MAIN_STORAGE_KEY);
+        var store = getMasterStoreData();
+        var q = findQuestionInStore(store, questionId);
+        if (q) {
+          q.priority = newPriority;
+          var prioMap = { must: 'Must Prepare', high: 'High', medium: 'Medium', standard: 'Standard' };
+          q.priorityLabel = prioMap[newPriority] || 'Standard';
+          q.isEdited = true;
+          store.lastSaved = Date.now();
+          var serialized = JSON.stringify(store);
+          localStorage.setItem(STORAGE_KEY_NESTED, serialized);
+          localStorage.setItem(MAIN_STORAGE_KEY, serialized);
+          return true;
+        }
+      } catch (e) {
+        console.error('Error updating main store priority:', e);
+      }
+      return false;
+    }
+
+    // ============================================================
+    // GRAPH STRUCTURE GENERATOR (COHERENT MASTER MAP)
+    // ============================================================
+    function generateMasterInterviewGraph(masterData) {
+      var nodes = [];
+      var edges = [];
+      var nextNodeId = 1;
+      var nextEdgeId = 1;
+
+      // 2 columns of 3 Hubs:
+      // Col 0: Hub 1 (About You), Hub 2 (KPIT Experience), Hub 3 (Sugam Krishi)
+      // Col 1: Hub 4 (Passwordzzz), Hub 5 (Tech Stack), Hub 6 (Why Accenture)
+      var columns = [
+        [masterData.questions[0], masterData.questions[1], masterData.questions[2]],
+        [masterData.questions[3], masterData.questions[4], masterData.questions[5]]
+      ];
+
+      var colStartX = [100, 1150];
+      var branchOffsetX = 270;
+      var questionOffsetX = 550;
+      var rowHeight = 65;
+      var branchSpacing = 20;
+      var hubSpacing = 95;
+
+      var masterNodesByHub = {};
+
+      columns.forEach(function (colHubs, colIdx) {
+        var currentY = 100;
+        var startX = colStartX[colIdx];
+
+        colHubs.forEach(function (mq, hubIdxInCol) {
+          var hubNumber = (colIdx === 0 ? hubIdxInCol + 1 : hubIdxInCol + 4);
+          var hubStartY = currentY;
+
+          var hubBranchNodes = [];
+          var questionCursorY = currentY;
+
+          (mq.children || []).forEach(function (sec) {
+            var branchStartY = questionCursorY;
+            var subQs = sec.children || [];
+            var branchSubNodeIds = [];
+
+            subQs.forEach(function (sq) {
+              var qNode = {
+                id: nextNodeId++,
+                title: sq.question,
+                questionId: sq.id,
+                nodeType: 'question',
+                hubId: mq.id,
+                hubIndex: hubNumber,
+                branchTitle: sec.title,
+                x: startX + questionOffsetX,
+                y: questionCursorY
+              };
+              nodes.push(qNode);
+              branchSubNodeIds.push(qNode.id);
+              questionCursorY += rowHeight;
+            });
+
+            // Center branch node vertically relative to its questions
+            var branchY = subQs.length > 0
+              ? Math.round((branchStartY + questionCursorY - rowHeight) / 2)
+              : branchStartY;
+
+            var branchNode = {
+              id: nextNodeId++,
+              title: sec.title,
+              questionId: null,
+              nodeType: 'branch',
+              hubId: mq.id,
+              hubIndex: hubNumber,
+              branchTitle: sec.title,
+              x: startX + branchOffsetX,
+              y: branchY
+            };
+            nodes.push(branchNode);
+            hubBranchNodes.push(branchNode.id);
+
+            // Connect branch to subquestions
+            branchSubNodeIds.forEach(function (subId) {
+              edges.push({
+                id: nextEdgeId++,
+                from: branchNode.id,
+                to: subId,
+                type: 'branch-to-q'
+              });
+            });
+
+            questionCursorY += branchSpacing;
+          });
+
+          // Master Hub Node placed at vertical center of this hub
+          var hubCenterY = Math.round((hubStartY + questionCursorY - branchSpacing - rowHeight / 2) / 2);
+          var masterNode = {
+            id: nextNodeId++,
+            title: mq.question,
+            questionId: mq.id,
+            nodeType: 'master',
+            hubId: mq.id,
+            hubIndex: hubNumber,
+            branchTitle: 'Master Hub',
+            x: startX,
+            y: hubCenterY
+          };
+          nodes.push(masterNode);
+          masterNodesByHub[hubNumber] = masterNode;
+
+          // Connect Master Hub to Branches
+          hubBranchNodes.forEach(function (bId) {
+            edges.push({
+              id: nextEdgeId++,
+              from: masterNode.id,
+              to: bId,
+              type: 'master-to-branch'
+            });
+          });
+
+          currentY = questionCursorY + hubSpacing;
+        });
+      });
+
+      // Progression Flow Edges: Hub 1 -> Hub 2 -> Hub 3 -> Hub 4 -> Hub 5 -> Hub 6
+      for (var h = 1; h <= 5; h++) {
+        if (masterNodesByHub[h] && masterNodesByHub[h + 1]) {
+          edges.push({
+            id: nextEdgeId++,
+            from: masterNodesByHub[h].id,
+            to: masterNodesByHub[h + 1].id,
+            isProgression: true,
+            type: 'prep-path'
+          });
+        }
+      }
+
+      return {
+        nodes: nodes,
+        edges: edges,
+        nextNodeId: nextNodeId,
+        nextEdgeId: nextEdgeId,
+        version: GRAPH_VERSION
+      };
+    }
+
+    // ============================================================
+    // PERSISTENCE
+    // ============================================================
+    function loadGraph() {
+      try {
+        var raw = localStorage.getItem(GRAPH_STORAGE_KEY);
         if (raw) {
-          var store = JSON.parse(raw);
-          var q = findQuestionInStore(store, questionId);
-          if (q) {
-            q.priority = newPriority;
-            var prioMap = { must: 'Must Prepare', high: 'High', medium: 'Medium', standard: 'Standard' };
-            q.priorityLabel = prioMap[newPriority] || 'Standard';
-            q.isEdited = true;
-            store.lastSaved = Date.now();
-            localStorage.setItem(MAIN_STORAGE_KEY, JSON.stringify(store));
-            return true;
+          var parsed = JSON.parse(raw);
+          if (parsed && Array.isArray(parsed.nodes) && parsed.nodes.length > 0 && parsed.version === GRAPH_VERSION) {
+            graphData = parsed;
+            if (!graphData.nextNodeId) graphData.nextNodeId = 1;
+            if (!graphData.nextEdgeId) graphData.nextEdgeId = 1;
+            graphData.nodes.forEach(function (n) {
+              if (n.id >= graphData.nextNodeId) graphData.nextNodeId = n.id + 1;
+            });
+            graphData.edges.forEach(function (e) {
+              if (e.id >= graphData.nextEdgeId) graphData.nextEdgeId = e.id + 1;
+            });
+            validateLinkedQuestions();
+            return;
           }
         }
-      } catch (e) { }
-      return false;
+      } catch (e) {
+        console.warn('Error loading graph from storage:', e);
+      }
+
+      // Initialize default master graph
+      var masterData = getMasterStoreData();
+      graphData = generateMasterInterviewGraph(masterData);
+      saveGraph();
+    }
+
+    function saveGraph() {
+      try {
+        graphData.version = GRAPH_VERSION;
+        localStorage.setItem(GRAPH_STORAGE_KEY, JSON.stringify(graphData));
+      } catch (e) {
+        console.error('Error saving graph:', e);
+        showToast('⚠ Storage error');
+      }
+    }
+
+    function validateLinkedQuestions() {
+      var questions = getMainStoreQuestions();
+      var qIds = {};
+      questions.forEach(function (q) { qIds[q.id] = true; });
+      graphData.nodes.forEach(function (n) {
+        if (n.questionId && !qIds[n.questionId]) {
+          n.questionId = null;
+        }
+      });
     }
 
     // ============================================================
@@ -1486,6 +2760,7 @@
         id: graphData.nextNodeId++,
         title: title,
         questionId: questionId || null,
+        nodeType: questionId ? 'question' : 'topic',
         x: Math.round(x),
         y: Math.round(y)
       };
@@ -1523,7 +2798,6 @@
     }
 
     function addEdge(fromId, toId) {
-      // Check duplicate
       var exists = graphData.edges.some(function (e) {
         return e.from === fromId && e.to === toId;
       });
@@ -1558,7 +2832,7 @@
     }
 
     // ============================================================
-    // NODE COLORS
+    // NODE COLORS & LABELS
     // ============================================================
     function getNodeAccentColor(node) {
       if (!node.questionId) return '#c2956b';
@@ -1569,18 +2843,34 @@
     }
 
     function getNodeSubtitle(node) {
-      if (!node.questionId) return 'Topic';
+      if (node.nodeType === 'master') {
+        var hubTitles = {
+          1: 'Introductory · Must Prepare',
+          2: 'KPIT Experience · Must Prepare',
+          3: 'Sugam Krishi · Must Prepare',
+          4: 'Passwordzzz · Must Prepare',
+          5: 'Tech Stack · High Priority',
+          6: 'Accenture & HR · Must Prepare'
+        };
+        return hubTitles[node.hubIndex] || 'Master Hub';
+      }
+      if (node.nodeType === 'branch') {
+        return 'Topic Branch';
+      }
+      if (!node.questionId) return 'Custom Topic';
       var q = getQuestion(node.questionId);
-      if (!q) return 'Unlinked';
-      return q.sectionLabel + ' · ' + q.priorityLabel;
+      if (!q) return 'Unlinked Question';
+      return (node.branchTitle || q.sectionLabel || 'Follow-up') + ' · ' + (q.priorityLabel || 'Standard');
     }
 
     // ============================================================
     // EDGE PATH CALCULATION
     // ============================================================
     function getNodeBorderPoint(node, angle) {
+      var nodeH = getNodeHeight(node);
+      var halfH = nodeH / 2;
       var w = getNodeWidth(node) / 2 + 2;
-      var h = NODE_HALF_H + 2;
+      var h = halfH + 2;
       var cosA = Math.cos(angle);
       var sinA = Math.sin(angle);
       var absCos = Math.abs(cosA);
@@ -1603,7 +2893,7 @@
       };
     }
 
-    function getEdgePath(fromNode, toNode) {
+    function getEdgePath(fromNode, toNode, isProgression) {
       var dx = toNode.x - fromNode.x;
       var dy = toNode.y - fromNode.y;
       var dist = Math.sqrt(dx * dx + dy * dy);
@@ -1614,7 +2904,6 @@
       var from = getNodeBorderPoint(fromNode, angleForward);
       var to = getNodeBorderPoint(toNode, angleBack);
 
-      // Slight perpendicular curve
       var ex = to.x - from.x;
       var ey = to.y - from.y;
       var elen = Math.sqrt(ex * ex + ey * ey);
@@ -1622,7 +2911,7 @@
 
       var nx = -ey / elen;
       var ny = ex / elen;
-      var offset = Math.min(12, elen * 0.06);
+      var offset = isProgression ? Math.min(28, elen * 0.12) : Math.min(12, elen * 0.06);
       var mx = (from.x + to.x) / 2 + nx * offset;
       var my = (from.y + to.y) / 2 + ny * offset;
 
@@ -1646,8 +2935,13 @@
       graphData.nodes.forEach(function (node) {
         var g = svgEl('g');
         var cls = 'gn';
+        if (node.nodeType === 'master') cls += ' gn--master';
+        else if (node.nodeType === 'branch') cls += ' gn--branch';
+        else cls += ' gn--question';
+
         if (node.id === graphState.selectedNode) cls += ' gn--selected';
         if (node.id === graphState.connectSource) cls += ' gn--connect-source';
+
         if (searchQuery) {
           var matches = node.title.toLowerCase().indexOf(searchQuery.toLowerCase()) !== -1;
           if (matches) {
@@ -1655,21 +2949,31 @@
           } else {
             cls += ' gn--search-dim';
           }
+        } else if (activeHubFilter !== 'all') {
+          var targetHub = parseInt(activeHubFilter, 10);
+          if (node.hubIndex === targetHub) {
+            cls += ' gn--hub-active';
+          } else {
+            cls += ' gn--hub-dim';
+          }
         }
+
         g.setAttribute('class', cls);
         g.setAttribute('data-nid', node.id);
         g.setAttribute('transform', 'translate(' + node.x + ',' + node.y + ')');
 
         var w = getNodeWidth(node);
+        var h = getNodeHeight(node);
         var hw = w / 2;
+        var hh = h / 2;
 
-        // Shadow rect (slightly offset)
+        // Shadow rect
         var shadow = svgEl('rect');
         shadow.setAttribute('x', -hw + 1);
-        shadow.setAttribute('y', -NODE_HALF_H + 2);
+        shadow.setAttribute('y', -hh + 2);
         shadow.setAttribute('width', w);
-        shadow.setAttribute('height', NODE_H);
-        shadow.setAttribute('rx', 10);
+        shadow.setAttribute('height', h);
+        shadow.setAttribute('rx', node.nodeType === 'branch' ? 18 : 10);
         shadow.setAttribute('fill', 'rgba(61,52,41,0.06)');
         shadow.setAttribute('stroke', 'none');
 
@@ -1677,62 +2981,83 @@
         var bg = svgEl('rect');
         bg.setAttribute('class', 'gn-bg');
         bg.setAttribute('x', -hw);
-        bg.setAttribute('y', -NODE_HALF_H);
+        bg.setAttribute('y', -hh);
         bg.setAttribute('width', w);
-        bg.setAttribute('height', NODE_H);
-        bg.setAttribute('rx', 10);
+        bg.setAttribute('height', h);
+        bg.setAttribute('rx', node.nodeType === 'branch' ? 18 : 10);
 
-        // Accent bar
-        var accent = svgEl('rect');
-        accent.setAttribute('class', 'gn-accent');
-        accent.setAttribute('x', -hw);
-        accent.setAttribute('y', -NODE_HALF_H + 8);
-        accent.setAttribute('width', 4);
-        accent.setAttribute('height', NODE_H - 16);
-        accent.setAttribute('rx', 2);
-        accent.setAttribute('fill', getNodeAccentColor(node));
+        g.appendChild(shadow);
+        g.appendChild(bg);
+
+        // Accent strip (for master and question nodes)
+        if (node.nodeType !== 'branch') {
+          var accent = svgEl('rect');
+          accent.setAttribute('class', 'gn-accent');
+          accent.setAttribute('x', -hw);
+          accent.setAttribute('y', -hh + 7);
+          accent.setAttribute('width', node.nodeType === 'master' ? 5 : 4);
+          accent.setAttribute('height', h - 14);
+          accent.setAttribute('rx', 2);
+          accent.setAttribute('fill', getNodeAccentColor(node));
+          g.appendChild(accent);
+        }
+
+        // Master Hub Pill Badge
+        if (node.nodeType === 'master') {
+          var hubBadge = svgEl('text');
+          hubBadge.setAttribute('class', 'gn-master-badge');
+          hubBadge.setAttribute('text-anchor', 'middle');
+          hubBadge.setAttribute('y', -hh + 14);
+          hubBadge.textContent = 'HUB ' + (node.hubIndex || '★') + ' · MASTER';
+          g.appendChild(hubBadge);
+        }
 
         // Title text
-        var maxTextW = w - NODE_PAD;
+        var maxTextW = w - (node.nodeType === 'branch' ? 24 : NODE_PAD);
         var titleText = svgEl('text');
         titleText.setAttribute('class', 'gn-title');
         titleText.setAttribute('text-anchor', 'middle');
         titleText.setAttribute('dominant-baseline', 'central');
-        titleText.setAttribute('y', node.questionId ? -4 : 0);
-        titleText.textContent = truncateText(node.title, maxTextW);
 
-        // Subtitle
-        if (node.questionId || true) {
+        var displayTitle = node.title;
+        if (node.nodeType === 'branch') {
+          displayTitle = '🌿 ' + node.title;
+        }
+
+        if (node.nodeType === 'master') {
+          titleText.setAttribute('y', 8);
+          titleText.textContent = truncateText(displayTitle, maxTextW);
+        } else if (node.nodeType === 'branch') {
+          titleText.setAttribute('y', 0);
+          titleText.textContent = truncateText(displayTitle, maxTextW);
+        } else {
+          titleText.setAttribute('y', -5);
+          titleText.textContent = truncateText(displayTitle, maxTextW);
+
           var subtitle = svgEl('text');
           subtitle.setAttribute('class', 'gn-subtitle');
           subtitle.setAttribute('text-anchor', 'middle');
-          subtitle.setAttribute('y', 12);
-          subtitle.textContent = getNodeSubtitle(node);
-          if (!node.questionId) subtitle.setAttribute('y', 0), titleText.setAttribute('y', -6);
-          else subtitle.setAttribute('y', 12), titleText.setAttribute('y', -5);
+          subtitle.setAttribute('y', 11);
+          subtitle.textContent = truncateText(getNodeSubtitle(node), maxTextW);
+          g.appendChild(subtitle);
         }
+
+        g.appendChild(titleText);
 
         // Tooltip
         var titleEl = svgEl('title');
         titleEl.textContent = node.title;
+        g.appendChild(titleEl);
 
-        // Link indicator
-        var linkDot = null;
+        // Link dot indicator (if linked to question in store)
         if (node.questionId) {
-          linkDot = svgEl('circle');
+          var linkDot = svgEl('circle');
           linkDot.setAttribute('class', 'gn-link-dot');
           linkDot.setAttribute('cx', hw - 10);
-          linkDot.setAttribute('cy', -NODE_HALF_H + 10);
+          linkDot.setAttribute('cy', -hh + 10);
           linkDot.setAttribute('r', 3.5);
+          g.appendChild(linkDot);
         }
-
-        g.appendChild(shadow);
-        g.appendChild(bg);
-        g.appendChild(accent);
-        g.appendChild(titleText);
-        if (subtitle) g.appendChild(subtitle);
-        g.appendChild(titleEl);
-        if (linkDot) g.appendChild(linkDot);
 
         nodesGroup.appendChild(g);
       });
@@ -1746,20 +3071,30 @@
         var toNode = findNode(edge.to);
         if (!fromNode || !toNode) return;
 
-        var pathD = getEdgePath(fromNode, toNode);
+        var isProg = edge.isProgression || edge.type === 'prep-path';
+        var pathD = getEdgePath(fromNode, toNode, isProg);
         if (!pathD) return;
 
         var g = svgEl('g');
-        g.setAttribute('class', 'ge' + (edge.id === graphState.selectedEdge ? ' ge--selected' : ''));
+        var cls = 'ge';
+        if (edge.id === graphState.selectedEdge) cls += ' ge--selected';
+        if (isProg) cls += ' ge--progression';
+
+        if (activeHubFilter !== 'all') {
+          var targetHub = parseInt(activeHubFilter, 10);
+          if (fromNode.hubIndex !== targetHub && toNode.hubIndex !== targetHub) {
+            cls += ' ge--dim';
+          }
+        }
+
+        g.setAttribute('class', cls);
         g.setAttribute('data-eid', edge.id);
 
-        // Visible path
         var path = svgEl('path');
         path.setAttribute('class', 'ge-path');
         path.setAttribute('d', pathD);
         path.setAttribute('marker-end', edge.id === graphState.selectedEdge ? 'url(#arrowheadAccent)' : 'url(#arrowhead)');
 
-        // Hit area (wider invisible path for click target)
         var hitPath = svgEl('path');
         hitPath.setAttribute('class', 'ge-hit');
         hitPath.setAttribute('d', pathD);
@@ -1784,9 +3119,7 @@
     function applyViewport() {
       viewportGroup.setAttribute('transform',
         'translate(' + viewport.x + ',' + viewport.y + ') scale(' + viewport.zoom + ')');
-      // Update dot grid panning
       canvasWrap.style.backgroundPosition = viewport.x + 'px ' + viewport.y + 'px';
-      // Zoom label
       document.getElementById('zoomLabel').textContent = Math.round(viewport.zoom * 100) + '%';
     }
 
@@ -1799,8 +3132,9 @@
     }
 
     function handleZoom(delta, clientX, clientY) {
-      var factor = 1 + delta * 0.1;
-      var newZoom = Math.max(0.15, Math.min(4, viewport.zoom * factor));
+      var factor = delta > 0 ? 1.15 : 1 / 1.15;
+      var newZoom = Math.max(0.15, Math.min(3.0, viewport.zoom * factor));
+      if (newZoom === viewport.zoom) return;
 
       var rect = graphSvg.getBoundingClientRect();
       var mx = clientX - rect.left;
@@ -1824,19 +3158,20 @@
       var minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
       graphData.nodes.forEach(function (n) {
         var hw = getNodeWidth(n) / 2;
+        var hh = getNodeHeight(n) / 2;
         minX = Math.min(minX, n.x - hw);
         maxX = Math.max(maxX, n.x + hw);
-        minY = Math.min(minY, n.y - NODE_HALF_H);
-        maxY = Math.max(maxY, n.y + NODE_HALF_H);
+        minY = Math.min(minY, n.y - hh);
+        maxY = Math.max(maxY, n.y + hh);
       });
 
       var pad = 80;
       var w = maxX - minX + pad * 2;
       var h = maxY - minY + pad * 2;
-      var canvasW = graphSvg.clientWidth;
-      var canvasH = graphSvg.clientHeight;
+      var canvasW = graphSvg.clientWidth || window.innerWidth;
+      var canvasH = graphSvg.clientHeight || (window.innerHeight - 100);
 
-      var zoom = Math.min(canvasW / w, canvasH / h, 2);
+      var zoom = Math.min(canvasW / w, canvasH / h, 1.8);
       zoom = Math.max(0.2, zoom);
       var cx = (minX + maxX) / 2;
       var cy = (minY + maxY) / 2;
@@ -1847,64 +3182,116 @@
       applyViewport();
     }
 
+    function focusHub(hubIndex) {
+      activeHubFilter = hubIndex;
+
+      document.querySelectorAll('.hub-pill').forEach(function (pill) {
+        if (pill.getAttribute('data-hub') === String(hubIndex)) {
+          pill.classList.add('active');
+        } else {
+          pill.classList.remove('active');
+        }
+      });
+
+      if (hubIndex === 'all') {
+        renderGraph();
+        fitAll();
+        return;
+      }
+
+      var idx = parseInt(hubIndex, 10);
+      var hubNodes = graphData.nodes.filter(function (n) { return n.hubIndex === idx; });
+      if (hubNodes.length === 0) return;
+
+      var minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+      hubNodes.forEach(function (n) {
+        var hw = getNodeWidth(n) / 2;
+        var hh = getNodeHeight(n) / 2;
+        minX = Math.min(minX, n.x - hw);
+        maxX = Math.max(maxX, n.x + hw);
+        minY = Math.min(minY, n.y - hh);
+        maxY = Math.max(maxY, n.y + hh);
+      });
+
+      var pad = 70;
+      var w = maxX - minX + pad * 2;
+      var h = maxY - minY + pad * 2;
+      var canvasW = graphSvg.clientWidth || window.innerWidth;
+      var canvasH = graphSvg.clientHeight || (window.innerHeight - 100);
+
+      var zoom = Math.min(canvasW / w, canvasH / h, 1.3);
+      zoom = Math.max(0.35, zoom);
+      var cx = (minX + maxX) / 2;
+      var cy = (minY + maxY) / 2;
+
+      viewport.zoom = zoom;
+      viewport.x = canvasW / 2 - cx * zoom;
+      viewport.y = canvasH / 2 - cy * zoom;
+      applyViewport();
+      renderGraph();
+    }
+
     function panToNode(nodeId) {
       var node = findNode(nodeId);
       if (!node) return;
-      var canvasW = graphSvg.clientWidth;
-      var canvasH = graphSvg.clientHeight;
+      var canvasW = graphSvg.clientWidth || window.innerWidth;
+      var canvasH = graphSvg.clientHeight || (window.innerHeight - 100);
       viewport.x = canvasW / 2 - node.x * viewport.zoom;
       viewport.y = canvasH / 2 - node.y * viewport.zoom;
       applyViewport();
     }
 
     // ============================================================
-    // SELECTION
+    // SELECTION & INTERACTION MODES
     // ============================================================
     function selectNode(nodeId) {
+      deselectAll();
       graphState.selectedNode = nodeId;
-      graphState.selectedEdge = null;
-      renderGraph();
+      var nodeEl = document.querySelector('[data-nid="' + nodeId + '"]');
+      if (nodeEl) nodeEl.classList.add('gn--selected');
       updateDeleteBtn();
+      updateStatusInfo();
       openSidePanel(nodeId);
     }
 
     function selectEdge(edgeId) {
+      deselectAll();
       graphState.selectedEdge = edgeId;
-      graphState.selectedNode = null;
-      renderGraph();
+      var edgeEl = document.querySelector('[data-eid="' + edgeId + '"]');
+      if (edgeEl) edgeEl.classList.add('ge--selected');
+      var pathEl = edgeEl ? edgeEl.querySelector('.ge-path') : null;
+      if (pathEl) pathEl.setAttribute('marker-end', 'url(#arrowheadAccent)');
       updateDeleteBtn();
-      closeSidePanel();
+      updateStatusInfo();
     }
 
     function deselectAll() {
-      graphState.selectedNode = null;
-      graphState.selectedEdge = null;
-      renderGraph();
-      updateDeleteBtn();
-    }
-
-    function updateDeleteBtn() {
-      var btn = document.getElementById('deleteBtn');
-      btn.disabled = !(graphState.selectedNode || graphState.selectedEdge);
-    }
-
-    // ============================================================
-    // CONNECT MODE
-    // ============================================================
-    function toggleConnectMode() {
-      if (graphState.mode === 'connect') {
-        exitConnectMode();
-      } else {
-        enterConnectMode();
+      if (graphState.selectedNode !== null) {
+        var prevNode = document.querySelector('[data-nid="' + graphState.selectedNode + '"]');
+        if (prevNode) prevNode.classList.remove('gn--selected');
+        graphState.selectedNode = null;
       }
+      if (graphState.selectedEdge !== null) {
+        var prevEdge = document.querySelector('[data-eid="' + graphState.selectedEdge + '"]');
+        if (prevEdge) {
+          prevEdge.classList.remove('ge--selected');
+          var p = prevEdge.querySelector('.ge-path');
+          if (p) p.setAttribute('marker-end', 'url(#arrowhead)');
+        }
+        graphState.selectedEdge = null;
+      }
+      updateDeleteBtn();
+      updateStatusInfo();
     }
 
-    function enterConnectMode() {
+    function enterConnectMode(sourceNodeId) {
       graphState.mode = 'connect';
-      graphState.connectSource = null;
+      graphState.connectSource = sourceNodeId || null;
       document.getElementById('connectBtn').classList.add('gt-btn--active');
       canvasWrap.classList.add('connecting');
-      updateStatusText('Connect mode: click a node to start');
+      document.getElementById('statusText').textContent = sourceNodeId
+        ? 'Click a target node to connect (or Esc to cancel)'
+        : 'Click the source node to connect';
       renderGraph();
     }
 
@@ -1914,28 +3301,36 @@
       document.getElementById('connectBtn').classList.remove('gt-btn--active');
       canvasWrap.classList.remove('connecting');
       tempEdgePath.setAttribute('display', 'none');
-      updateStatusText('Ready — double-click canvas to add a node');
+      document.getElementById('statusText').textContent = 'Ready — double-click canvas to add a node';
       renderGraph();
     }
 
-    function handleConnectClick(nodeId) {
-      if (graphState.connectSource === null) {
-        graphState.connectSource = nodeId;
-        updateStatusText('Now click target node to connect');
-        renderGraph();
+    function toggleConnectMode() {
+      if (graphState.mode === 'connect') {
+        exitConnectMode();
       } else {
-        if (nodeId !== graphState.connectSource) {
-          addEdge(graphState.connectSource, nodeId);
-        }
-        graphState.connectSource = null;
-        tempEdgePath.setAttribute('display', 'none');
-        updateStatusText('Connect mode: click a node to start');
-        renderGraph();
+        enterConnectMode(graphState.selectedNode);
       }
     }
 
+    function updateDeleteBtn() {
+      var btn = document.getElementById('deleteBtn');
+      btn.disabled = (graphState.selectedNode === null && graphState.selectedEdge === null);
+    }
+
+    function updateStatusInfo() {
+      var info = document.getElementById('statusInfo');
+      var qCount = graphData.nodes.filter(function (n) { return n.questionId; }).length;
+      info.textContent = graphData.nodes.length + ' nodes (' + qCount + ' linked) · ' + graphData.edges.length + ' connections';
+    }
+
+    function closeSidePanel() {
+      document.getElementById('sidePanel').classList.remove('open');
+      panelNodeId = null;
+    }
+
     // ============================================================
-    // SIDE PANEL
+    // SIDE PANEL DETAILS
     // ============================================================
     function openSidePanel(nodeId) {
       var node = findNode(nodeId);
@@ -1946,27 +3341,43 @@
       var body = document.getElementById('spBody');
       var headerTitle = document.getElementById('spHeaderTitle');
 
+      if (node.nodeType === 'branch') {
+        renderBranchPanel(node);
+        panel.classList.add('open');
+        return;
+      }
+
       if (node.questionId) {
         var q = getQuestion(node.questionId);
         if (q) {
-          headerTitle.textContent = 'Question Details';
+          headerTitle.textContent = node.nodeType === 'master' ? 'Master Hub Details' : 'Question Details';
+          
+          var hubBadgeHtml = node.hubIndex
+            ? '<span class="sp-badge sp-badge--hub">HUB ' + node.hubIndex + '</span>'
+            : '';
+
+          var sectionBadgeHtml = node.branchTitle
+            ? '<span class="sp-badge sp-badge--section">' + escapeHtml(node.branchTitle) + '</span>'
+            : (q.sectionLabel ? '<span class="sp-badge sp-badge--section">' + escapeHtml(q.sectionLabel) + '</span>' : '');
+
           body.innerHTML =
             '<div class="sp-badges">' +
-            '<span class="sp-badge sp-badge--section">' + escapeHtml(q.sectionLabel) + '</span>' +
-            '<select class="sp-badge-select sp-badge--priority-' + q.priority + '" id="spPrioritySelect" title="Change priority">' +
+            hubBadgeHtml +
+            sectionBadgeHtml +
+            '<select class="sp-badge-select sp-badge--priority-' + (q.priority || 'standard') + '" id="spPrioritySelect" title="Change priority">' +
             '<option value="must"' + (q.priority === 'must' ? ' selected' : '') + '>Must Prepare</option>' +
             '<option value="high"' + (q.priority === 'high' ? ' selected' : '') + '>High</option>' +
             '<option value="medium"' + (q.priority === 'medium' ? ' selected' : '') + '>Medium</option>' +
             '<option value="standard"' + (q.priority === 'standard' ? ' selected' : '') + '>Standard</option>' +
             '</select>' +
-            '<span class="sp-badge sp-badge--type">' + escapeHtml(q.type) + '</span>' +
+            '<span class="sp-badge sp-badge--type">' + escapeHtml(q.type || 'General') + '</span>' +
             '</div>' +
             '<div class="sp-question">' + escapeHtml(q.question) + '</div>' +
             '<div class="sp-divider"></div>' +
-            '<div class="sp-answer-label">Answer</div>' +
-            '<div class="sp-answer" id="spAnswer" contenteditable="true">' + (q.answer || '<p><em>No answer yet…</em></p>') + '</div>' +
+            '<div class="sp-answer-label">Core Answer</div>' +
+            '<div class="sp-answer" id="spAnswer" contenteditable="true">' + (q.answer || '<p><em>No answer drafted yet…</em></p>') + '</div>' +
             '<div class="sp-actions">' +
-            '<a class="sp-link-btn" href="index.html" target="_blank">↗ Open in Q&A List</a>' +
+            '<a class="sp-link-btn" href="index.html#q-' + q.id + '" target="_blank">↗ Open in Main Screen</a>' +
             '<button class="sp-link-btn sp-link-btn--danger" id="spUnlinkBtn">⊘ Unlink Question</button>' +
             '</div>';
 
@@ -1981,7 +3392,7 @@
                   delete _nodeWidthCache[nd.id];
                   renderGraph();
                   openSidePanel(panelNodeId);
-                  showToast('Priority updated ✓');
+                  showToast('Priority updated in store ✓');
                 }
               }
             });
@@ -1994,7 +3405,7 @@
               var nd = findNode(panelNodeId);
               if (nd && nd.questionId) {
                 updateMainStoreAnswer(nd.questionId, this.innerHTML);
-                showToast('Answer saved ✓');
+                showToast('Answer saved to store ✓');
               }
             }
           });
@@ -2012,7 +3423,6 @@
             }
           });
         } else {
-          // Linked question was deleted
           renderTopicPanel(node);
         }
       } else {
@@ -2022,81 +3432,115 @@
       panel.classList.add('open');
     }
 
+    function renderBranchPanel(node) {
+      var headerTitle = document.getElementById('spHeaderTitle');
+      var body = document.getElementById('spBody');
+      headerTitle.textContent = 'Topic Branch';
+
+      // Find all connected questions from this branch
+      var connectedQNodes = [];
+      graphData.edges.forEach(function (e) {
+        if (e.from === node.id) {
+          var targetNode = findNode(e.to);
+          if (targetNode) connectedQNodes.push(targetNode);
+        }
+      });
+
+      var qListHtml = connectedQNodes.map(function (qn) {
+        var prio = 'standard';
+        if (qn.questionId) {
+          var q = getQuestion(qn.questionId);
+          if (q) prio = q.priority;
+        }
+        return '<div class="sp-branch-q-item" data-goto="' + qn.id + '">' +
+          '<span>' + escapeHtml(qn.title) + '</span>' +
+          '<span class="sp-badge sp-badge--priority-' + prio + '">' + prio.toUpperCase() + '</span>' +
+          '</div>';
+      }).join('');
+
+      body.innerHTML =
+        '<div class="sp-badges">' +
+        (node.hubIndex ? '<span class="sp-badge sp-badge--hub">HUB ' + node.hubIndex + '</span>' : '') +
+        '<span class="sp-badge sp-badge--section">TOPIC BRANCH</span>' +
+        '</div>' +
+        '<div class="sp-topic-label">Branch Title:</div>' +
+        '<input type="text" class="sp-topic-title-input" id="spBranchTitleInput" value="' + escapeHtml(node.title) + '">' +
+        '<div class="sp-divider"></div>' +
+        '<div class="sp-answer-label">Follow-up Subquestions (' + connectedQNodes.length + ')</div>' +
+        '<div class="sp-branch-q-list">' + (qListHtml || '<p style="color:var(--text-light);font-size:12px;">No subquestions connected yet.</p>') + '</div>' +
+        '<div class="sp-actions">' +
+        '<button class="sp-link-btn" id="spAddSubQBtn">＋ Connect Follow-up</button>' +
+        '<button class="sp-link-btn sp-link-btn--danger" id="spDeleteBranchBtn">✕ Delete Branch</button>' +
+        '</div>';
+
+      var titleInput = document.getElementById('spBranchTitleInput');
+      titleInput.addEventListener('change', function () {
+        updateNodeTitle(node.id, this.value.trim() || node.title);
+        showToast('Branch title updated ✓');
+      });
+
+      // Jump to subquestion
+      body.querySelectorAll('.sp-branch-q-item').forEach(function (el) {
+        el.addEventListener('click', function () {
+          var targetId = parseInt(this.getAttribute('data-goto'), 10);
+          selectNode(targetId);
+          panToNode(targetId);
+        });
+      });
+
+      document.getElementById('spAddSubQBtn').addEventListener('click', function () {
+        enterConnectMode(node.id);
+      });
+
+      document.getElementById('spDeleteBranchBtn').addEventListener('click', function () {
+        openDeleteModal('node', node.id);
+      });
+    }
+
     function renderTopicPanel(node) {
       var headerTitle = document.getElementById('spHeaderTitle');
       var body = document.getElementById('spBody');
       headerTitle.textContent = 'Topic Node';
       body.innerHTML =
         '<div class="sp-topic-label">📌 Topic Node</div>' +
-        '<div class="modal-form-group">' +
-        '<label>Title</label>' +
-        '<input type="text" class="sp-topic-title-input" id="spTopicTitle" value="' + escapeHtml(node.title) + '" />' +
-        '</div>' +
-        '<div class="sp-unlinked-msg">This node is not linked to any interview question. ' +
-        'You can use it to group topics or create categories in your interview map.</div>' +
+        '<input type="text" class="sp-topic-title-input" id="spTopicTitleInput" value="' + escapeHtml(node.title) + '">' +
+        '<p class="sp-unlinked-msg">This node is not linked to an interview question. You can connect it to other nodes, edit its title, or link it to a question below.</p>' +
         '<div class="sp-actions">' +
-        '<button class="sp-link-btn" id="spLinkBtn">🔗 Link to Question</button>' +
+        '<button class="sp-link-btn" id="spLinkQuestionBtn">🔗 Link to Existing Question</button>' +
+        '<button class="sp-link-btn sp-link-btn--danger" id="spDeleteTopicBtn">✕ Delete Node</button>' +
         '</div>';
 
-      // Title auto-save
-      document.getElementById('spTopicTitle').addEventListener('blur', function () {
-        if (panelNodeId !== null && this.value.trim()) {
-          updateNodeTitle(panelNodeId, this.value.trim());
-          showToast('Title updated ✓');
-        }
+      var titleInput = document.getElementById('spTopicTitleInput');
+      titleInput.addEventListener('change', function () {
+        updateNodeTitle(node.id, this.value.trim() || node.title);
+        showToast('Title updated ✓');
       });
 
-      document.getElementById('spTopicTitle').addEventListener('keydown', function (e) {
-        if (e.key === 'Enter') {
-          this.blur();
-        }
+      document.getElementById('spLinkQuestionBtn').addEventListener('click', function () {
+        openLinkModal(node.id);
       });
 
-      // Link button
-      document.getElementById('spLinkBtn').addEventListener('click', function () {
-        closeSidePanel();
-        var pos = { x: node.x, y: node.y };
-        openLinkQuestionModal(node.id);
+      document.getElementById('spDeleteTopicBtn').addEventListener('click', function () {
+        openDeleteModal('node', node.id);
       });
-    }
-
-    function closeSidePanel() {
-      panelNodeId = null;
-      document.getElementById('sidePanel').classList.remove('open');
-    }
-
-    function openLinkQuestionModal(nodeId) {
-      // Reuse add node modal but in "link" mode
-      editingNodeId = nodeId;
-      document.getElementById('modalSearchInput').value = '';
-      document.getElementById('topicTitleInput').value = '';
-      document.getElementById('topicTitleInput').parentElement.style.display = 'none';
-      document.querySelector('.modal-or').style.display = 'none';
-      document.getElementById('addTopicConfirm').style.display = 'none';
-      document.querySelector('.add-modal .modal h3').textContent = 'Link to Question';
-      renderSearchResults('');
-      document.getElementById('addNodeModal').classList.add('open');
-      document.getElementById('modalSearchInput').focus();
     }
 
     // ============================================================
-    // MODALS — ADD NODE
+    // MODALS
     // ============================================================
-    function openAddNodeModal(x, y) {
-      editingNodeId = null;
-      addNodePosition.x = x || getDefaultPosition().x;
-      addNodePosition.y = y || getDefaultPosition().y;
-
-      // Reset modal state
+    function openAddNodeModal(optX, optY) {
+      if (optX !== undefined && optY !== undefined) {
+        addNodePosition = { x: optX, y: optY };
+      } else {
+        addNodePosition = getCenterCanvasPosition();
+      }
       document.getElementById('modalSearchInput').value = '';
       document.getElementById('topicTitleInput').value = '';
-      document.getElementById('topicTitleInput').parentElement.style.display = '';
-      document.querySelector('.modal-or').style.display = '';
-      document.getElementById('addTopicConfirm').style.display = '';
-      document.querySelector('.add-modal .modal h3').textContent = 'Add to Interview Map';
       renderSearchResults('');
       document.getElementById('addNodeModal').classList.add('open');
-      document.getElementById('modalSearchInput').focus();
+      setTimeout(function () {
+        document.getElementById('modalSearchInput').focus();
+      }, 100);
     }
 
     function closeAddNodeModal() {
@@ -2104,9 +3548,67 @@
       editingNodeId = null;
     }
 
-    function getDefaultPosition() {
-      var canvasW = graphSvg.clientWidth;
-      var canvasH = graphSvg.clientHeight;
+    function openLinkModal(nodeId) {
+      editingNodeId = nodeId;
+      addNodePosition = getCenterCanvasPosition();
+      document.getElementById('modalSearchInput').value = '';
+      document.getElementById('topicTitleInput').value = '';
+      renderSearchResults('');
+      document.getElementById('addNodeModal').classList.add('open');
+      setTimeout(function () {
+        document.getElementById('modalSearchInput').focus();
+      }, 100);
+    }
+
+    function openEditNodeModal(nodeId) {
+      var node = findNode(nodeId);
+      if (!node) return;
+      editingNodeId = nodeId;
+      document.getElementById('editNodeTitleInput').value = node.title;
+      document.getElementById('editNodeModal').classList.add('open');
+      setTimeout(function () {
+        document.getElementById('editNodeTitleInput').focus();
+        document.getElementById('editNodeTitleInput').select();
+      }, 100);
+    }
+
+    function closeEditNodeModal() {
+      document.getElementById('editNodeModal').classList.remove('open');
+      editingNodeId = null;
+    }
+
+    function openDeleteModal(type, id) {
+      deletingType = type;
+      deletingId = id;
+      if (type === 'node') {
+        var node = findNode(id);
+        var label = node ? node.title : 'this node';
+        document.getElementById('deleteTitle').textContent = 'Delete "' + truncateText(label, 30) + '"?';
+        document.getElementById('deleteDesc').textContent = 'This will remove the node and all its connections from the map. The original question in your preparation store will not be affected.';
+      } else {
+        document.getElementById('deleteTitle').textContent = 'Remove Connection?';
+        document.getElementById('deleteDesc').textContent = 'This will delete the connection between these two nodes.';
+      }
+      document.getElementById('deleteModal').classList.add('open');
+    }
+
+    function closeDeleteModal() {
+      document.getElementById('deleteModal').classList.remove('open');
+      deletingType = null;
+      deletingId = null;
+    }
+
+    function openResetModal() {
+      document.getElementById('resetModal').classList.add('open');
+    }
+
+    function closeResetModal() {
+      document.getElementById('resetModal').classList.remove('open');
+    }
+
+    function getCenterCanvasPosition() {
+      var canvasW = graphSvg.clientWidth || window.innerWidth;
+      var canvasH = graphSvg.clientHeight || (window.innerHeight - 100);
       var x = (canvasW / 2 - viewport.x) / viewport.zoom + (Math.random() - 0.5) * 40;
       var y = (canvasH / 2 - viewport.y) / viewport.zoom + (Math.random() - 0.5) * 40;
       return { x: Math.round(x), y: Math.round(y) };
@@ -2120,12 +3622,11 @@
         var q = query.toLowerCase();
         results = questions.filter(function (item) {
           return item.question.toLowerCase().indexOf(q) !== -1 ||
-            item.sectionLabel.toLowerCase().indexOf(q) !== -1 ||
-            item.type.toLowerCase().indexOf(q) !== -1;
+            (item.sectionLabel && item.sectionLabel.toLowerCase().indexOf(q) !== -1) ||
+            (item.type && item.type.toLowerCase().indexOf(q) !== -1);
         });
       }
 
-      // Track which questions are already on the graph
       var linkedIds = {};
       graphData.nodes.forEach(function (n) {
         if (n.questionId) linkedIds[n.questionId] = true;
@@ -2134,14 +3635,19 @@
       var container = document.getElementById('searchResults');
       container.innerHTML = '';
 
-      results.slice(0, 20).forEach(function (item) {
+      if (results.length === 0) {
+        container.innerHTML = '<div class="sr-empty">No questions found matching "' + escapeHtml(query) + '"</div>';
+        return;
+      }
+
+      results.slice(0, 25).forEach(function (item) {
         var div = document.createElement('div');
         div.className = 'sr-item' + (linkedIds[item.id] ? ' sr-item--linked' : '');
 
         var left = document.createElement('div');
         left.className = 'sr-item-left';
         left.innerHTML = '<span class="sr-q">' + escapeHtml(item.question) + '</span>' +
-          '<span class="sr-meta">' + escapeHtml(item.sectionLabel) + ' · ' + escapeHtml(item.priorityLabel) + '</span>';
+          '<span class="sr-meta">' + escapeHtml(item.sectionLabel || 'Question') + ' · ' + escapeHtml(item.priorityLabel || 'Standard') + '</span>';
 
         div.appendChild(left);
 
@@ -2154,7 +3660,6 @@
 
         div.addEventListener('click', function () {
           if (editingNodeId !== null) {
-            // Linking mode — link existing node to question
             var node = findNode(editingNodeId);
             if (node) {
               node.questionId = item.id;
@@ -2170,7 +3675,6 @@
           }
 
           if (linkedIds[item.id]) {
-            // Already on map — pan to it
             var existingNode = graphData.nodes.find(function (n) { return n.questionId === item.id; });
             if (existingNode) {
               selectNode(existingNode.id);
@@ -2180,219 +3684,147 @@
             return;
           }
 
-          // Add linked node
           addNode(item.question, item.id, addNodePosition.x, addNodePosition.y);
           closeAddNodeModal();
         });
 
         container.appendChild(div);
       });
-
-      if (results.length === 0 && query) {
-        container.innerHTML = '<div class="sr-empty">No matching questions found</div>';
-      } else if (results.length === 0) {
-        container.innerHTML = '<div class="sr-empty">No questions in the Q&A store yet</div>';
-      }
     }
 
-    // ============================================================
-    // MODALS — EDIT NODE
-    // ============================================================
-    function openEditNodeModal(nodeId) {
-      editingNodeId = nodeId;
-      var node = findNode(nodeId);
-      if (!node) return;
-      document.getElementById('editNodeTitleInput').value = node.title;
-      document.getElementById('editNodeModal').classList.add('open');
-      document.getElementById('editNodeTitleInput').focus();
-      document.getElementById('editNodeTitleInput').select();
-    }
-
-    function closeEditNodeModal() {
-      document.getElementById('editNodeModal').classList.remove('open');
-      editingNodeId = null;
-    }
-
-    // ============================================================
-    // MODALS — DELETE
-    // ============================================================
-    function openDeleteModal(type, id) {
-      deletingType = type;
-      deletingId = id;
-
-      if (type === 'node') {
-        var node = findNode(id);
-        document.getElementById('deleteTitle').textContent = 'Delete this node?';
-        document.getElementById('deleteDesc').textContent =
-          'This will remove "' + (node ? node.title : '') + '" and all its connections from the map. The original question (if linked) will not be affected.';
-      } else {
-        document.getElementById('deleteTitle').textContent = 'Remove this connection?';
-        document.getElementById('deleteDesc').textContent = 'This will remove the connection between the two nodes.';
-      }
-
-      document.getElementById('deleteModal').classList.add('open');
-    }
-
-    function closeDeleteModal() {
-      document.getElementById('deleteModal').classList.remove('open');
-      deletingType = null;
-      deletingId = null;
-    }
-
-    // ============================================================
-    // SEARCH
-    // ============================================================
     function handleGraphSearch(query) {
       searchQuery = query.trim();
-      renderGraph();
+      renderNodes();
     }
 
     // ============================================================
-    // STATUS
+    // EVENT LISTENERS — MOUSE & CANVAS
     // ============================================================
-    function updateStatusText(text) {
-      document.getElementById('statusText').innerHTML = text;
-    }
+    canvasWrap.addEventListener('mousedown', function (e) {
+      if (e.target.closest('.side-panel') || e.target.closest('.modal-overlay')) return;
 
-    function updateStatusInfo() {
-      var info = graphData.nodes.length + ' node' + (graphData.nodes.length !== 1 ? 's' : '') +
-        ', ' + graphData.edges.length + ' connection' + (graphData.edges.length !== 1 ? 's' : '');
-      document.getElementById('statusInfo').textContent = info;
-    }
+      var nodeGroup = e.target.closest('.gn');
+      var edgeHit = e.target.closest('.ge-hit');
 
-    // ============================================================
-    // EVENT HANDLERS — MOUSE
-    // ============================================================
-    graphSvg.addEventListener('mousedown', function (e) {
-      if (e.button !== 0) return; // left click only
-
-      var nodeEl = e.target.closest('.gn');
-      var edgeEl = e.target.closest('.ge');
-
-      mouseState.startX = e.clientX;
-      mouseState.startY = e.clientY;
-      mouseState.hasMoved = false;
-
-      if (nodeEl) {
-        var nodeId = parseInt(nodeEl.getAttribute('data-nid'));
-
-        if (graphState.mode === 'connect') {
-          handleConnectClick(nodeId);
-          return;
+      if (e.shiftKey && nodeGroup) {
+        var clickedNodeId = parseInt(nodeGroup.getAttribute('data-nid'), 10);
+        if (graphState.mode === 'connect' && graphState.connectSource !== null) {
+          if (graphState.connectSource !== clickedNodeId) {
+            addEdge(graphState.connectSource, clickedNodeId);
+            exitConnectMode();
+          }
+        } else {
+          enterConnectMode(clickedNodeId);
         }
+        return;
+      }
 
-        var node = findNode(nodeId);
-        if (!node) return;
+      if (graphState.mode === 'connect') {
+        if (nodeGroup) {
+          var targetId = parseInt(nodeGroup.getAttribute('data-nid'), 10);
+          if (graphState.connectSource === null) {
+            graphState.connectSource = targetId;
+            document.getElementById('statusText').textContent = 'Click target node to connect (or Esc)';
+            renderGraph();
+          } else if (graphState.connectSource !== targetId) {
+            addEdge(graphState.connectSource, targetId);
+            exitConnectMode();
+          }
+        } else {
+          exitConnectMode();
+        }
+        return;
+      }
+
+      if (nodeGroup) {
+        var nId = parseInt(nodeGroup.getAttribute('data-nid'), 10);
+        var n = findNode(nId);
+        if (!n) return;
 
         mouseState.action = 'drag';
-        mouseState.dragNodeId = nodeId;
-        mouseState.dragStartNodeX = node.x;
-        mouseState.dragStartNodeY = node.y;
-        e.preventDefault();
-      } else if (edgeEl) {
-        // Edge click handled on mouseup
-        mouseState.action = null;
-      } else {
-        // Background — start pan
-        if (graphState.mode === 'connect' && graphState.connectSource !== null) {
-          // In connect mode, clicking background cancels source selection
-          graphState.connectSource = null;
-          tempEdgePath.setAttribute('display', 'none');
-          updateStatusText('Connect mode: click a node to start');
-          renderGraph();
-          return;
-        }
-        mouseState.action = 'pan';
-        mouseState.startVpX = viewport.x;
-        mouseState.startVpY = viewport.y;
-        canvasWrap.classList.add('panning');
-        e.preventDefault();
-      }
-    });
-
-    document.addEventListener('mousemove', function (e) {
-      // Temp edge in connect mode
-      if (graphState.mode === 'connect' && graphState.connectSource !== null) {
-        var sourceNode = findNode(graphState.connectSource);
-        if (sourceNode) {
-          var mPos = screenToSvg(e.clientX, e.clientY);
-          var angle = Math.atan2(mPos.y - sourceNode.y, mPos.x - sourceNode.x);
-          var from = getNodeBorderPoint(sourceNode, angle);
-          tempEdgePath.setAttribute('d',
-            'M' + from.x.toFixed(1) + ',' + from.y.toFixed(1) +
-            ' L' + mPos.x.toFixed(1) + ',' + mPos.y.toFixed(1));
-          tempEdgePath.setAttribute('display', '');
-        }
+        mouseState.dragNodeId = nId;
+        mouseState.startX = e.clientX;
+        mouseState.startY = e.clientY;
+        mouseState.dragStartNodeX = n.x;
+        mouseState.dragStartNodeY = n.y;
+        mouseState.hasMoved = false;
+        return;
       }
 
-      if (!mouseState.action) return;
-
-      var dx = e.clientX - mouseState.startX;
-      var dy = e.clientY - mouseState.startY;
-
-      if (Math.abs(dx) > 3 || Math.abs(dy) > 3) {
-        mouseState.hasMoved = true;
-      }
-
-      if (mouseState.action === 'pan') {
-        viewport.x = mouseState.startVpX + dx;
-        viewport.y = mouseState.startVpY + dy;
-        applyViewport();
-      } else if (mouseState.action === 'drag') {
-        var node = findNode(mouseState.dragNodeId);
-        if (node) {
-          node.x = Math.round(mouseState.dragStartNodeX + dx / viewport.zoom);
-          node.y = Math.round(mouseState.dragStartNodeY + dy / viewport.zoom);
-          renderGraph();
-        }
-      }
-    });
-
-    document.addEventListener('mouseup', function (e) {
-      if (mouseState.action === 'drag') {
-        if (mouseState.hasMoved) {
-          saveGraph();
-        } else {
-          // Click on node (no drag)
-          selectNode(mouseState.dragNodeId);
-        }
-      }
-
-      if (mouseState.action === 'pan') {
-        canvasWrap.classList.remove('panning');
-        if (!mouseState.hasMoved) {
-          // Click on background
-          deselectAll();
-          closeSidePanel();
-        }
-      }
-
-      mouseState.action = null;
-      mouseState.dragNodeId = null;
-    });
-
-    // Edge click
-    graphSvg.addEventListener('click', function (e) {
-      var edgeHit = e.target.closest('.ge-hit') || e.target.closest('.ge-path');
       if (edgeHit) {
         var edgeGroup = edgeHit.closest('.ge');
         if (edgeGroup) {
-          var edgeId = parseInt(edgeGroup.getAttribute('data-eid'));
-          selectEdge(edgeId);
-          e.stopPropagation();
+          var eId = parseInt(edgeGroup.getAttribute('data-eid'), 10);
+          selectEdge(eId);
+        }
+        return;
+      }
+
+      // Pan
+      mouseState.action = 'pan';
+      mouseState.startX = e.clientX;
+      mouseState.startY = e.clientY;
+      mouseState.startVpX = viewport.x;
+      mouseState.startVpY = viewport.y;
+      mouseState.hasMoved = false;
+      canvasWrap.classList.add('panning');
+      deselectAll();
+      closeSidePanel();
+    });
+
+    window.addEventListener('mousemove', function (e) {
+      if (mouseState.action === 'drag' && mouseState.dragNodeId !== null) {
+        var dx = (e.clientX - mouseState.startX) / viewport.zoom;
+        var dy = (e.clientY - mouseState.startY) / viewport.zoom;
+        if (Math.abs(dx) > 3 || Math.abs(dy) > 3) mouseState.hasMoved = true;
+
+        var dNode = findNode(mouseState.dragNodeId);
+        if (dNode) {
+          dNode.x = Math.round(mouseState.dragStartNodeX + dx);
+          dNode.y = Math.round(mouseState.dragStartNodeY + dy);
+          renderGraph();
+        }
+      } else if (mouseState.action === 'pan') {
+        var pdx = e.clientX - mouseState.startX;
+        var pdy = e.clientY - mouseState.startY;
+        if (Math.abs(pdx) > 3 || Math.abs(pdy) > 3) mouseState.hasMoved = true;
+        viewport.x = mouseState.startVpX + pdx;
+        viewport.y = mouseState.startVpY + pdy;
+        applyViewport();
+      }
+
+      // Temp edge preview in connect mode
+      if (graphState.mode === 'connect' && graphState.connectSource !== null) {
+        var srcNode = findNode(graphState.connectSource);
+        if (srcNode) {
+          var pt = screenToSvg(e.clientX, e.clientY);
+          tempEdgePath.setAttribute('d', 'M' + srcNode.x + ',' + srcNode.y + ' L' + pt.x + ',' + pt.y);
+          tempEdgePath.setAttribute('display', '');
         }
       }
     });
 
+    window.addEventListener('mouseup', function (e) {
+      if (mouseState.action === 'drag') {
+        if (!mouseState.hasMoved && mouseState.dragNodeId !== null) {
+          selectNode(mouseState.dragNodeId);
+        } else if (mouseState.hasMoved) {
+          saveGraph();
+        }
+      }
+      mouseState.action = null;
+      mouseState.dragNodeId = null;
+      canvasWrap.classList.remove('panning');
+    });
+
     // Double-click
-    graphSvg.addEventListener('dblclick', function (e) {
-      var nodeEl = e.target.closest('.gn');
-      if (nodeEl) {
-        var nodeId = parseInt(nodeEl.getAttribute('data-nid'));
-        openEditNodeModal(nodeId);
+    canvasWrap.addEventListener('dblclick', function (e) {
+      var nodeGroup = e.target.closest('.gn');
+      if (nodeGroup) {
+        var nId = parseInt(nodeGroup.getAttribute('data-nid'), 10);
+        openEditNodeModal(nId);
         return;
       }
-      // Double-click on background — add node
       var pos = screenToSvg(e.clientX, e.clientY);
       openAddNodeModal(pos.x, pos.y);
     });
@@ -2404,11 +3836,8 @@
       handleZoom(delta, e.clientX, e.clientY);
     }, { passive: false });
 
-    // ============================================================
-    // EVENT HANDLERS — KEYBOARD
-    // ============================================================
+    // Keyboard shortcuts
     document.addEventListener('keydown', function (e) {
-      // Don't intercept when typing in inputs
       if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.contentEditable === 'true') return;
 
       if (e.key === 'Delete' || e.key === 'Backspace') {
@@ -2427,26 +3856,31 @@
           deselectAll();
           closeSidePanel();
         }
-        // Close any open modal
         closeAddNodeModal();
         closeEditNodeModal();
         closeDeleteModal();
+        closeResetModal();
       }
     });
 
     // ============================================================
-    // EVENT HANDLERS — TOOLBAR BUTTONS
+    // EVENT LISTENERS — TOOLBAR & BUTTONS
     // ============================================================
-    document.getElementById('addNodeBtn').addEventListener('click', function () {
-      openAddNodeModal();
-    });
+    document.getElementById('addNodeBtn').addEventListener('click', function () { openAddNodeModal(); });
+    document.getElementById('emptyAddBtn').addEventListener('click', function () { openAddNodeModal(); });
+    document.getElementById('connectBtn').addEventListener('click', toggleConnectMode);
+    document.getElementById('fitAllBtn').addEventListener('click', fitAll);
 
-    document.getElementById('emptyAddBtn').addEventListener('click', function () {
-      openAddNodeModal();
-    });
-
-    document.getElementById('connectBtn').addEventListener('click', function () {
-      toggleConnectMode();
+    document.getElementById('resetMapBtn').addEventListener('click', openResetModal);
+    document.getElementById('resetCancel').addEventListener('click', closeResetModal);
+    document.getElementById('resetConfirm').addEventListener('click', function () {
+      var masterData = getMasterStoreData();
+      graphData = generateMasterInterviewGraph(masterData);
+      saveGraph();
+      renderGraph();
+      closeResetModal();
+      focusHub('all');
+      showToast('Interview Map reset to 6 Master Hubs structure ✓');
     });
 
     document.getElementById('deleteBtn').addEventListener('click', function () {
@@ -2455,10 +3889,6 @@
       } else if (graphState.selectedEdge) {
         openDeleteModal('edge', graphState.selectedEdge);
       }
-    });
-
-    document.getElementById('fitAllBtn').addEventListener('click', function () {
-      fitAll();
     });
 
     document.getElementById('zoomInBtn').addEventListener('click', function () {
@@ -2471,22 +3901,24 @@
       handleZoom(-1, rect.left + rect.width / 2, rect.top + rect.height / 2);
     });
 
-    // Search
     document.getElementById('graphSearch').addEventListener('input', function () {
       handleGraphSearch(this.value);
     });
 
-    // Side panel close
     document.getElementById('spClose').addEventListener('click', function () {
       closeSidePanel();
       deselectAll();
     });
 
-    // ============================================================
-    // EVENT HANDLERS — MODALS
-    // ============================================================
+    // Hub Filter Bar
+    document.querySelectorAll('.hub-pill').forEach(function (pill) {
+      pill.addEventListener('click', function () {
+        var hub = this.getAttribute('data-hub');
+        focusHub(hub);
+      });
+    });
 
-    // Add Node Modal
+    // Add Modal Actions
     document.getElementById('modalSearchInput').addEventListener('input', function () {
       renderSearchResults(this.value);
     });
@@ -2502,14 +3934,12 @@
     });
 
     document.getElementById('topicTitleInput').addEventListener('keydown', function (e) {
-      if (e.key === 'Enter') {
-        document.getElementById('addTopicConfirm').click();
-      }
+      if (e.key === 'Enter') document.getElementById('addTopicConfirm').click();
     });
 
     document.getElementById('addNodeCancel').addEventListener('click', closeAddNodeModal);
 
-    // Edit Node Modal
+    // Edit Modal Actions
     document.getElementById('editNodeConfirm').addEventListener('click', function () {
       var title = document.getElementById('editNodeTitleInput').value.trim();
       if (!title) {
@@ -2524,14 +3954,12 @@
     });
 
     document.getElementById('editNodeTitleInput').addEventListener('keydown', function (e) {
-      if (e.key === 'Enter') {
-        document.getElementById('editNodeConfirm').click();
-      }
+      if (e.key === 'Enter') document.getElementById('editNodeConfirm').click();
     });
 
     document.getElementById('editNodeCancel').addEventListener('click', closeEditNodeModal);
 
-    // Delete Modal
+    // Delete Modal Actions
     document.getElementById('deleteConfirm').addEventListener('click', function () {
       if (deletingType === 'node' && deletingId !== null) {
         deleteNodeById(deletingId);
@@ -2543,7 +3971,7 @@
 
     document.getElementById('deleteCancel').addEventListener('click', closeDeleteModal);
 
-    // Close modals on overlay click
+    // Close overlays on outside click
     document.querySelectorAll('.modal-overlay').forEach(function (overlay) {
       overlay.addEventListener('click', function (e) {
         if (e.target === overlay) {
@@ -2564,16 +3992,10 @@
     updateDeleteBtn();
     applyViewport();
 
-    // Center viewport if there are nodes
-    if (graphData.nodes.length > 0) {
+    // Fit view
+    setTimeout(function () {
       fitAll();
-    } else {
-      // Center viewport
-      var initRect = graphSvg.getBoundingClientRect();
-      viewport.x = initRect.width / 2;
-      viewport.y = initRect.height / 2;
-      applyViewport();
-    }
+    }, 50);
 
   </script>
 </body>
