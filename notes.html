@@ -1,0 +1,1253 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Technical Interview Notes — Accenture Interview Prep</title>
+  <meta name="description"
+    content="Comprehensive technical interview preparation notes for Accenture ASE — Python, Flask, SQL, ML, LLMs, Security, Flutter, OOP, OS, DSA, System Architecture, and DevOps. Live inline editable markdown viewer.">
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <style>
+    /* ============================================================
+       Technical Notes — Warm Parchment Theme (matching main app)
+       ============================================================ */
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #faf8f5;
+      --panel: #ffffff;
+      --border: #e8e2d9;
+      --border-light: #f0ebe4;
+      --text: #3d3429;
+      --text-muted: #7a6e5f;
+      --text-light: #9a8a75;
+      --accent: #c2956b;
+      --accent-hover: #8b5e3c;
+      --accent-light: #fbf5ee;
+      --accent-border: #ebd8c8;
+      --green: #6b8f5e;
+      --green-bg: #eef4ea;
+      --amber: #a07d3a;
+      --amber-bg: #faf3e6;
+      --rose: #a05a4a;
+      --rose-bg: #f8edea;
+      --blue: #4a6fa0;
+      --blue-bg: #eaf0f8;
+      --pill-bg: #f0ebe2;
+    }
+
+    html {
+      -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+      font-family: 'Georgia', 'Times New Roman', serif;
+      background: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    ::selection {
+      background: #e8c9a0;
+      color: #2a2118;
+    }
+
+    /* ============================================================
+       HEADER
+       ============================================================ */
+    .notes-header {
+      flex-shrink: 0;
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      background: var(--panel);
+      z-index: 20;
+    }
+
+    .notes-nav {
+      font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #a08c72;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .notes-nav .leaf {
+      display: inline-block;
+      opacity: 0.25;
+      font-size: 14px;
+    }
+
+    .notes-nav a {
+      color: inherit;
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+
+    .notes-nav a:hover {
+      color: var(--accent-hover);
+    }
+
+    .notes-nav .nav-current {
+      color: var(--text);
+    }
+
+    .notes-title {
+      font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* ============================================================
+       TOOLBAR
+       ============================================================ */
+    .notes-toolbar {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 8px 18px;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border-light);
+      flex-wrap: wrap;
+      z-index: 10;
+    }
+
+    .nt-left {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .nt-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .view-switch {
+      display: inline-flex;
+      background: var(--pill-bg);
+      padding: 2px;
+      border-radius: 7px;
+      border: 1px solid var(--border);
+    }
+
+    .vs-btn {
+      font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
+      font-size: 11.5px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border: none;
+      border-radius: 5px;
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.12s;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .vs-btn:hover {
+      color: var(--text);
+    }
+
+    .vs-btn.active {
+      background: var(--panel);
+      color: var(--text);
+      box-shadow: 0 1px 3px rgba(61, 52, 41, 0.1);
+    }
+
+    .nt-btn {
+      font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 5px 12px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--panel);
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.12s;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .nt-btn:hover {
+      background: var(--pill-bg);
+      color: var(--text);
+      border-color: #d8cfc2;
+    }
+
+    .nt-btn--accent {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    .nt-btn--accent:hover {
+      background: var(--accent-hover);
+      border-color: var(--accent-hover);
+      color: #fff;
+    }
+
+    .nt-sep {
+      width: 1px;
+      height: 20px;
+      background: var(--border);
+      margin: 0 2px;
+    }
+
+    .editor-tool-btn {
+      font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 8px;
+      border-radius: 5px;
+      border: 1px solid var(--border);
+      background: var(--panel);
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.12s;
+      min-width: 26px;
+      text-align: center;
+    }
+
+    .editor-tool-btn:hover {
+      background: var(--pill-bg);
+      color: var(--text);
+    }
+
+    .save-status {
+      font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--green);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      user-select: none;
+    }
+
+    .save-status.dirty {
+      color: var(--amber);
+    }
+
+    /* ============================================================
+       WORKSPACE LAYOUT
+       ============================================================ */
+    .notes-workspace {
+      flex: 1;
+      display: flex;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Outline Sidebar */
+    .outline-sidebar {
+      width: 270px;
+      flex-shrink: 0;
+      background: #fdfbf7;
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transition: width 0.2s cubic-bezier(0.16, 1, 0.3, 1), margin-left 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .outline-sidebar.collapsed {
+      width: 0;
+      margin-left: -1px;
+      border-right: none;
+    }
+
+    .outline-header {
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--border);
+      font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-light);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--bg);
+    }
+
+    .outline-search {
+      margin: 10px 14px 6px;
+      padding: 6px 10px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
+      font-size: 12px;
+      outline: none;
+      background: #fff;
+    }
+
+    .outline-search:focus {
+      border-color: var(--accent);
+    }
+
+    .outline-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 8px 10px 20px;
+      list-style: none;
+    }
+
+    .outline-item {
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
+      font-size: 12px;
+      line-height: 1.35;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.12s ease;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-bottom: 2px;
+    }
+
+    .outline-item:hover {
+      background: var(--accent-light);
+      color: var(--text);
+    }
+
+    .outline-item.active {
+      background: #f3e9dc;
+      color: var(--accent-hover);
+      font-weight: 600;
+    }
+
+    .outline-item.h3-item {
+      padding-left: 20px;
+      font-size: 11.5px;
+      opacity: 0.85;
+    }
+
+    /* Main Panes Container */
+    .panes-container {
+      flex: 1;
+      display: flex;
+      overflow: hidden;
+      background: var(--panel);
+    }
+
+    /* Editor Pane */
+    .editor-pane {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      border-right: 1px solid var(--border);
+      min-width: 280px;
+      overflow: hidden;
+      background: #ffffff;
+    }
+
+    .pane-header {
+      flex-shrink: 0;
+      padding: 8px 16px;
+      background: #fdfbf7;
+      border-bottom: 1px solid var(--border-light);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-light);
+    }
+
+    .pane-header-stats {
+      font-weight: 500;
+      text-transform: none;
+      letter-spacing: normal;
+      color: var(--text-muted);
+    }
+
+    .editor-textarea {
+      flex: 1;
+      width: 100%;
+      height: 100%;
+      padding: 18px 24px;
+      border: none;
+      outline: none;
+      font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Monaco, monospace;
+      font-size: 13.5px;
+      line-height: 1.65;
+      color: #2c2520;
+      background: #ffffff;
+      resize: none;
+      tab-size: 2;
+      overflow-y: auto;
+    }
+
+    .editor-textarea:focus {
+      background: #fffdfb;
+    }
+
+    /* Preview Pane */
+    .preview-pane {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 280px;
+      overflow: hidden;
+      background: var(--bg);
+    }
+
+    .preview-scroll {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px 36px 80px;
+    }
+
+    .preview-body {
+      max-width: 860px;
+      margin: 0 auto;
+      font-family: 'Georgia', 'Times New Roman', serif;
+      font-size: 15px;
+      line-height: 1.75;
+      color: var(--text);
+    }
+
+    /* Rendered Markdown Styles */
+    .preview-body h1 {
+      font-family: 'Georgia', serif;
+      font-size: 26px;
+      font-weight: 700;
+      color: #241c14;
+      line-height: 1.3;
+      margin-bottom: 10px;
+    }
+
+    .preview-body h2 {
+      font-family: 'Georgia', serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: #2c241c;
+      margin-top: 36px;
+      margin-bottom: 14px;
+      padding-bottom: 8px;
+      border-bottom: 1.5px solid var(--border);
+    }
+
+    .preview-body h3 {
+      font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #73593f;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+
+    .preview-body p {
+      margin-bottom: 14px;
+    }
+
+    .preview-body strong {
+      color: #241c14;
+      font-weight: 700;
+    }
+
+    .preview-body em {
+      color: #615545;
+    }
+
+    .preview-body hr {
+      border: none;
+      height: 1px;
+      background: var(--border);
+      margin: 28px 0;
+    }
+
+    .preview-body ul,
+    .preview-body ol {
+      margin: 0 0 16px 24px;
+    }
+
+    .preview-body li {
+      margin-bottom: 7px;
+    }
+
+    /* Tables */
+    .preview-body table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0 24px 0;
+      font-size: 13.5px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      display: table;
+      box-shadow: 0 1px 3px rgba(61, 52, 41, 0.04);
+    }
+
+    .preview-body th {
+      background: #f7f2eb;
+      color: #2c241c;
+      font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
+      font-size: 11.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 10px 14px;
+      text-align: left;
+      border-bottom: 1.5px solid var(--border);
+    }
+
+    .preview-body td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border-light);
+      vertical-align: top;
+      line-height: 1.55;
+    }
+
+    .preview-body tr:nth-child(even) td {
+      background: #fdfbf7;
+    }
+
+    .preview-body tr:last-child td {
+      border-bottom: none;
+    }
+
+    .preview-body tr:hover td {
+      background: #fbf5ee;
+    }
+
+    /* Code & Fences */
+    .preview-body code {
+      font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+      font-size: 12.5px;
+      background: #f2ece4;
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: #7a3a2a;
+      border: 1px solid #e4dacd;
+    }
+
+    .preview-body pre {
+      background: #2a221a;
+      color: #f5f0e8;
+      padding: 16px 18px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin: 16px 0 20px;
+      border: 1px solid #42362b;
+    }
+
+    .preview-body pre code {
+      background: none;
+      padding: 0;
+      border: none;
+      color: inherit;
+      font-size: 13px;
+    }
+
+    .preview-body blockquote {
+      border-left: 3.5px solid var(--accent);
+      background: var(--accent-light);
+      margin: 16px 0;
+      padding: 12px 18px;
+      border-radius: 0 6px 6px 0;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    /* View Mode Toggles */
+    body.mode-preview-only .editor-pane {
+      display: none !important;
+    }
+
+    body.mode-preview-only .preview-pane {
+      flex: 1 !important;
+    }
+
+    body.mode-editor-only .preview-pane {
+      display: none !important;
+    }
+
+    body.mode-editor-only .editor-pane {
+      flex: 1 !important;
+      border-right: none;
+    }
+
+    /* Search Highlight */
+    mark.highlight {
+      background: #ffe3a8;
+      color: #3b2a0d;
+      padding: 1px 3px;
+      border-radius: 3px;
+    }
+
+    /* ============================================================
+       MODALS
+       ============================================================ */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(45, 38, 28, 0.45);
+      backdrop-filter: blur(2px);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
+
+    .modal-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      max-width: 440px;
+      width: 90%;
+      box-shadow: 0 12px 36px rgba(61, 52, 41, 0.15);
+      text-align: center;
+      transform: scale(0.95);
+      transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .modal-overlay.open .modal {
+      transform: scale(1);
+    }
+
+    .modal h3 {
+      font-family: 'Georgia', serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 10px;
+    }
+
+    .modal p {
+      font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+
+    .modal-btn {
+      font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 8px 18px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: all 0.12s;
+    }
+
+    .modal-btn--cancel {
+      background: var(--panel);
+      color: var(--text-muted);
+    }
+
+    .modal-btn--cancel:hover {
+      background: var(--pill-bg);
+    }
+
+    .modal-btn--danger {
+      background: var(--rose);
+      color: #fff;
+      border-color: var(--rose);
+    }
+
+    .modal-btn--danger:hover {
+      background: #8a3a2a;
+      border-color: #8a3a2a;
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      opacity: 0;
+      background: var(--text);
+      color: #f5f0e8;
+      font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
+      font-size: 13px;
+      padding: 8px 22px;
+      border-radius: 20px;
+      pointer-events: none;
+      transition: opacity 0.3s, transform 0.3s;
+      z-index: 2000;
+      white-space: nowrap;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    @media (max-width: 768px) {
+      .notes-header {
+        padding: 10px 14px;
+      }
+      .notes-toolbar {
+        padding: 6px 12px;
+      }
+      .outline-sidebar {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 50;
+        box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
+      }
+      .panes-container {
+        flex-direction: column;
+      }
+      .editor-pane {
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+      }
+    }
+  </style>
+</head>
+
+<body class="mode-split">
+
+  <!-- Header -->
+  <div class="notes-header">
+    <div class="notes-nav">
+      <span class="leaf">🍂</span>
+      <a href="index.html">Accenture ASE</a>
+      <span>·</span>
+      <a href="index.html">Interview Prep</a>
+      <span>·</span>
+      <a href="graph.html" title="Interview Knowledge Map">🗺 Interview Map</a>
+      <span>·</span>
+      <span class="nav-current">📝 Technical Notes</span>
+    </div>
+    <div class="notes-title">
+      <span>📝</span>
+      Technical Interview Notes
+    </div>
+  </div>
+
+  <!-- Toolbar -->
+  <div class="notes-toolbar">
+    <div class="nt-left">
+      <button class="nt-btn" id="toggleOutlineBtn" title="Toggle Section Outline">
+        📑 Outline
+      </button>
+
+      <div class="view-switch" id="viewSwitcher">
+        <button class="vs-btn active" data-mode="split" id="btnModeSplit" title="Editor and preview side-by-side">
+          ◫ Split
+        </button>
+        <button class="vs-btn" data-mode="preview-only" id="btnModePreview" title="Full-width reader view">
+          📖 Preview
+        </button>
+        <button class="vs-btn" data-mode="editor-only" id="btnModeEditor" title="Full-width editor view">
+          ✏️ Edit MD
+        </button>
+      </div>
+
+      <span class="nt-sep"></span>
+
+      <!-- Markdown Formatting Tools -->
+      <button class="editor-tool-btn" onclick="insertFormat('bold')" title="Bold (**text**)">B</button>
+      <button class="editor-tool-btn" onclick="insertFormat('italic')" title="Italic (*text*)"><em>I</em></button>
+      <button class="editor-tool-btn" onclick="insertFormat('h2')" title="Section Heading (## )">H2</button>
+      <button class="editor-tool-btn" onclick="insertFormat('code')" title="Inline code (`code`)">&lt;/&gt;</button>
+      <button class="editor-tool-btn" onclick="insertFormat('quote')" title="Blockquote (&gt; )">“</button>
+      <button class="editor-tool-btn" onclick="insertFormat('table')" title="Insert Table">▦</button>
+      <button class="editor-tool-btn" onclick="insertFormat('list')" title="Bullet list (- )">≡</button>
+    </div>
+
+    <div class="nt-right">
+      <span class="save-status" id="saveStatus">● Auto-saved</span>
+      <span class="nt-sep"></span>
+      <button class="nt-btn" id="copyMdBtn" title="Copy raw markdown to clipboard">
+        📋 Copy MD
+      </button>
+      <button class="nt-btn nt-btn--accent" id="downloadMdBtn" title="Download updated Accenture_Technical_Interview_Notes.md">
+        ↓ Download .md
+      </button>
+      <button class="nt-btn" id="resetMdBtn" title="Reset to original notes content">
+        ⟲ Reset
+      </button>
+    </div>
+  </div>
+
+  <!-- Workspace -->
+  <div class="notes-workspace">
+
+    <!-- Outline Sidebar -->
+    <aside class="outline-sidebar" id="outlineSidebar">
+      <div class="outline-header">
+        <span>Table of Contents</span>
+        <button class="nt-btn" style="padding:2px 6px;font-size:10px;" onclick="toggleOutline()">✕</button>
+      </div>
+      <input type="text" class="outline-search" id="outlineSearch" placeholder="Filter sections..." />
+      <ul class="outline-list" id="outlineList"></ul>
+    </aside>
+
+    <!-- Split Panes -->
+    <div class="panes-container">
+
+      <!-- Left: Editor Pane -->
+      <section class="editor-pane" id="editorPane">
+        <div class="pane-header">
+          <span>Markdown Source (Live Editable)</span>
+          <span class="pane-header-stats" id="editorStats">0 words · 0 lines</span>
+        </div>
+        <textarea class="editor-textarea" id="markdownEditor" spellcheck="false"
+          placeholder="Type or edit markdown notes here..."></textarea>
+      </section>
+
+      <!-- Right: Preview Pane -->
+      <section class="preview-pane" id="previewPane">
+        <div class="pane-header">
+          <span>Rendered Preview</span>
+          <span class="pane-header-stats" id="previewStats">~14 min read</span>
+        </div>
+        <div class="preview-scroll" id="previewScroll">
+          <article class="preview-body" id="previewBody"></article>
+        </div>
+      </section>
+
+    </div>
+
+  </div>
+
+  <!-- Reset Confirm Modal -->
+  <div class="modal-overlay" id="resetModal">
+    <div class="modal">
+      <h3>Reset Notes to Original?</h3>
+      <p>This will restore the original reference notes document from Accenture_Technical_Interview_Notes.md. Any custom additions or edits will be discarded.</p>
+      <div class="modal-actions">
+        <button class="modal-btn modal-btn--cancel" id="cancelResetBtn">Cancel</button>
+        <button class="modal-btn modal-btn--danger" id="confirmResetBtn">Reset Notes</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // ============================================================
+    // DEFAULT REFERENCE CONTENT
+    // ============================================================
+    var DEFAULT_MARKDOWN = "# Accenture Technical Interview — Comprehensive Prep Notes\n### Sayan Kabir | M.Tech CSE, KIIT | Compiled from resume + Q&A bank\n\nThis covers every technical thread your resume and answer bank touch — Python/pandas/NumPy automation, Flask + SQLAlchemy, SQL/DBMS, CNN + TensorFlow, LLM chatbot integration, AES encryption + biometrics, Flutter + Provider/BLoC, OOP, OS, DSA, REST APIs, Docker, Git, CI/CD, and design patterns — with concise explanations plus the specific follow-ups an interviewer is likely to fire based on *your* projects.\n\n---\n\n## 1. Python, Pandas & NumPy (KPIT automation scripts)\n\n**What to say if asked to summarize:** At KPIT you wrote Python scripts using pandas/NumPy to automate repetitive data-handling tasks — reading raw data (CSV/DB exports), cleaning it, transforming it, and producing reports, replacing manual Excel work.\n\n| Concept | Explanation |\n|---|---|\n| **pandas DataFrame vs Series** | DataFrame = 2D labeled table (rows+columns); Series = 1D labeled array (a single column). DataFrame is essentially a dict of Series. |\n| **`loc` vs `iloc`** | `loc` selects by label/index name; `iloc` selects by integer position. `df.loc['a':'c']` is inclusive of both ends; `df.iloc[0:3]` is exclusive of the end (Python slicing rules). |\n| **Vectorization** | NumPy/pandas operations run in compiled C loops instead of Python `for` loops — much faster. E.g., `df['x'] * 2` beats iterating row by row. |\n| **Handling missing data** | `dropna()`, `fillna()`, `isnull().sum()` to audit. Interviewers may ask when to drop vs impute — mention: drop if missingness is small/random, impute (mean/median/forward-fill) if the column is important and data is scarce. |\n| **`apply` vs vectorized ops** | `apply()` runs a Python function per row/column — flexible but slower than vectorized NumPy ops. Use vectorized first; `apply` only when logic can't be vectorized. |\n| **`merge` vs `concat` vs `join`** | `merge` = SQL-style join on keys/columns; `concat` = stack DataFrames along an axis (rows or columns); `join` = merge on index by default. |\n| **GroupBy** | Split-apply-combine: `df.groupby('col').agg(...)` — splits data into groups, applies a function (sum/mean/count), combines results. Core to any \"automate a report\" answer. |\n| **NumPy arrays vs Python lists** | NumPy arrays are homogeneous, contiguous in memory, support vectorized math and broadcasting; Python lists are heterogeneous and slower for numeric work. |\n| **Broadcasting** | NumPy's rule for applying operations between arrays of different shapes without explicit loops (e.g., adding a scalar to a whole array, or a (3,) array to a (3,4) matrix). |\n\n**Likely interviewer questions (with how to answer using your KPIT context):**\n- *\"Walk me through one automation script you built.\"* → Pick one: e.g. \"reads a raw CSV export, cleans nulls/duplicates with pandas, aggregates with groupby, writes a summary Excel/CSV, previously done manually — saved X hours.\"\n- *\"How did you handle bad/missing data in your automation scripts?\"* → Explain your actual approach: validation checks, `fillna`/`dropna`, logging anomalies rather than silently failing.\n- *\"Why pandas and not writing raw Python loops or using Excel formulas?\"* → Vectorization = speed, and pandas gives cleaner group/merge/pivot operations than manual loops.\n- *\"Have you profiled or optimized a slow pandas script?\"* → If yes, mention avoiding `apply` in favor of vectorized ops, using appropriate dtypes (e.g. `category` for strings), chunked reading (`read_csv(chunksize=...)`) for large files.\n\n---\n\n## 2. Flask & SQLAlchemy (KPIT internal tool)\n\n**What to say if asked to summarize:** You built a Flask-based internal web tool with SQLAlchemy as the ORM for database integration — a typical thin backend serving internal data to a small set of users.\n\n| Concept | Explanation |\n|---|---|\n| **What is Flask** | A lightweight (micro) Python web framework — unlike Django, it doesn't force a specific project structure or bundle an ORM/admin panel; you add what you need (Flask-SQLAlchemy, Flask-RESTful, etc.). |\n| **What is an ORM / why SQLAlchemy** | Object-Relational Mapper — lets you interact with the DB using Python classes/objects instead of raw SQL strings. SQLAlchemy maps a Python class to a table; each instance = a row. Benefits: less SQL injection risk (parameterized queries by default), portability across DB engines, cleaner code. |\n| **Flask routing** | `@app.route('/path', methods=['GET','POST'])` maps URLs to Python view functions. |\n| **Flask app factory / Blueprints** | For bigger apps: `create_app()` factory pattern + Blueprints to modularize routes instead of one giant `app.py`. Good to mention even if your KPIT tool was simple — shows you know how it scales. |\n| **SQLAlchemy Session** | The \"unit of work\" — tracks objects, and `session.add()` / `session.commit()` / `session.rollback()` control when changes actually hit the DB (transaction management). |\n| **Migrations** | Alembic (often via Flask-Migrate) handles schema versioning/migrations when models change — worth mentioning even briefly. |\n| **Request/response cycle** | Client sends HTTP request → Flask routes it to a view function → function queries DB via SQLAlchemy models → returns JSON/HTML → Flask sends HTTP response. |\n| **Flask vs Django** | Flask: minimal, unopinionated, you assemble pieces. Django: \"batteries included\" (ORM, admin, auth built in), more opinionated project structure. Flask suits small internal tools (your case); Django suits larger full-featured apps. |\n\n**Likely interviewer questions:**\n- *\"How exactly did you use SQLAlchemy — raw SQL or ORM models?\"* → Describe defining model classes (`db.Model`), querying with `Model.query.filter_by(...)`, and why that's safer/cleaner than string-concatenated SQL.\n- *\"How did the Flask app talk to the database — synchronously, connection pooling?\"* → SQLAlchemy manages a connection pool under the hood; each request opens a session, does work, commits/closes.\n- *\"What would you change if this tool needed to scale to 1000 users?\"* → Add caching, move to Blueprints, use a production WSGI server (Gunicorn) behind Nginx instead of Flask's dev server, consider async or a heavier framework if I/O-bound.\n- *\"How did you prevent SQL injection?\"* → ORM parameterizes queries automatically; also validate/sanitize any raw input.\n\n---\n\n## 3. SQL, DBMS Fundamentals & Databases Used\n\n**Your DB exposure:** MySQL, SQLite (Passwordzzz), Firebase Firestore (Sugam Krishi), Supabase (listed skill).\n\n| Concept | Explanation |\n|---|---|\n| **ACID properties** | Atomicity (all-or-nothing transactions), Consistency (DB moves between valid states), Isolation (concurrent transactions don't interfere), Durability (committed data survives crashes). |\n| **Normalization** | Organizing tables to reduce redundancy. 1NF: atomic column values, no repeating groups. 2NF: 1NF + no partial dependency on part of a composite key. 3NF: 2NF + no transitive dependency (non-key columns depend only on the key). |\n| **Primary key vs Foreign key** | PK uniquely identifies a row in its table; FK is a column referencing a PK in another table, enforcing referential integrity. |\n| **Indexing** | A data structure (usually B-Tree) that speeds up lookups on a column at the cost of extra storage and slower writes (index must be updated on insert/update). |\n| **JOIN types** | INNER (only matching rows), LEFT/RIGHT (all rows from one side + matches), FULL OUTER (all rows from both, matched where possible). |\n| **Transactions** | A sequence of operations treated as a single unit — `BEGIN`, `COMMIT`, `ROLLBACK`. Needed whenever multiple writes must succeed or fail together (e.g., debit one account, credit another). |\n| **SQL vs NoSQL** | SQL = structured schema, relations, strong consistency, good for complex queries/joins (MySQL). NoSQL = flexible/schemaless, horizontally scalable, good for high write throughput or unstructured/nested data (Firestore documents). Choose based on whether your data is relational and how much you need horizontal scale vs strict consistency. |\n| **Firebase Firestore specifics** | Document-oriented NoSQL, real-time listeners (`onSnapshot`) push live updates to clients — this is *why* you chose it for Sugam Krishi's real-time market data sync, instead of polling a SQL DB. |\n| **SQLite specifics (Passwordzzz)** | Serverless, file-based, zero-configuration — ideal for a fully offline, local-first mobile app with no network dependency. Trade-off: not built for concurrent multi-user write access, but that's irrelevant for a single-user local vault. |\n\n**Likely interviewer questions:**\n- *\"Why Firestore over MySQL for Sugam Krishi?\"* → Needed real-time sync across farmer devices without managing polling/websocket infra yourself; Firestore's listeners + Firebase Auth gave that out of the box, and schema flexibility suited evolving product data (crop listings, chat messages).\n- *\"Why SQLite over Firebase/cloud DB for Passwordzzz?\"* → Core design goal was zero data transmission — a password manager should never touch the network. SQLite is embedded/local so nothing leaves the device.\n- *\"Explain a JOIN query you've written.\"* → Have one ready (even simple) from KPIT SQL work — e.g., joining a transactions table with a lookup/reference table.\n- *\"What's database normalization and did you apply it anywhere?\"* → Explain 1NF–3NF briefly; relate to any schema you designed (KPIT internal tool tables, or how you avoided data duplication).\n\n---\n\n## 4. CNN & Deep Learning — Crop Disease Detection (Sugam Krishi)\n\n| Concept | Explanation |\n|---|---|\n| **Why CNN for image classification** | Convolutional layers exploit spatial locality (nearby pixels are related) and use shared weights (filters/kernels), so they need far fewer parameters than a fully-connected network on raw pixels and are translation-invariant. |\n| **Core CNN layers** | Convolution (learns local feature filters), Activation (ReLU, adds non-linearity), Pooling (Max/Avg — downsamples, adds spatial invariance, reduces compute), Fully Connected (final classification), Softmax (output probabilities across disease classes). |\n| **Training pipeline** | Collect/label leaf images → preprocess (resize, normalize pixel values) → augment (rotate/flip/zoom to fight overfitting, crucial with a small agri dataset) → split train/val/test → train with a loss function (categorical cross-entropy) and optimizer (Adam) → evaluate (accuracy, confusion matrix, precision/recall per disease class). |\n| **Transfer learning** | If you used a pretrained backbone (MobileNet/ResNet fine-tuned) rather than training from scratch — mention this if true, since agri image datasets are typically small; transfer learning gives much better accuracy with less data. If you trained from scratch, be ready to justify why (dataset size/domain specificity). |\n| **On-device inference** | Converting the trained model to **TensorFlow Lite** (`.tflite`) for mobile deployment — quantization (reducing weight precision, e.g. float32→int8) shrinks model size and speeds up inference on-device, at a small accuracy cost. |\n| **Overfitting & how you fought it** | Small agri datasets overfit easily. Mitigations: data augmentation, dropout layers, early stopping, transfer learning, regularization (L2). |\n| **Evaluation metrics beyond accuracy** | For imbalanced disease classes, accuracy alone is misleading — precision/recall/F1 and a confusion matrix matter more (a rare disease class could be ignored by the model while accuracy still looks fine). |\n\n**Likely interviewer questions:**\n- *\"Walk me through how you trained the crop disease model.\"* → Dataset source (e.g. PlantVillage-style or self-collected), preprocessing, architecture choice, training, and how you validated it before deploying.\n- *\"Why CNN and not a simpler ML model (e.g. SVM on handcrafted features)?\"* → CNNs learn features automatically from raw pixels instead of hand-engineering them — better for complex, high-variance image data like leaf textures/lesions under different lighting.\n- *\"How did you deploy it for on-device inference — what were the constraints?\"* → Model size/latency matter on farmers' (often low-end) phones — mention TFLite conversion/quantization if you did it, or acknowledge it as the \"if I rebuilt it\" improvement.\n- *\"How would you improve accuracy today?\"* → More/better-labeled data, transfer learning from a stronger pretrained backbone, augmentation tuned to real field conditions (lighting, occlusion), active learning from misclassified farmer-submitted images.\n\n---\n\n## 5. LLM Chatbot Integration (Sugam Krishi)\n\n| Concept | Explanation |\n|---|---|\n| **What \"integrating an LLM chatbot\" typically means** | Calling an LLM API (or a wrapper library) with the farmer's natural-language query — possibly with a system prompt scoping it to agriculture — and returning the response through your app's chat UI. |\n| **Prompt engineering basics** | System prompt sets persona/scope/constraints; user prompt is the actual query; you may inject context (retrieved crop data) into the prompt for grounding. |\n| **RAG (Retrieval-Augmented Generation)** | If you grounded chatbot answers in your own crop/market data rather than relying purely on the LLM's general knowledge, that's RAG — retrieve relevant docs/data, feed them into the prompt alongside the question. Mention if applicable; otherwise be honest it was a simpler direct-API integration. |\n| **Handling hallucination/reliability** | For a farming advice bot, wrong answers have real consequences — mention any guardrails: scoping the system prompt tightly, falling back to human/expert resources for uncertain queries, or disclaiming \"this is general guidance.\" |\n| **Latency/cost tradeoffs** | LLM API calls add latency and cost per query — worth mentioning you'd cache common Q&A or use a smaller/cheaper model for simple queries if scaling up. |\n\n**Likely interviewer questions:**\n- *\"How did the chatbot understand farmer queries — did you fine-tune a model?\"* → Most likely you called an existing LLM API (be honest — this is a normal, respected approach) rather than fine-tuning; explain the integration point in your Flutter/Firebase stack.\n- *\"What if the LLM gives wrong farming advice?\"* → Discuss guardrails/scoping and the reality that any LLM feature for a sensitive domain needs human-reviewable fallbacks.\n\n---\n\n## 6. Encryption & Security — AES-256 + Biometrics (Passwordzzz)\n\n| Concept | Explanation |\n|---|---|\n| **Symmetric vs Asymmetric encryption** | Symmetric (AES): same key encrypts and decrypts — fast, ideal for encrypting local data you'll decrypt yourself. Asymmetric (RSA): public/private key pair — used for secure key exchange or signatures, slower. Password managers use symmetric encryption (AES) for the vault since only the user needs to decrypt it. |\n| **AES-256 basics** | Advanced Encryption Standard, 256-bit key length, block cipher (operates on fixed-size blocks, typically 128 bits). \"256\" = key size, not block size. |\n| **Why AES over something like DES** | DES's 56-bit key is brute-forceable today; AES-256 is the current industry/government standard for strong symmetric encryption. |\n| **Mode of operation** | AES needs a mode (e.g., **GCM** or CBC) to handle multi-block data. GCM is preferred in modern apps because it provides both confidentiality *and* integrity/authentication (detects tampering) via an auth tag, whereas plain CBC only gives confidentiality. If asked which mode you used, GCM is the strong, defensible answer for a password vault. |\n| **Key derivation** | The AES key itself shouldn't be the user's raw master password — it should be derived via a KDF like **PBKDF2**, **bcrypt**, or **Argon2** (adds salt + many iterations, making brute-force/rainbow-table attacks impractical). Mention this even if implementation detail — shows you understand *why* \"just AES-256\" isn't the whole story. |\n| **Salting** | A random value added per-user/per-password before hashing/deriving keys, so identical passwords don't produce identical hashes/keys — defeats precomputed rainbow-table attacks. |\n| **Biometric authentication (fingerprint)** | On mobile, biometric auth is handled by the OS's secure hardware (Secure Enclave/TEE, Android Keystore) — the app never actually \"sees\" the fingerprint data; it just receives a yes/no from the OS's biometric API (e.g., Android `BiometricPrompt`) after which it's allowed to unlock/decrypt the local vault key. |\n| **Local-first / zero data transmission** | The entire point of Passwordzzz's design: no cloud sync, no network calls with credential data — smallest possible attack surface (nothing to intercept in transit, no server breach risk). |\n\n**Likely interviewer questions:**\n- *\"Where do you store the AES key — hardcoded, derived, or in the keystore?\"* → Best answer: key derived from the user's master password via a KDF (PBKDF2/Argon2) with a salt, or stored using Android Keystore-backed encryption — never hardcoded.\n- *\"What mode of AES did you use, and why does that matter?\"* → Explain GCM vs CBC as above — shows depth beyond \"AES-256\" as a buzzword.\n- *\"What happens if the user forgets their master password?\"* → Honest answer for a true zero-knowledge local design: there's no recovery — that's the security/UX trade-off of local-first, no-cloud-backup encryption. Good to acknowledge as a real limitation/improvement area.\n- *\"How is biometric auth different from just typing a password?\"* → It doesn't replace the encryption key — it's a convenience gate to unlock access to the already-derived key, handled by secure OS hardware rather than app code.\n\n---\n\n## 7. Flutter & State Management (Provider / BLoC)\n\n**Used in:** Sugam Krishi and Passwordzzz (both Flutter apps).\n\n| Concept | Explanation |\n|---|---|\n| **Why Flutter** | Single codebase (Dart) compiles to native ARM code for both iOS and Android — faster cross-platform development than maintaining two native codebases, with a rich widget system for custom UI. |\n| **Widget tree / Stateless vs Stateful widgets** | Flutter UI = a tree of widgets. `StatelessWidget` has no mutable state (rebuilds only when parent rebuilds); `StatefulWidget` holds a `State` object that can call `setState()` to trigger a rebuild. |\n| **Why state management beyond `setState`** | `setState` only works within a single widget/small subtree; as an app grows, you need to share state across distant widgets (e.g., cart state, auth state) without prop-drilling — that's what Provider/BLoC solve. |\n| **Provider** | A wrapper around Flutter's `InheritedWidget` — exposes a state object to descendant widgets via `context.watch`/`context.read`, and rebuilds only the widgets that listen to it (`Consumer`/`Selector`) when notified via `ChangeNotifier.notifyListeners()`. Simpler, less boilerplate — good default choice. |\n| **BLoC (Business Logic Component)** | Stricter, event-driven pattern: UI dispatches **Events** → BLoC processes them and emits **States** → UI rebuilds via `BlocBuilder`. Enforces a clean separation between UI and business logic using Streams internally. More boilerplate but more testable/predictable at scale. |\n| **Provider vs BLoC — when to choose which** | Provider: smaller/medium apps, faster to write, less ceremony. BLoC: larger apps, teams, when you want a very explicit unidirectional event→state flow and strong testability. If you used Provider, justify it as \"right-sized for the app's scope\" — not a knowledge gap. |\n| **Async in Flutter** | `Future`/`async`/`await` for one-off async ops (an API call); `Stream`/`StreamBuilder` for continuous data (Firestore's real-time listeners map naturally to Streams — ties directly into Sugam Krishi's real-time sync). |\n\n**Likely interviewer questions:**\n- *\"Why did you choose Provider (or BLoC) specifically?\"* → Team size/project complexity — Provider gave enough structure without BLoC's boilerplate for an app this size; can add BLoC is the app grows.\n- *\"How does Firestore's real-time data reach your Flutter UI?\"* → Firestore streams document changes → wrapped in a `StreamBuilder` (or piped into a Provider/BLoC state) → widget rebuilds automatically on new data.\n- *\"What's the widget lifecycle?\"* → `createState()` → `initState()` (once, setup) → `build()` (called whenever state changes) → `dispose()` (cleanup, e.g. close streams/controllers).\n\n---\n\n## 8. OOP Fundamentals (Four Pillars + Follow-ups)\n\n| Pillar | Explanation | Follow-up traps |\n|---|---|---|\n| **Encapsulation** | Bundling data + methods that operate on it into one unit (class), restricting direct access to internal state via access modifiers (private fields + public getters/setters). | *Abstraction vs encapsulation:* Abstraction hides **implementation complexity** (what it does, not how); encapsulation hides/protects **internal data** (via access control). They're related but distinct — don't conflate them. |\n| **Abstraction** | Exposing only essential features/behavior while hiding internal complexity — e.g., an abstract class/interface defines *what* to do, subclasses define *how*. |\n| **Inheritance** | A class (subclass) acquires properties/behavior of another (superclass) — promotes code reuse. Watch for: \"favor composition over inheritance\" — know this as a real design principle, not just theory. |\n| **Polymorphism** | One interface, many implementations. **Compile-time (static)**: method overloading — same method name, different parameter lists. **Runtime (dynamic)**: method overriding — subclass provides its own implementation, resolved at runtime via virtual dispatch. |\n\n**Other common OOP questions:**\n- *\"What is a constructor / destructor?\"* — Constructor initializes an object at creation; destructor (C++) cleans up resources when an object goes out of scope (Python/Dart rely on garbage collection instead of explicit destructors).\n- *\"Difference between class and object\"* — Class = blueprint/template; object = a concrete instance of that blueprint with actual data.\n- *\"What is method overriding vs overloading?\"* — Overriding = subclass redefines a parent method (same signature, runtime polymorphism); overloading = same method name, different parameters (compile-time, and not supported the same way in Python/Dart as in C++/Java — worth knowing this language nuance since you list C++ *and* Python/Dart).\n- *\"What are interfaces / abstract classes, and the difference?\"* — Abstract class can have some implemented methods + state; interface (pure abstract) only declares method signatures, no implementation (Dart: any class can implicitly be used as an interface; C++ simulates interfaces via pure virtual functions).\n- *\"Composition vs inheritance\"* — Composition (\"has-a\") builds objects out of other objects instead of inheriting (\"is-a\"); generally preferred for flexibility and avoiding deep, fragile inheritance hierarchies.\n\n---\n\n## 9. Operating Systems Fundamentals\n\n| Concept | Explanation |\n|---|---|\n| **Process vs Thread** | Process = independent program in execution with its own memory space; Thread = a lighter-weight unit of execution *within* a process, sharing that process's memory. Threads are cheaper to create/switch but risk race conditions since they share memory. |\n| **Multithreading vs Multiprocessing** | Multithreading: concurrency within one process (shared memory, risk of races, needs locks). Multiprocessing: true parallelism across processes (separate memory, safer but heavier, needs IPC to communicate). |\n| **Deadlock — 4 necessary conditions** | Mutual exclusion, Hold-and-wait, No preemption, Circular wait. All four must hold simultaneously for deadlock; prevention strategies break at least one (e.g., resource ordering breaks circular wait). |\n| **CPU Scheduling algorithms** | FCFS (simple, can cause convoy effect), SJF (optimal average wait time but needs burst-time prediction), Round Robin (time-sliced, fair, good for interactive systems), Priority Scheduling (risk of starvation, mitigated by aging). |\n| **Paging vs Segmentation** | Paging: physical memory split into fixed-size frames, logical memory into same-size pages — avoids external fragmentation but can have internal fragmentation. Segmentation: variable-sized logical units (code, stack, heap) — matches program structure better but risks external fragmentation. |\n| **Virtual memory** | Abstraction giving each process its own large, contiguous address space, backed by a mix of physical RAM and disk (swap) via page tables — enables running programs larger than physical RAM and isolates processes from each other. |\n| **Race condition & Critical section** | Race condition: outcome depends on timing/interleaving of concurrent operations on shared data. Critical section: the code segment accessing shared resources, protected via mutexes/semaphores to ensure mutual exclusion. |\n| **Semaphore vs Mutex** | Mutex: binary lock, owned by the thread that locked it (only that thread can unlock). Semaphore: a counter allowing N threads to access a resource concurrently, not tied to ownership — used for signaling between threads, not just mutual exclusion. |\n\n**Likely interviewer angle:** These are usually asked as generic CS-fundamentals questions, not tied to your projects — just be crisp and give an example (e.g., \"a race condition would be two threads incrementing a shared counter without a lock\").\n\n---\n\n## 10. Data Structures & Algorithms\n\n| Topic | What to know |\n|---|---|\n| **Time/space complexity (Big-O)** | Be able to state Big-O for basic operations on Array, Linked List, Stack, Queue, Hash Map, BST — e.g., array access O(1), search O(n); hash map average O(1) insert/lookup, worst-case O(n) on collisions. |\n| **Array vs Linked List** | Array: contiguous memory, O(1) random access, O(n) insert/delete (shifting). Linked List: non-contiguous, O(1) insert/delete at a known node, O(n) access (traverse). |\n| **Stack vs Queue** | Stack: LIFO (push/pop from same end) — used in recursion/call stack, undo functionality, DFS. Queue: FIFO — used in scheduling, BFS. |\n| **Hashing** | Maps keys to array indices via a hash function; collisions handled via chaining (linked lists per bucket) or open addressing (probing). Underlies Python dict / Dart Map / hash-based sets. |\n| **Trees** | BST: left < node < right, O(log n) average search/insert (O(n) worst case if unbalanced). Balanced trees (AVL, Red-Black) guarantee O(log n) by rebalancing. |\n| **Graph traversal** | BFS (queue-based, level-by-level, shortest path in unweighted graphs), DFS (stack/recursion-based, explores depth-first, good for cycle detection/topological sort). |\n| **Sorting** | Know at least: Merge Sort (O(n log n), stable, needs extra space), Quick Sort (O(n log n) average, O(n²) worst, in-place), and when you'd pick one over the other (stability requirement, memory constraints). |\n| **Recursion & recursion vs iteration** | Recursion trades stack space for simpler code on problems with natural recursive structure (trees, divide-and-conquer); risk of stack overflow on deep recursion without tail-call optimization (which Python/Dart don't reliably provide). |\n\n**Prep tip:** They likely won't do a full DSA round for this drive given the profile, but expect 1–2 rapid-fire questions (e.g., \"what's the time complexity of binary search,\" \"difference between array and linked list\") mixed into the technical round.\n\n---\n\n## 11. REST APIs & Web Architecture\n\n| Concept | Explanation |\n|---|---|\n| **What is a REST API** | An architectural style for networked apps: stateless client-server communication over HTTP, resources identified by URLs, manipulated via standard HTTP methods. |\n| **HTTP methods** | GET (read, safe/idempotent), POST (create, not idempotent), PUT (full update, idempotent), PATCH (partial update), DELETE (remove, idempotent). |\n| **Statelessness** | Each request contains all the information the server needs — server holds no client session state between requests (any session/auth token is sent with each request, e.g. JWT in headers). |\n| **Status codes** | 200 OK, 201 Created, 400 Bad Request, 401 Unauthorized, 403 Forbidden, 404 Not Found, 500 Internal Server Error — be ready to explain 401 vs 403 (401 = not authenticated; 403 = authenticated but not permitted). |\n| **REST vs GraphQL (bonus)** | REST: fixed endpoints, can over/under-fetch data. GraphQL: single endpoint, client specifies exactly the fields it needs. Mention only if pushed further. |\n| **Idempotency** | An idempotent operation produces the same result no matter how many times it's repeated (GET, PUT, DELETE) — important for retry-safe network calls, e.g. in your mobile apps' API calls. |\n\n**Tie to your work:** Your Flask backend at KPIT and Sugam Krishi's Firebase functions both expose(d) endpoints/APIs consumed by a client — be ready to describe one concrete request/response flow end to end.\n\n---\n\n## 12. Docker & Containerization\n\n| Concept | Explanation |\n|---|---|\n| **What is Docker / why used** | Packages an application with all its dependencies (libraries, runtime, OS-level tools) into a single portable **image**, run as a **container** — solves \"works on my machine\" by guaranteeing the same environment everywhere (dev, test, prod). |\n| **Image vs Container** | Image = a read-only template/blueprint (built from a `Dockerfile`); Container = a running (or stopped) instance of that image. |\n| **Dockerfile basics** | A script of instructions (`FROM`, `COPY`, `RUN`, `CMD`) that defines how to build an image layer by layer. |\n| **VM vs Container** | VMs virtualize an entire OS (heavier, own kernel each); containers share the host OS kernel and only isolate the process/filesystem — much lighter and faster to start. |\n| **`docker-compose`** | Defines and runs multi-container applications (e.g., a Flask app + its database) with one YAML file/command, useful for local dev environments mirroring production. |\n\n**Likely question:** *\"Did you containerize anything?\"* — If you used Docker mainly for a consistent dev environment or a small deployment, describe that honestly; if it was just exploratory/coursework, say so and pivot to *why* it matters (reproducibility, easier onboarding, consistent envs across dev/staging/prod).\n\n---\n\n## 13. Git / GitHub & Version Control (KPIT collaboration)\n\n| Concept | Explanation |\n|---|---|\n| **Branching workflow** | Feature branches off `main`/`develop`, merged via Pull Requests after review — this is almost certainly how you collaborated at KPIT; be ready to describe it concretely. |\n| **Merge vs Rebase** | Merge preserves full history with a merge commit (non-destructive); Rebase replays your commits on top of the target branch for a linear history (rewrites commit history — avoid rebasing shared/pushed branches). |\n| **Merge conflicts** | Occur when the same lines are changed differently on two branches — Git can't auto-resolve; you manually pick the correct content and commit. Have a real example ready if you hit one at KPIT. |\n| **`git pull` vs `git fetch`** | `fetch` downloads remote changes without merging into your working branch; `pull` = `fetch` + `merge` (or rebase) automatically. |\n| **Code review practices** | PR review, comments, required approvals before merge — mention this since your resume explicitly says \"collaborated through shared codebases, branching, and code review practices.\" |\n\n---\n\n## 14. CI/CD & DevOps (IBM DevOps Certificate)\n\n| Concept | Explanation |\n|---|---|\n| **CI (Continuous Integration)** | Developers frequently merge code into a shared repo; each merge triggers automated builds + tests to catch integration issues early. |\n| **CD (Continuous Delivery/Deployment)** | Delivery: code is automatically prepared/tested for release but a human triggers the actual deploy. Deployment: fully automated — every passing change goes straight to production. |\n| **Typical pipeline stages** | Source (commit trigger) → Build → Test (unit/integration) → Deploy (staging → production), often with a manual approval gate before prod. |\n| **Common tools** | GitHub Actions, Jenkins, GitLab CI, CircleCI — know the concept even if you haven't used a specific one hands-on; the IBM cert gives you enough vocabulary to speak generally. |\n| **Why CI/CD matters** | Catches bugs earlier (fail fast), reduces manual deployment error, enables frequent small releases instead of risky big-bang deployments. |\n| **DevOps culture, not just tools** | Emphasize it's also about breaking down the wall between Dev and Ops — shared responsibility for reliability, monitoring, fast feedback loops (mention if they probe beyond tooling). |\n\n**Honest framing:** Since this is certificate knowledge rather than hands-on project experience, answer conceptually and clearly rather than overclaiming hands-on pipeline-building — interviewers respect \"I understand the concepts and pipeline stages from my IBM DevOps certification; I haven't built a production CI/CD pipeline myself yet, but I'm comfortable with the ideas and tools like GitHub Actions.\"\n\n---\n\n## 15. Design Patterns (commonly asked, not explicitly on your resume — good to have ready)\n\n| Pattern | Category | One-line explanation |\n|---|---|---|\n| **Singleton** | Creational | Ensures a class has only one instance and provides a global access point to it (e.g., a single DB connection manager). |\n| **Factory** | Creational | Delegates object creation to a factory method/class instead of calling constructors directly — decouples client code from concrete classes. |\n| **Observer** | Behavioral | An object (subject) maintains a list of dependents (observers) and notifies them automatically on state changes — this is *exactly* the pattern behind `ChangeNotifier`/Provider in Flutter and Firestore's real-time listeners, so tie it back to your own projects. |\n| **Builder** | Creational | Constructs a complex object step by step, separating construction from representation. |\n| **MVC / MVVM** | Architectural | Separates concerns: Model (data), View (UI), Controller/ViewModel (logic connecting them) — BLoC is essentially an MVVM-flavored pattern for Flutter. |\n| **Strategy** | Behavioral | Encapsulates interchangeable algorithms behind a common interface, selectable at runtime (e.g., swapping your password-strength scoring logic without touching calling code). |\n\n**Best move if asked \"which design patterns have you used?\"**: Point to the Observer pattern underlying Provider/`ChangeNotifier` in your Flutter apps and Firestore's listener model — genuine, defensible, ties theory to your real code instead of reciting textbook definitions.\n\n---\n\n## 16. Quick-Fire Round (rapid one-liners to have loaded)\n\n- **Compiler vs Interpreter:** Compiler translates the whole program to machine code before execution (C++); interpreter executes line by line (Python).\n- **Static vs Dynamic typing:** Static = types checked at compile time (C++); Dynamic = checked at runtime (Python, Dart with `var`/inference still type-safe but flexible).\n- **Pass by value vs reference:** Value copies the data; reference passes a pointer/reference to the same memory — mutating it affects the original.\n- **Exception handling:** `try/except` (Python) / `try/catch` (Dart, C++) — catch and handle runtime errors gracefully instead of crashing.\n- **API vs SDK:** API = a contract/interface to interact with a service; SDK = a full toolkit (libraries, docs, sometimes APIs) to build on a platform.\n- **Cache:** Fast, small storage layer holding frequently accessed data to avoid recomputation/re-fetching — relevant if asked how you'd speed up the Sugam Krishi chatbot or backend.\n- **Load balancer:** Distributes incoming traffic across multiple servers for reliability/scale — good to mention if asked \"how would you scale this app to a million users.\"\n\n---\n\n## How to Use These Notes\n1. Read each section once, then try explaining it out loud in 30–60 seconds without looking — that's roughly the length of a good spoken answer.\n2. For every project-specific section (2, 4, 5, 6, 7, 9), always be ready with the **\"why did you choose X\"** framing — Accenture interviewers probe design decisions on your actual projects far more than they quiz raw theory.\n3. Where a section says \"be honest\" (CI/CD, chatbot fine-tuning) — don't overclaim. A clear, self-aware answer beats a shaky confident-sounding one.\n";
+    var STORAGE_KEY_NOTES = 'accenture_technical_notes_markdown_v1';
+
+    // State
+    var currentMarkdown = '';
+    var saveTimeout = null;
+    var renderTimeout = null;
+
+    // DOM Elements
+    var editor = document.getElementById('markdownEditor');
+    var previewBody = document.getElementById('previewBody');
+    var previewScroll = document.getElementById('previewScroll');
+    var outlineList = document.getElementById('outlineList');
+    var outlineSidebar = document.getElementById('outlineSidebar');
+    var saveStatusEl = document.getElementById('saveStatus');
+    var editorStatsEl = document.getElementById('editorStats');
+    var previewStatsEl = document.getElementById('previewStats');
+
+    // ============================================================
+    // INITIALIZATION & STORAGE
+    // ============================================================
+    function loadNotes() {
+      try {
+        var saved = localStorage.getItem(STORAGE_KEY_NOTES);
+        if (saved && saved.trim()) {
+          currentMarkdown = saved;
+        } else {
+          currentMarkdown = DEFAULT_MARKDOWN;
+        }
+      } catch (e) {
+        currentMarkdown = DEFAULT_MARKDOWN;
+      }
+      editor.value = currentMarkdown;
+      renderPreview(currentMarkdown);
+      buildOutline(currentMarkdown);
+      updateStats(currentMarkdown);
+    }
+
+    function saveNotes(text) {
+      try {
+        localStorage.setItem(STORAGE_KEY_NOTES, text);
+        setSaveStatus(true);
+      } catch (e) {
+        console.error('Error saving notes:', e);
+      }
+    }
+
+    function setSaveStatus(saved) {
+      if (saved) {
+        saveStatusEl.textContent = '● Auto-saved';
+        saveStatusEl.classList.remove('dirty');
+      } else {
+        saveStatusEl.textContent = '● Unsaved...';
+        saveStatusEl.classList.add('dirty');
+      }
+    }
+
+    function showToast(msg) {
+      var el = document.getElementById('toast');
+      el.textContent = msg;
+      el.classList.add('show');
+      setTimeout(function () { el.classList.remove('show'); }, 2200);
+    }
+
+    // ============================================================
+    // MARKDOWN COMPILER & PREVIEW
+    // ============================================================
+    function renderPreview(md) {
+      var html = '';
+      if (typeof marked !== 'undefined' && typeof marked.parse === 'function') {
+        marked.setOptions({
+          breaks: true,
+          gfm: true
+        });
+        html = marked.parse(md);
+      } else {
+        // Fallback simple parser
+        html = simpleMarkdownFallback(md);
+      }
+      previewBody.innerHTML = html;
+
+      // Add anchor IDs to headings for outline navigation
+      var headings = previewBody.querySelectorAll('h1, h2, h3');
+      headings.forEach(function (h, idx) {
+        if (!h.id) {
+          var cleanText = h.textContent.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase();
+          h.id = 'sec-' + idx + '-' + cleanText.slice(0, 30);
+        }
+      });
+    }
+
+    function simpleMarkdownFallback(md) {
+      return md
+        .replace(/^# (.*$)/gim, '<h1>$1</h1>')
+        .replace(/^## (.*$)/gim, '<h2>$1</h2>')
+        .replace(/^### (.*$)/gim, '<h3>$1</h3>')
+        .replace(/\*\*(.*?)\*\*/gim, '<strong>$1</strong>')
+        .replace(/\*(.*?)\*/gim, '<em>$1</em>')
+        .replace(/\`\`\`([\s\S]*?)\`\`\`/gim, '<pre><code>$1</code></pre>')
+        .replace(/\`(.*?)\`/gim, '<code>$1</code>')
+        .replace(/\n\n/gim, '</p><p>')
+        .replace(/^> (.*$)/gim, '<blockquote>$1</blockquote>');
+    }
+
+    // ============================================================
+    // OUTLINE / TABLE OF CONTENTS
+    // ============================================================
+    function buildOutline(md) {
+      outlineList.innerHTML = '';
+      var lines = md.split('\n');
+      var headings = [];
+      var secIndex = 0;
+
+      lines.forEach(function (line, lineIdx) {
+        var h2Match = line.match(/^##\s+(.+)$/);
+        var h3Match = line.match(/^###\s+(.+)$/);
+
+        if (h2Match) {
+          headings.push({
+            level: 2,
+            title: h2Match[1].trim(),
+            lineIdx: lineIdx,
+            index: secIndex++
+          });
+        } else if (h3Match) {
+          headings.push({
+            level: 3,
+            title: h3Match[1].trim(),
+            lineIdx: lineIdx,
+            index: secIndex++
+          });
+        }
+      });
+
+      headings.forEach(function (h) {
+        var li = document.createElement('li');
+        li.className = 'outline-item' + (h.level === 3 ? ' h3-item' : '');
+        li.textContent = h.title;
+        li.title = h.title;
+
+        li.addEventListener('click', function () {
+          // Scroll preview
+          var previewHeadings = previewBody.querySelectorAll('h2, h3');
+          if (previewHeadings[h.index]) {
+            previewHeadings[h.index].scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+
+          // Scroll editor
+          scrollToEditorLine(h.lineIdx);
+
+          // Highlight outline
+          document.querySelectorAll('.outline-item').forEach(function (el) { el.classList.remove('active'); });
+          li.classList.add('active');
+        });
+
+        outlineList.appendChild(li);
+      });
+    }
+
+    function scrollToEditorLine(lineIdx) {
+      var lines = editor.value.split('\n');
+      var charPos = 0;
+      for (var i = 0; i < lineIdx && i < lines.length; i++) {
+        charPos += lines[i].length + 1;
+      }
+      editor.focus();
+      editor.setSelectionRange(charPos, charPos);
+      var lineHeight = 22;
+      editor.scrollTop = lineIdx * lineHeight - 60;
+    }
+
+    function toggleOutline() {
+      outlineSidebar.classList.toggle('collapsed');
+      document.getElementById('toggleOutlineBtn').classList.toggle('nt-btn--accent', !outlineSidebar.classList.contains('collapsed'));
+    }
+
+    // Outline search filter
+    document.getElementById('outlineSearch').addEventListener('input', function () {
+      var q = this.value.toLowerCase().trim();
+      document.querySelectorAll('.outline-item').forEach(function (item) {
+        var matches = !q || item.textContent.toLowerCase().indexOf(q) !== -1;
+        item.style.display = matches ? 'block' : 'none';
+      });
+    });
+
+    // ============================================================
+    // STATS (WORDS, READING TIME)
+    // ============================================================
+    function updateStats(text) {
+      var words = text.trim() ? text.trim().split(/\s+/).length : 0;
+      var lines = text.split('\n').length;
+      editorStatsEl.textContent = words + ' words · ' + lines + ' lines';
+
+      var readMinutes = Math.max(1, Math.round(words / 220));
+      previewStatsEl.textContent = '~' + readMinutes + ' min read';
+    }
+
+    // ============================================================
+    // RUNTIME INLINE EDITING & SYNC
+    // ============================================================
+    editor.addEventListener('input', function () {
+      var val = this.value;
+      currentMarkdown = val;
+      setSaveStatus(false);
+
+      // Debounced live render & save
+      clearTimeout(renderTimeout);
+      renderTimeout = setTimeout(function () {
+        renderPreview(val);
+        buildOutline(val);
+        updateStats(val);
+      }, 50);
+
+      clearTimeout(saveTimeout);
+      saveTimeout = setTimeout(function () {
+        saveNotes(val);
+      }, 400);
+    });
+
+    // Tab key support in textarea
+    editor.addEventListener('keydown', function (e) {
+      if (e.key === 'Tab') {
+        e.preventDefault();
+        var start = this.selectionStart;
+        var end = this.selectionEnd;
+        this.value = this.value.substring(0, start) + '  ' + this.value.substring(end);
+        this.selectionStart = this.selectionEnd = start + 2;
+        editor.dispatchEvent(new Event('input'));
+      }
+    });
+
+    // Markdown quick formatting tools
+    function insertFormat(type) {
+      var start = editor.selectionStart;
+      var end = editor.selectionEnd;
+      var text = editor.value;
+      var sel = text.substring(start, end);
+      var insert = '';
+      var cursorOffset = 0;
+
+      switch (type) {
+        case 'bold':
+          insert = '**' + (sel || 'bold text') + '**';
+          cursorOffset = sel ? insert.length : 2;
+          break;
+        case 'italic':
+          insert = '*' + (sel || 'italic text') + '*';
+          cursorOffset = sel ? insert.length : 1;
+          break;
+        case 'h2':
+          insert = '\n## ' + (sel || 'Section Title') + '\n';
+          cursorOffset = insert.length;
+          break;
+        case 'code':
+          if (sel.includes('\n')) {
+            insert = '\n```\n' + (sel || '// code') + '\n```\n';
+          } else {
+            insert = '`' + (sel || 'code') + '`';
+          }
+          cursorOffset = insert.length;
+          break;
+        case 'quote':
+          insert = '\n> ' + (sel || 'Important note or explanation') + '\n';
+          cursorOffset = insert.length;
+          break;
+        case 'list':
+          insert = '\n- ' + (sel || 'List item') + '\n';
+          cursorOffset = insert.length;
+          break;
+        case 'table':
+          insert = '\n| Concept | Explanation |\n|---|---|\n| **Term** | Description... |\n';
+          cursorOffset = insert.length;
+          break;
+      }
+
+      editor.focus();
+      editor.value = text.substring(0, start) + insert + text.substring(end);
+      editor.selectionStart = editor.selectionEnd = start + cursorOffset;
+      editor.dispatchEvent(new Event('input'));
+    }
+
+    // ============================================================
+    // VIEW SWITCHER
+    // ============================================================
+    function setViewMode(mode) {
+      document.body.classList.remove('mode-split', 'mode-preview-only', 'mode-editor-only');
+      document.body.classList.add('mode-' + mode);
+
+      document.querySelectorAll('.vs-btn').forEach(function (btn) {
+        btn.classList.toggle('active', btn.dataset.mode === mode);
+      });
+    }
+
+    document.querySelectorAll('.vs-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        setViewMode(this.dataset.mode);
+      });
+    });
+
+    document.getElementById('toggleOutlineBtn').addEventListener('click', toggleOutline);
+
+    // ============================================================
+    // EXPORT & RESET ACTIONS
+    // ============================================================
+    document.getElementById('copyMdBtn').addEventListener('click', function () {
+      navigator.clipboard.writeText(editor.value).then(function () {
+        showToast('Markdown copied to clipboard ✓');
+      }).catch(function () {
+        editor.select();
+        document.execCommand('copy');
+        showToast('Markdown copied to clipboard ✓');
+      });
+    });
+
+    document.getElementById('downloadMdBtn').addEventListener('click', function () {
+      var blob = new Blob([editor.value], { type: 'text/markdown;charset=utf-8' });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = 'Accenture_Technical_Interview_Notes.md';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast('Downloaded Accenture_Technical_Interview_Notes.md ✓');
+    });
+
+    // Reset Modal
+    document.getElementById('resetMdBtn').addEventListener('click', function () {
+      document.getElementById('resetModal').classList.add('open');
+    });
+
+    document.getElementById('cancelResetBtn').addEventListener('click', function () {
+      document.getElementById('resetModal').classList.remove('open');
+    });
+
+    document.getElementById('confirmResetBtn').addEventListener('click', function () {
+      currentMarkdown = DEFAULT_MARKDOWN;
+      editor.value = currentMarkdown;
+      saveNotes(currentMarkdown);
+      renderPreview(currentMarkdown);
+      buildOutline(currentMarkdown);
+      updateStats(currentMarkdown);
+      document.getElementById('resetModal').classList.remove('open');
+      showToast('Notes reset to original reference ✓');
+    });
+
+    // Close modal on background click
+    document.querySelectorAll('.modal-overlay').forEach(function (overlay) {
+      overlay.addEventListener('click', function (e) {
+        if (e.target === overlay) {
+          overlay.classList.remove('open');
+        }
+      });
+    });
+
+    // Run initial load
+    loadNotes();
+
+  </script>
+</body>
+
+</html>

@@ -113,6 +113,22 @@
       color: var(--text);
     }
 
+    .graph-nav .nav-notes-link {
+      font-weight: 600;
+      color: var(--accent-hover) !important;
+      background: var(--accent-light);
+      padding: 2px 8px;
+      border-radius: 6px;
+      border: 1px solid var(--accent-border);
+      transition: all 0.15s ease !important;
+    }
+
+    .graph-nav .nav-notes-link:hover {
+      background: var(--accent-hover) !important;
+      color: #fff !important;
+      border-color: var(--accent-hover) !important;
+    }
+
     .graph-title {
       font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
       font-size: 15px;
@@ -1276,6 +1292,8 @@
       <a href="index.html">Interview Prep</a>
       <span>·</span>
       <span class="nav-current">Interview Map</span>
+      <span>·</span>
+      <a href="notes.html" class="nav-notes-link" title="Open Technical Interview Notes">📝 Technical Notes</a>
     </div>
     <div class="graph-title">
       <span class="title-icon">🗺</span>
